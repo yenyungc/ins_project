@@ -12,13 +12,15 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-
+import android.view.View;
+import android.widget.Button;
 
 
 import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "main";
+    Button button1;
 
 
     //firebase
@@ -31,6 +33,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 //        setContentView(R.layout.activity_home);
         Log.d(TAG, "onCreate: starting.");
+        setContentView(R.layout.activity_main);
+        button1 = (Button) findViewById(R.id.Camera);
+        button1.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "goto camera");
+                Intent intent = new Intent(MainActivity.this, Camera.class);
+                startActivity(intent);
+            }});
+
 
         setupFirebaseAuth();
 
