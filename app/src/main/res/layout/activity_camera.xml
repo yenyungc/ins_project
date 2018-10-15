@@ -27,8 +27,10 @@
             android:id="@+id/grid"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingStart="130dp"
-            android:text="grid" />
+            android:showText="true"
+            android:text="grid"
+            android:textOff="Off"
+            android:textOn="On" />
 
         <Button
             android:id="@+id/picture"
@@ -40,7 +42,10 @@
         <Switch
             android:id="@+id/flash"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:checked="true"
+            android:showText="true"
             android:text="flash"
             android:textOff="Off"
             android:textOn="Auto" />

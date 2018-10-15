@@ -36,6 +36,8 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import java.io.File;
@@ -68,7 +70,7 @@ import java.util.concurrent.TimeUnit;
  * limitations under the License.
  */
 
-public class Camera extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
+public class Camera extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback, CompoundButton.OnCheckedChangeListener {
 
 
     // request code
@@ -125,6 +127,14 @@ public class Camera extends AppCompatActivity implements ActivityCompat.OnReques
      * Max preview height that is guaranteed by Camera2 API
      */
     private static final int MAX_PREVIEW_HEIGHT = 1080;
+
+    /**
+     * The flash mode: 1 means auto Flash, 0 means Flash off
+     */
+    private static int FLASHMODE = 1;
+
+    private Switch switch1;
+    private Switch switch2;
 
 
 
@@ -464,13 +474,13 @@ public class Camera extends AppCompatActivity implements ActivityCompat.OnReques
         // connect UI view to Java controller
         mTextureView = (AutoFitTextureView) findViewById(R.id.texture);
 
-        // the button as well
-        // google team gave a bad name to this button... picture
         Button button = (Button) findViewById(R.id.picture);
+        switch1 = (Switch) findViewById(R.id.flash);
+        switch2 = (Switch) findViewById(R.id.grid);
 
-
-
-        mFile = new File(getExternalFilesDir(null), "pic.jpg");
+        //the file name of the picture to take
+        String fileName = String.valueOf(System.currentTimeMillis())+".jpg";
+        mFile = new File(getExternalFilesDir(null), fileName);
         button.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -482,6 +492,43 @@ public class Camera extends AppCompatActivity implements ActivityCompat.OnReques
                 takePicture();
 
             }});
+
+        switch1.setOnCheckedChangeListener(this);
+        switch2.setOnCheckedChangeListener(this);
+
+    }
+
+    // Dealing with switch events
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        switch (buttonView.getId()){
+            case (R.id.flash): {
+                if (isChecked) {
+                    setAutoFlash(mPreviewRequestBuilder);
+                    FLASHMODE = 1;
+                    Toast.makeText(this,"auto flash",Toast.LENGTH_SHORT).show();
+
+                    Log.d(TAG, "switch to auto flash");
+                } else {
+                    setOffFlash(mPreviewRequestBuilder);
+                    FLASHMODE = 0;
+                    Toast.makeText(this,"flash off",Toast.LENGTH_SHORT).show();
+
+                    Log.d(TAG, "switch to off flash");
+                }
+                break;
+            }
+            case (R.id.grid): {
+                if (isChecked) {
+
+                    Log.d(TAG, "switch to grid");
+                } else {
+
+                    Log.d(TAG, "switch to non-grid");
+                }
+                break;
+            }
+        }
 
     }
 
@@ -786,10 +833,16 @@ public class Camera extends AppCompatActivity implements ActivityCompat.OnReques
                             mCaptureSession = cameraCaptureSession;
                             try {
                                 // Auto focus should be continuous for camera preview.
+//                                negativeMode(mPreviewRequestBuilder);  //Test!
                                 mPreviewRequestBuilder.set(CaptureRequest.CONTROL_AF_MODE,
                                         CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE);
                                 // Flash is automatically enabled when necessary.
-                                setAutoFlash(mPreviewRequestBuilder);
+                                if (FLASHMODE == 1) {
+                                    setAutoFlash(mPreviewRequestBuilder);
+                                } else {
+                                    setOffFlash(mPreviewRequestBuilder);
+                                }
+
 
                                 // Finally, we start displaying the camera preview.
                                 mPreviewRequest = mPreviewRequestBuilder.build();
@@ -918,7 +971,13 @@ public class Camera extends AppCompatActivity implements ActivityCompat.OnReques
             // Use the same AE and AF modes as the preview.
             captureBuilder.set(CaptureRequest.CONTROL_AF_MODE,
                     CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE);
-            setAutoFlash(captureBuilder);
+//            negativeMode(mPreviewRequestBuilder);  //Test!
+            if (FLASHMODE == 1) {
+                setAutoFlash(captureBuilder);
+            } else {
+                setOffFlash(captureBuilder);
+            }
+
 
             // Orientation
             int rotation = getWindowManager().getDefaultDisplay().getRotation();
@@ -970,7 +1029,12 @@ public class Camera extends AppCompatActivity implements ActivityCompat.OnReques
             // Reset the auto-focus trigger
             mPreviewRequestBuilder.set(CaptureRequest.CONTROL_AF_TRIGGER,
                     CameraMetadata.CONTROL_AF_TRIGGER_CANCEL);
-            setAutoFlash(mPreviewRequestBuilder);
+            if (FLASHMODE == 1) {
+                setAutoFlash(mPreviewRequestBuilder);
+            } else {
+                setOffFlash(mPreviewRequestBuilder);
+            }
+
             mCaptureSession.capture(mPreviewRequestBuilder.build(), mCaptureCallback,
                     mBackgroundHandler);
             // After this, the camera will go back to the normal state of preview.
@@ -985,11 +1049,27 @@ public class Camera extends AppCompatActivity implements ActivityCompat.OnReques
 
 
     private void setAutoFlash(CaptureRequest.Builder requestBuilder) {
-//        Log.d(TAG, "line 988");
+        Log.d(TAG, "set AutoFlash mode");
 
         if (mFlashSupported) {
             requestBuilder.set(CaptureRequest.CONTROL_AE_MODE,
                     CaptureRequest.CONTROL_AE_MODE_ON_AUTO_FLASH);
+        }
+    }
+
+    private void negativeMode(CaptureRequest.Builder requestBuilder) {
+        Log.d(TAG, "set negative mode");
+        requestBuilder.set(CaptureRequest.CONTROL_EFFECT_MODE,
+                CaptureRequest.CONTROL_EFFECT_MODE_NEGATIVE);
+
+    }
+
+    private void setOffFlash(CaptureRequest.Builder requestBuilder) {
+        Log.d(TAG, "set Flash_Off mode");
+
+        if (mFlashSupported) {
+            requestBuilder.set(CaptureRequest.CONTROL_AE_MODE,
+                    CaptureRequest.CONTROL_AE_MODE_OFF);
         }
     }
 
