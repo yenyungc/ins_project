@@ -20,21 +20,60 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
-    testImplementation 'junit:junit:4.12'
 
     //Design library for Coordinator layout and toolbar
     implementation 'com.android.support:design:28.0.0'
 
+    //card view
+    implementation 'com.android.support:cardview-v7:28.0.0'
+
+    //recycler view
+    implementation 'com.android.support:recyclerview-v7:28.0.0'
+
+    //appcompat
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    testImplementation 'junit:junit:4.12'
 
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    implementation 'com.google.firebase:firebase-core:16.0.1'
-    // Firebase Authentication
+
+    //Exo Player
+    implementation 'com.google.android.exoplayer:exoplayer:2.9.0'
+
+    //BottomNavigationViewEx library
+    implementation 'com.github.ittianyu:BottomNavigationViewEx:2.0.2'
+
+    //Circle ImageView
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
+
+    //elastic header
+    implementation 'com.github.eschao:android-ElasticListView:v1.0'
+
+    //material dialogs
+    implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
+
+    //glide
+    implementation 'com.github.bumptech.glide:glide:4.8.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
+
+    //Universal image loader
+    implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
+
+    //Fire base core
+    implementation 'com.google.firebase:firebase-core:16.0.3'
+
+    //Fire base authentication
     implementation 'com.google.firebase:firebase-auth:16.0.3'
 
+    //Fire base database
+    implementation 'com.google.firebase:firebase-database:16.0.1'
 
+    //Fire base storage
+    implementation 'com.google.firebase:firebase-storage:10.2.1'
+
+    implementation files('libs/aspectjrt-1.9.1.jar')
 }
 
 
