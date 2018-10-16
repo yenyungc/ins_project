@@ -1,4 +1,4 @@
-package ins.com.ins_project;
+package ins.com.ins_project.Home;
 
 
 import android.Manifest;
@@ -51,6 +51,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
+
+import ins.com.ins_project.R;
 
 // Chu: I reuse some code in https://github.com/googlesamples/android-Camera2Basic/
 

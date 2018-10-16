@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ins.com.ins_project.Camera">
+    tools:context="ins.com.ins_project.Home.Camera">
 
 
-    <ins.com.ins_project.AutoFitTextureView
+    <ins.com.ins_project.Home.AutoFitTextureView
         android:id="@+id/texture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

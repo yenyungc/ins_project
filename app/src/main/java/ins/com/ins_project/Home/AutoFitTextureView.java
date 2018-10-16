@@ -1,4 +1,4 @@
-package ins.com.ins_project;
+package ins.com.ins_project.Home;
 
 import android.content.Context;
 import android.util.AttributeSet;
