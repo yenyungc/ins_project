@@ -73,7 +73,7 @@ dependencies {
     //Fire base storage
     implementation 'com.google.firebase:firebase-storage:10.2.1'
 
-    implementation files('libs/aspectjrt-1.9.1.jar')
+    implementation files('libs/aspectjrt-1.7.3.jar')
 }
 
 
