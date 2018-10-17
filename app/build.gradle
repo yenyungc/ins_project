@@ -9,6 +9,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -20,6 +21,8 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation 'com.android.support:multidex:1.0.1'
 
     implementation 'com.android.support:exifinterface:27.1.0'
 
@@ -67,13 +70,13 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:16.0.3'
 
     //Fire base authentication
-    implementation 'com.google.firebase:firebase-auth:16.0.3'
+    implementation 'com.google.firebase:firebase-auth:15.0.0'
 
     //Fire base database
     implementation 'com.google.firebase:firebase-database:16.0.1'
 
     //Fire base storage
-    implementation 'com.google.firebase:firebase-storage:10.2.1'
+    implementation 'com.google.firebase:firebase-storage:15.0.0'
 
     implementation files('libs/aspectjrt-1.7.3.jar')
 }

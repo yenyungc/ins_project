@@ -1,6 +1,5 @@
 package ins.com.ins_project.Home;
 
-
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;

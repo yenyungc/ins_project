@@ -310,34 +310,43 @@ public class HomeFragment extends Fragment implements OnUpdateListener, OnLoadLi
 
         clearAll();
         //also add your own id to the list
-        mFollowing.add(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        try {
+            mFollowing.add(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        } catch (NullPointerException e){
+            e.printStackTrace();
+        }
 
-        Query query = FirebaseDatabase.getInstance().getReference()
-                .child(getActivity().getString(R.string.dbname_following))
-                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                ;
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
-                    Log.d(TAG, "getFollowing: found user: " + singleSnapshot
-                            .child(getString(R.string.field_user_id)).getValue());
+        try {
+            Query query = FirebaseDatabase.getInstance().getReference()
+                    .child(getActivity().getString(R.string.dbname_following))
+                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
-                    mFollowing.add(singleSnapshot
-                            .child(getString(R.string.field_user_id)).getValue().toString());
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
+                        Log.d(TAG, "getFollowing: found user: " + singleSnapshot
+                                .child(getString(R.string.field_user_id)).getValue());
+
+                        mFollowing.add(singleSnapshot
+                                .child(getString(R.string.field_user_id)).getValue().toString());
+                    }
+
+                    getPhotos();
+//                getMyUserAccountSettings();
+                    getFriendsAccountSettings();
                 }
 
-                getPhotos();
-//                getMyUserAccountSettings();
-                getFriendsAccountSettings();
-            }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                }
 
-            }
+            });
+        } catch (NullPointerException e){
+            e.printStackTrace();
+        }
 
-        });
 
     }
 
