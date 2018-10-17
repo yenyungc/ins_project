@@ -21,6 +21,7 @@ import com.google.firebase.auth.FirebaseAuth;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "main";
     Button button1;
+    Button button2;
 
 
     //firebase
@@ -35,12 +36,23 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate: starting.");
         setContentView(R.layout.activity_main);
         button1 = (Button) findViewById(R.id.Camera);
+        button2 = (Button) findViewById(R.id.Gallery);
         button1.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "goto camera");
                 Intent intent = new Intent(MainActivity.this, Camera.class);
+                startActivity(intent);
+            }});
+
+        button2.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "goto gallery");
+                PhotoEditor.setSource(1);
+                Intent intent = new Intent(MainActivity.this, PhotoEditor.class);
                 startActivity(intent);
             }});
 
