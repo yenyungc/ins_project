@@ -23,19 +23,19 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import tabian.com.instagramclone2.R;
-import tabian.com.instagramclone2.materialcamera.ICallback;
-import tabian.com.instagramclone2.materialcamera.util.CameraUtil;
-import tabian.com.instagramclone2.materialcamera.util.Degrees;
-import tabian.com.instagramclone2.materialcamera.util.ImageUtil;
-import tabian.com.instagramclone2.materialcamera.util.ManufacturerUtil;
+import ins.com.ins_project.R;
+import ins.com.ins_project.materialcamera.ICallback;
+import ins.com.ins_project.materialcamera.util.CameraUtil;
+import ins.com.ins_project.materialcamera.util.Degrees;
+import ins.com.ins_project.materialcamera.util.ImageUtil;
+import ins.com.ins_project.materialcamera.util.ManufacturerUtil;
 
-import static tabian.com.instagramclone2.materialcamera.internal.BaseCaptureActivity.CAMERA_POSITION_BACK;
-import static tabian.com.instagramclone2.materialcamera.internal.BaseCaptureActivity.CAMERA_POSITION_FRONT;
-import static tabian.com.instagramclone2.materialcamera.internal.BaseCaptureActivity.CAMERA_POSITION_UNKNOWN;
-import static tabian.com.instagramclone2.materialcamera.internal.BaseCaptureActivity.FLASH_MODE_ALWAYS_ON;
-import static tabian.com.instagramclone2.materialcamera.internal.BaseCaptureActivity.FLASH_MODE_AUTO;
-import static tabian.com.instagramclone2.materialcamera.internal.BaseCaptureActivity.FLASH_MODE_OFF;
+import static ins.com.ins_project.materialcamera.internal.BaseCaptureActivity.CAMERA_POSITION_BACK;
+import static ins.com.ins_project.materialcamera.internal.BaseCaptureActivity.CAMERA_POSITION_FRONT;
+import static ins.com.ins_project.materialcamera.internal.BaseCaptureActivity.CAMERA_POSITION_UNKNOWN;
+import static ins.com.ins_project.materialcamera.internal.BaseCaptureActivity.FLASH_MODE_ALWAYS_ON;
+import static ins.com.ins_project.materialcamera.internal.BaseCaptureActivity.FLASH_MODE_AUTO;
+import static ins.com.ins_project.materialcamera.internal.BaseCaptureActivity.FLASH_MODE_OFF;
 
 /** @author Aidan Follestad (afollestad) */
 @SuppressWarnings("deprecation")
@@ -44,7 +44,7 @@ public class CameraFragment extends BaseCameraFragment implements View.OnClickLi
 
   private static final String TAG = "CameraFragment";
 
-  tabian.com.instagramclone2.materialcamera.internal.CameraPreview mPreviewView;
+  ins.com.ins_project.materialcamera.internal.CameraPreview mPreviewView;
   RelativeLayout mPreviewFrame;
 
   private Camera.Size mVideoSize;
@@ -326,8 +326,8 @@ public class CameraFragment extends BaseCameraFragment implements View.OnClickLi
     if (activity == null) return;
     if (mWindowSize == null) mWindowSize = new Point();
     activity.getWindowManager().getDefaultDisplay().getSize(mWindowSize);
-    mPreviewView = new tabian.com.instagramclone2.materialcamera.internal.CameraPreview(getActivity(), mCamera);
-    if (mPreviewFrame.getChildCount() > 0 && mPreviewFrame.getChildAt(0) instanceof tabian.com.instagramclone2.materialcamera.internal.CameraPreview)
+    mPreviewView = new ins.com.ins_project.materialcamera.internal.CameraPreview(getActivity(), mCamera);
+    if (mPreviewFrame.getChildCount() > 0 && mPreviewFrame.getChildAt(0) instanceof ins.com.ins_project.materialcamera.internal.CameraPreview)
       mPreviewFrame.removeViewAt(0);
     mPreviewFrame.addView(mPreviewView, 0);
     Log.d(TAG, "createPreview: window size x: " + mWindowSize.x);

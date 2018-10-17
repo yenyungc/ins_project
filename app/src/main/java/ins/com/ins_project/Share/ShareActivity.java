@@ -14,10 +14,10 @@ import android.view.MenuItem;
 
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
-import tabian.com.instagramclone2.R;
-import tabian.com.instagramclone2.Utils.BottomNavigationViewHelper;
-import tabian.com.instagramclone2.Utils.Permissions;
-import tabian.com.instagramclone2.Utils.SectionsPagerAdapter;
+import ins.com.ins_project.R;
+import ins.com.ins_project.Utils.BottomNavigationViewHelper;
+import ins.com.ins_project.Utils.Permissions;
+import ins.com.ins_project.Utils.SectionsPagerAdapter;
 
 /**
  * Created by User on 5/28/2017.

@@ -48,7 +48,7 @@ import java.io.IOException;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-import tabian.com.instagramclone2.R;
+import ins.com.ins_project.R;
 
 
 /** @author Aidan Follestad (afollestad) */

@@ -16,8 +16,8 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import tabian.com.instagramclone2.Login.LoginActivity;
-import tabian.com.instagramclone2.R;
+import ins.com.ins_project.Login.LoginActivity;
+import ins.com.ins_project.R;
 
 /**
  * Created by User on 6/4/2017.

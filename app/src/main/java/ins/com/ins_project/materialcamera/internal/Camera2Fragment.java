@@ -60,16 +60,16 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
-import tabian.com.instagramclone2.R;
-import tabian.com.instagramclone2.materialcamera.util.CameraUtil;
-import tabian.com.instagramclone2.materialcamera.util.Degrees;
+import ins.com.ins_project.R;
+import ins.com.ins_project.materialcamera.util.CameraUtil;
+import ins.com.ins_project.materialcamera.util.Degrees;
 
-import static tabian.com.instagramclone2.materialcamera.internal.BaseCaptureActivity.CAMERA_POSITION_BACK;
-import static tabian.com.instagramclone2.materialcamera.internal.BaseCaptureActivity.CAMERA_POSITION_FRONT;
-import static tabian.com.instagramclone2.materialcamera.internal.BaseCaptureActivity.CAMERA_POSITION_UNKNOWN;
-import static tabian.com.instagramclone2.materialcamera.internal.BaseCaptureActivity.FLASH_MODE_ALWAYS_ON;
-import static tabian.com.instagramclone2.materialcamera.internal.BaseCaptureActivity.FLASH_MODE_AUTO;
-import static tabian.com.instagramclone2.materialcamera.internal.BaseCaptureActivity.FLASH_MODE_OFF;
+import static ins.com.ins_project.materialcamera.internal.BaseCaptureActivity.CAMERA_POSITION_BACK;
+import static ins.com.ins_project.materialcamera.internal.BaseCaptureActivity.CAMERA_POSITION_FRONT;
+import static ins.com.ins_project.materialcamera.internal.BaseCaptureActivity.CAMERA_POSITION_UNKNOWN;
+import static ins.com.ins_project.materialcamera.internal.BaseCaptureActivity.FLASH_MODE_ALWAYS_ON;
+import static ins.com.ins_project.materialcamera.internal.BaseCaptureActivity.FLASH_MODE_AUTO;
+import static ins.com.ins_project.materialcamera.internal.BaseCaptureActivity.FLASH_MODE_OFF;
 
 /** @author Aidan Follestad (afollestad) */
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)

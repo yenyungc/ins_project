@@ -14,8 +14,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import tabian.com.instagramclone2.Home.HomeActivity;
-import tabian.com.instagramclone2.R;
+import ins.com.ins_project.Home.HomeActivity;
+import ins.com.ins_project.R;
 
 
 /**

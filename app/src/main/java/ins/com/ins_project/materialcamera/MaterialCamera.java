@@ -23,9 +23,9 @@ import java.io.File;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-import tabian.com.instagramclone2.R;
-import tabian.com.instagramclone2.materialcamera.internal.CameraIntentKey;
-import tabian.com.instagramclone2.materialcamera.util.CameraUtil;
+import ins.com.ins_project.R;
+import ins.com.ins_project.materialcamera.internal.CameraIntentKey;
+import ins.com.ins_project.materialcamera.util.CameraUtil;
 
 /** @author Aidan Follestad (afollestad) */
 @SuppressWarnings("WeakerAccess")

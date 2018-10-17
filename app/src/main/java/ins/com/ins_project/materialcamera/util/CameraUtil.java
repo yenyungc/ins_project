@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-import tabian.com.instagramclone2.materialcamera.internal.BaseCaptureActivity;
+import ins.com.ins_project.materialcamera.internal.BaseCaptureActivity;
 
 /** @author Aidan Follestad (afollestad) */
 public class CameraUtil {

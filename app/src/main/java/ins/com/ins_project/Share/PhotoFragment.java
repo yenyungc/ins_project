@@ -12,9 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import tabian.com.instagramclone2.Profile.AccountSettingsActivity;
-import tabian.com.instagramclone2.R;
-import tabian.com.instagramclone2.Utils.Permissions;
+import ins.com.ins_project.Profile.AccountSettingsActivity;
+import ins.com.ins_project.R;
+import ins.com.ins_project.Utils.Permissions;
 
 /**
  * Created by User on 5/28/2017.

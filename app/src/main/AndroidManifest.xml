@@ -4,8 +4,14 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" />
+    <!--<uses-feature android:name="android.hardware.camera.autofocus" />-->
+    <uses-permission android:name="android.permission.FLASHLIGHT"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.FLASHLIGHT" />
 
     <uses-feature android:name="android.hardware.camera.any" />
@@ -28,7 +34,36 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Home.AutoFitTextureView" />
+
+        <activity android:name=".Likes.LikesActivity"
+            android:launchMode="singleInstance"/>
+        <activity android:name=".Profile.ProfileActivity"
+            android:launchMode="singleInstance"/>
+        <activity android:name=".Share.ShareActivity"
+            android:launchMode="singleInstance"/>
+        <activity android:name=".Share.NextActivity"
+            android:launchMode="singleInstance"/>
+        <activity android:name=".Login.LoginActivity"
+            android:launchMode="singleInstance"/>
+
+        <activity android:name=".Profile.AccountSettingsActivity"
+            android:launchMode="singleInstance"/>
+        <activity android:name=".Login.RegisterActivity"
+            android:launchMode="singleInstance"/>
+        <activity android:name=".opengl.OpenGLES10Activity"
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".opengl.NewStoryActivity"
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Search.SearchActivity"
+            android:windowSoftInputMode="adjustNothing"
+            android:launchMode="singleInstance"/>
+
+
+
+        <!--<activity android:name=".Home.AutoFitTextureView" />-->
         <activity android:name=".Home.Camera"></activity>
     </application>
 

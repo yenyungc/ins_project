@@ -57,7 +57,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import tabian.com.instagramclone2.R;
+import ins.com.ins_project.R;
 
 import static java.lang.Math.round;
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<tabian.com.instagramclone2.materialcamera.internal.AutoFitTextureView
+<ins.com.ins_project.materialcamera.internal.AutoFitTextureView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/texture"
     android:layout_width="match_parent"

@@ -10,12 +10,12 @@ import android.widget.RelativeLayout;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
-import tabian.com.instagramclone2.R;
-import tabian.com.instagramclone2.materialcamera.util.CameraUtil;
+import ins.com.ins_project.R;
+import ins.com.ins_project.materialcamera.util.CameraUtil;
 
 
 public abstract class BaseGalleryFragment extends Fragment
-    implements tabian.com.instagramclone2.materialcamera.internal.CameraUriInterface, View.OnClickListener {
+    implements ins.com.ins_project.materialcamera.internal.CameraUriInterface, View.OnClickListener {
 
   BaseCaptureInterface mInterface;
   int mPrimaryColor;

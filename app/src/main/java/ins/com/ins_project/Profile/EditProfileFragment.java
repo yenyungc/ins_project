@@ -29,14 +29,14 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import tabian.com.instagramclone2.R;
-import tabian.com.instagramclone2.Share.ShareActivity;
-import tabian.com.instagramclone2.Utils.FirebaseMethods;
-import tabian.com.instagramclone2.Utils.UniversalImageLoader;
-import tabian.com.instagramclone2.dialogs.ConfirmPasswordDialog;
-import tabian.com.instagramclone2.models.User;
-import tabian.com.instagramclone2.models.UserAccountSettings;
-import tabian.com.instagramclone2.models.UserSettings;
+import ins.com.ins_project.R;
+import ins.com.ins_project.Share.ShareActivity;
+import ins.com.ins_project.Utils.FirebaseMethods;
+import ins.com.ins_project.Utils.UniversalImageLoader;
+import ins.com.ins_project.dialogs.ConfirmPasswordDialog;
+import ins.com.ins_project.models.User;
+import ins.com.ins_project.models.UserAccountSettings;
+import ins.com.ins_project.models.UserSettings;
 
 /**
  * Created by User on 6/4/2017.

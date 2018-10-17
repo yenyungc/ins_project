@@ -22,9 +22,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import tabian.com.instagramclone2.R;
-import tabian.com.instagramclone2.Utils.FirebaseMethods;
-import tabian.com.instagramclone2.models.User;
+import ins.com.ins_project.R;
+import ins.com.ins_project.Utils.FirebaseMethods;
+import ins.com.ins_project.models.User;
 
 /**
  * Created by User on 6/19/2017.

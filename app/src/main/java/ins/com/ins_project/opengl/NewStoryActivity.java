@@ -11,9 +11,9 @@ import android.widget.Toast;
 
 import java.io.File;
 
-import tabian.com.instagramclone2.R;
-import tabian.com.instagramclone2.Utils.FilePaths;
-import tabian.com.instagramclone2.materialcamera.MaterialCamera;
+import ins.com.ins_project.R;
+import ins.com.ins_project.Utils.FilePaths;
+import ins.com.ins_project.materialcamera.MaterialCamera;
 
 
 /**

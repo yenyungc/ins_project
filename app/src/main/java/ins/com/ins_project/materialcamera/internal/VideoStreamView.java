@@ -25,7 +25,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-import tabian.com.instagramclone2.R;
+import ins.com.ins_project.R;
 
 /** @author Aidan Follestad (afollestad) */
 public class VideoStreamView extends SurfaceView

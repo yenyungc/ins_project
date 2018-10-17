@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import tabian.com.instagramclone2.R;
+import ins.com.ins_project.R;
 
 /**
  * Created by User on 5/28/2017.

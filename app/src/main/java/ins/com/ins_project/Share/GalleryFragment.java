@@ -23,11 +23,11 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import java.util.ArrayList;
 
-import tabian.com.instagramclone2.Profile.AccountSettingsActivity;
-import tabian.com.instagramclone2.R;
-import tabian.com.instagramclone2.Utils.FilePaths;
-import tabian.com.instagramclone2.Utils.FileSearch;
-import tabian.com.instagramclone2.Utils.GridImageAdapter;
+import ins.com.ins_project.Profile.AccountSettingsActivity;
+import ins.com.ins_project.R;
+import ins.com.ins_project.Utils.FilePaths;
+import ins.com.ins_project.Utils.FileSearch;
+import ins.com.ins_project.Utils.GridImageAdapter;
 
 /**
  * Created by User on 5/28/2017.

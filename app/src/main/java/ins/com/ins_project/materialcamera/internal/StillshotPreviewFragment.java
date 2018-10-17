@@ -15,10 +15,10 @@ import com.bumptech.glide.Glide;
 
 import java.io.File;
 
-import tabian.com.instagramclone2.R;
+import ins.com.ins_project.R;
 
 
-public class StillshotPreviewFragment extends tabian.com.instagramclone2.materialcamera.internal.BaseGalleryFragment {
+public class StillshotPreviewFragment extends ins.com.ins_project.materialcamera.internal.BaseGalleryFragment {
 
   private static final String TAG = "StillshotPreviewFragmen";
 
@@ -36,7 +36,7 @@ public class StillshotPreviewFragment extends tabian.com.instagramclone2.materia
     fragment.setRetainInstance(true);
     Bundle args = new Bundle();
     args.putString("output_uri", outputUri);
-    args.putBoolean(tabian.com.instagramclone2.materialcamera.internal.CameraIntentKey.ALLOW_RETRY, allowRetry);
+    args.putBoolean(ins.com.ins_project.materialcamera.internal.CameraIntentKey.ALLOW_RETRY, allowRetry);
     args.putInt(CameraIntentKey.PRIMARY_COLOR, primaryColor);
     fragment.setArguments(args);
     return fragment;

@@ -15,8 +15,8 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 
-import tabian.com.instagramclone2.R;
-import tabian.com.instagramclone2.models.UserStories;
+import ins.com.ins_project.R;
+import ins.com.ins_project.models.UserStories;
 
 
 /**

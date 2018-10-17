@@ -28,11 +28,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import tabian.com.instagramclone2.Profile.ProfileActivity;
-import tabian.com.instagramclone2.R;
-import tabian.com.instagramclone2.Utils.BottomNavigationViewHelper;
-import tabian.com.instagramclone2.Utils.UserListAdapter;
-import tabian.com.instagramclone2.models.User;
+import ins.com.ins_project.Profile.ProfileActivity;
+import ins.com.ins_project.R;
+import ins.com.ins_project.Utils.BottomNavigationViewHelper;
+import ins.com.ins_project.Utils.UserListAdapter;
+import ins.com.ins_project.models.User;
 
 /**
  * Created by User on 5/28/2017.
