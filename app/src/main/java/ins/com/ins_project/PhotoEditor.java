@@ -2,6 +2,7 @@ package ins.com.ins_project;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -384,7 +385,51 @@ public class PhotoEditor extends AppCompatActivity {
     }
 
     private void negativeMode() {
+        /*
+         * 算法原理： 将当前像素点的RGB值分别与255之差后的值作为当前点的RGB值 例：ABC，求B点的底片效果： B.r = 255 - B.r; B.g = 255 - B.g; B.b = 255 - B.b;
+         */
+        int width = imgWidth;
+        int height = imgHeight;
+        Bitmap bmp = bm;
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+        int[] oldPixels = new int[width * height];
+        int[] newPixels = new int[width * height];
+        int color;
+        int pixelsR, pixelsG, pixelsB, pixelsA;
 
+        bmp.getPixels(oldPixels, 0, width, 0, 0, width, height);
+        for (int i = 1; i < height * width; i++) {
+            color = oldPixels[i];
+            // get the RGB value
+            pixelsA = Color.alpha(color);
+            pixelsR = Color.red(color);
+            pixelsG = Color.green(color);
+            pixelsB = Color.blue(color);
+            // Transform to negative
+            pixelsR = (255 - pixelsR);
+            pixelsG = (255 - pixelsG);
+            pixelsB = (255 - pixelsB);
+            // should be in range of 0 and 255
+            if (pixelsR > 255) {
+                pixelsR = 255;
+            } else if (pixelsR < 0) {
+                pixelsR = 0;
+            }
+            if (pixelsG > 255) {
+                pixelsG = 255;
+            } else if (pixelsG < 0) {
+                pixelsG = 0;
+            }
+            if (pixelsB > 255) {
+                pixelsB = 255;
+            } else if (pixelsB < 0) {
+                pixelsB = 0;
+            }
+            // generate new pixels
+            newPixels[i] = Color.argb(pixelsA, pixelsR, pixelsG, pixelsB);
+        }
+        bitmap.setPixels(newPixels, 0, width, 0, 0, width, height);
+        imageToShow.setImageBitmap(bitmap);
     }
 
     private void blacknWhiteMode() {
@@ -414,3 +459,6 @@ public class PhotoEditor extends AppCompatActivity {
 
 //亮度对比度
 //http://blog.csdn.net/sxwyf248/article/details/7019731
+
+//滤镜
+//https://blog.csdn.net/aqi00/article/details/51331531
