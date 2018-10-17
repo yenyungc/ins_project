@@ -29,7 +29,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".AutoFitTextureView" />
-        <activity android:name=".Camera"></activity>
+        <activity android:name=".Camera" />
+        <activity android:name=".GridSurfaceView"></activity>
     </application>
 
 </manifest>
