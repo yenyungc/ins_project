@@ -833,7 +833,7 @@ public class Camera extends AppCompatActivity implements ActivityCompat.OnReques
                             mCaptureSession = cameraCaptureSession;
                             try {
                                 // Auto focus should be continuous for camera preview.
-//                                negativeMode(mPreviewRequestBuilder);  //Test!
+                                negativeMode(mPreviewRequestBuilder);  //Test!
                                 mPreviewRequestBuilder.set(CaptureRequest.CONTROL_AF_MODE,
                                         CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE);
                                 // Flash is automatically enabled when necessary.
@@ -971,7 +971,7 @@ public class Camera extends AppCompatActivity implements ActivityCompat.OnReques
             // Use the same AE and AF modes as the preview.
             captureBuilder.set(CaptureRequest.CONTROL_AF_MODE,
                     CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE);
-//            negativeMode(mPreviewRequestBuilder);  //Test!
+            negativeMode(mPreviewRequestBuilder);  //Test!
             if (FLASHMODE == 1) {
                 setAutoFlash(captureBuilder);
             } else {
