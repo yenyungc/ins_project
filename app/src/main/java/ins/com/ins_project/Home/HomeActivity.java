@@ -33,15 +33,14 @@ import ins.com.ins_project.models.Photo;
 import ins.com.ins_project.opengl.AddToStoryDialog;
 import ins.com.ins_project.opengl.NewStoryActivity;
 
-public class HomeActivity extends AppCompatActivity implements
-        MainFeedListAdapter.OnLoadMoreItemsListener{
+public class HomeActivity extends AppCompatActivity implements MainFeedListAdapter.OnLoadMoreItemsListener {
 
     @Override
     public void onLoadMoreItems() {
         Log.d(TAG, "onLoadMoreItems: displaying more photos");
-        HomeFragment fragment = (HomeFragment)getSupportFragmentManager()
+        HomeFragment fragment = (HomeFragment) getSupportFragmentManager()
                 .findFragmentByTag("android:switcher:" + R.id.viewpager_container + ":" + mViewPager.getCurrentItem());
-        if(fragment != null){
+        if (fragment != null) {
             fragment.displayMorePhotos();
         }
     }
@@ -74,29 +73,26 @@ public class HomeActivity extends AppCompatActivity implements
         mRelativeLayout = (RelativeLayout) findViewById(R.id.relLayoutParent);
 
         setupFirebaseAuth();
-
         initImageLoader();
         setupBottomNavigationView();
         setupViewPager();
-
     }
 
-    public void openNewStoryActivity(){
+    public void openNewStoryActivity() {
         Intent intent = new Intent(this, NewStoryActivity.class);
         startActivityForResult(intent, REQUEST_ADD_NEW_STORY);
     }
 
-    public void showAddToStoryDialog(){
+    public void showAddToStoryDialog() {
         Log.d(TAG, "showAddToStoryDialog: showing add to story dialog.");
         AddToStoryDialog dialog = new AddToStoryDialog();
         dialog.show(getFragmentManager(), getString(R.string.dialog_add_to_story));
     }
 
-
-    public void onCommentThreadSelected(Photo photo, String callingActivity){
+    public void onCommentThreadSelected(Photo photo, String callingActivity) {
         Log.d(TAG, "onCommentThreadSelected: selected a coemment thread");
 
-        ViewCommentsFragment fragment  = new ViewCommentsFragment();
+        ViewCommentsFragment fragment = new ViewCommentsFragment();
         Bundle args = new Bundle();
         args.putParcelable(getString(R.string.photo), photo);
         args.putString(getString(R.string.home_activity), getString(R.string.home_activity));
@@ -106,17 +102,15 @@ public class HomeActivity extends AppCompatActivity implements
         transaction.replace(R.id.container, fragment);
         transaction.addToBackStack(getString(R.string.view_comments_fragment));
         transaction.commit();
-
     }
 
-    public void hideLayout(){
+    public void hideLayout() {
         Log.d(TAG, "hideLayout: hiding layout");
         mRelativeLayout.setVisibility(View.GONE);
         mFrameLayout.setVisibility(View.VISIBLE);
     }
 
-
-    public void showLayout(){
+    public void showLayout() {
         Log.d(TAG, "hideLayout: showing layout");
         mRelativeLayout.setVisibility(View.VISIBLE);
         mFrameLayout.setVisibility(View.GONE);
@@ -125,11 +119,10 @@ public class HomeActivity extends AppCompatActivity implements
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        if(mFrameLayout.getVisibility() == View.VISIBLE){
+        if (mFrameLayout.getVisibility() == View.VISIBLE) {
             showLayout();
         }
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -148,20 +141,15 @@ public class HomeActivity extends AppCompatActivity implements
 
                     FirebaseMethods firebaseMethods = new FirebaseMethods(this);
                     firebaseMethods.uploadNewStory(data, fragment);
-
-                }
-                else{
+                } else {
                     Log.d(TAG, "onActivityResult: could not communicate with home fragment.");
                 }
-
-
-
             }
         }
     }
 
 
-    private void initImageLoader(){
+    private void initImageLoader() {
         UniversalImageLoader universalImageLoader = new UniversalImageLoader(mContext);
         ImageLoader.getInstance().init(universalImageLoader.getConfig());
     }
@@ -169,7 +157,7 @@ public class HomeActivity extends AppCompatActivity implements
     /**
      * Responsible for adding the 3 tabs: Camera, Home, Messages
      */
-    private void setupViewPager(){
+    private void setupViewPager() {
         SectionsPagerAdapter adapter = new SectionsPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new CameraFragment()); //index 0
         adapter.addFragment(new HomeFragment()); //index 1
@@ -187,11 +175,11 @@ public class HomeActivity extends AppCompatActivity implements
     /**
      * BottomNavigationView setup
      */
-    private void setupBottomNavigationView(){
+    private void setupBottomNavigationView() {
         Log.d(TAG, "setupBottomNavigationView: setting up BottomNavigationView");
         BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottomNavViewBar);
         BottomNavigationViewHelper.setupBottomNavigationView(bottomNavigationViewEx);
-        BottomNavigationViewHelper.enableNavigation(mContext, this,bottomNavigationViewEx);
+        BottomNavigationViewHelper.enableNavigation(mContext, this, bottomNavigationViewEx);
         Menu menu = bottomNavigationViewEx.getMenu();
         MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
         menuItem.setChecked(true);
@@ -204,20 +192,22 @@ public class HomeActivity extends AppCompatActivity implements
 
     /**
      * checks to see if the @param 'user' is logged in
+     *
      * @param user
      */
-    private void checkCurrentUser(FirebaseUser user){
+    private void checkCurrentUser(FirebaseUser user) {
         Log.d(TAG, "checkCurrentUser: checking if user is logged in.");
 
-        if(user == null){
+        if (user == null) {
             Intent intent = new Intent(mContext, LoginActivity.class);
             startActivity(intent);
         }
     }
+
     /**
      * Setup the firebase auth object
      */
-    private void setupFirebaseAuth(){
+    private void setupFirebaseAuth() {
         Log.d(TAG, "setupFirebaseAuth: setting up firebase auth.");
 
         mAuth = FirebaseAuth.getInstance();
@@ -257,6 +247,4 @@ public class HomeActivity extends AppCompatActivity implements
             mAuth.removeAuthStateListener(mAuthListener);
         }
     }
-
-
 }

@@ -38,12 +38,8 @@ import ins.com.ins_project.models.User;
 import ins.com.ins_project.models.UserAccountSettings;
 import ins.com.ins_project.models.UserSettings;
 
-/**
- * Created by User on 6/4/2017.
- */
-
 public class EditProfileFragment extends Fragment implements
-        ConfirmPasswordDialog.OnConfirmPasswordListener{
+        ConfirmPasswordDialog.OnConfirmPasswordListener {
 
 
     @Override
@@ -61,20 +57,19 @@ public class EditProfileFragment extends Fragment implements
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             Log.d(TAG, "User re-authenticated.");
 
                             ///////////////////////check to see if the email is not already present in the database
                             mAuth.fetchProvidersForEmail(mEmail.getText().toString()).addOnCompleteListener(new OnCompleteListener<ProviderQueryResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<ProviderQueryResult> task) {
-                                    if(task.isSuccessful()){
-                                        try{
-                                            if(task.getResult().getProviders().size() == 1){
+                                    if (task.isSuccessful()) {
+                                        try {
+                                            if (task.getResult().getProviders().size() == 1) {
                                                 Log.d(TAG, "onComplete: that email is already in use.");
                                                 Toast.makeText(getActivity(), "That email is already in use", Toast.LENGTH_SHORT).show();
-                                            }
-                                            else{
+                                            } else {
                                                 Log.d(TAG, "onComplete: That email is available.");
 
                                                 //////////////////////the email is available so update it
@@ -90,18 +85,15 @@ public class EditProfileFragment extends Fragment implements
                                                             }
                                                         });
                                             }
-                                        }catch (NullPointerException e){
-                                            Log.e(TAG, "onComplete: NullPointerException: "  +e.getMessage() );
+                                        } catch (NullPointerException e) {
+                                            Log.e(TAG, "onComplete: NullPointerException: " + e.getMessage());
                                         }
                                     }
                                 }
                             });
 
 
-
-
-
-                        }else{
+                        } else {
                             Log.d(TAG, "onComplete: re-authentication failed.");
                         }
 
@@ -144,7 +136,6 @@ public class EditProfileFragment extends Fragment implements
         mChangeProfilePhoto = (TextView) view.findViewById(R.id.changeProfilePhoto);
         mFirebaseMethods = new FirebaseMethods(getActivity());
 
-
         //setProfileImage();
         setupFirebaseAuth();
 
@@ -166,7 +157,6 @@ public class EditProfileFragment extends Fragment implements
                 saveProfileSettings();
             }
         });
-
         return view;
     }
 
@@ -175,7 +165,7 @@ public class EditProfileFragment extends Fragment implements
      * Retrieves the data contained in the widgets and submits it to the database
      * Before donig so it chekcs to make sure the username chosen is unqiue
      */
-    private void saveProfileSettings(){
+    private void saveProfileSettings() {
         final String displayName = mDisplayName.getText().toString();
         final String username = mUsername.getText().toString();
         final String website = mWebsite.getText().toString();
@@ -185,12 +175,12 @@ public class EditProfileFragment extends Fragment implements
 
 
         //case1: if the user made a change to their username
-        if(!mUserSettings.getUser().getUsername().equals(username)){
+        if (!mUserSettings.getUser().getUsername().equals(username)) {
 
             checkIfUsernameExists(username);
         }
         //case2: if the user made a change to their email
-        if(!mUserSettings.getUser().getEmail().equals(email)){
+        if (!mUserSettings.getUser().getEmail().equals(email)) {
 
             // step1) Reauthenticate
             //          -Confirm the password and email
@@ -208,28 +198,28 @@ public class EditProfileFragment extends Fragment implements
         /**
          * change the rest of the settings that do not require uniqueness
          */
-        if(!mUserSettings.getSettings().getDisplay_name().equals(displayName)){
+        if (!mUserSettings.getSettings().getDisplay_name().equals(displayName)) {
             //update displayname
             mFirebaseMethods.updateUserAccountSettings(displayName, null, null, 0);
         }
-        if(!mUserSettings.getSettings().getWebsite().equals(website)){
+        if (!mUserSettings.getSettings().getWebsite().equals(website)) {
             //update website
             mFirebaseMethods.updateUserAccountSettings(null, website, null, 0);
         }
-        if(!mUserSettings.getSettings().getDescription().equals(description)){
+        if (!mUserSettings.getSettings().getDescription().equals(description)) {
             //update description
             mFirebaseMethods.updateUserAccountSettings(null, null, description, 0);
         }
-        if(!mUserSettings.getSettings().getProfile_photo().equals(phoneNumber)){
+        if (!mUserSettings.getSettings().getProfile_photo().equals(phoneNumber)) {
             //update phoneNumber
             mFirebaseMethods.updateUserAccountSettings(null, null, null, phoneNumber);
         }
     }
 
 
-
     /**
      * Check is @param username already exists in teh database
+     *
      * @param username
      */
     private void checkIfUsernameExists(final String username) {
@@ -244,14 +234,14 @@ public class EditProfileFragment extends Fragment implements
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                if(!dataSnapshot.exists()){
+                if (!dataSnapshot.exists()) {
                     //add the username
                     mFirebaseMethods.updateUsername(username);
                     Toast.makeText(getActivity(), "saved username.", Toast.LENGTH_SHORT).show();
 
                 }
-                for(DataSnapshot singleSnapshot: dataSnapshot.getChildren()){
-                    if (singleSnapshot.exists()){
+                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
+                    if (singleSnapshot.exists()) {
                         Log.d(TAG, "checkIfUsernameExists: FOUND A MATCH: " + singleSnapshot.getValue(User.class).getUsername());
                         Toast.makeText(getActivity(), "That username already exists.", Toast.LENGTH_SHORT).show();
                     }
@@ -265,7 +255,7 @@ public class EditProfileFragment extends Fragment implements
         });
     }
 
-    private void setProfileWidgets(UserSettings userSettings){
+    private void setProfileWidgets(UserSettings userSettings) {
         Log.d(TAG, "setProfileWidgets: setting widgets with data retrieving from firebase database: " + userSettings.toString());
         Log.d(TAG, "setProfileWidgets: setting widgets with data retrieving from firebase database: " + userSettings.getUser().getEmail());
         Log.d(TAG, "setProfileWidgets: setting widgets with data retrieving from firebase database: " + userSettings.getUser().getPhone_number());
@@ -299,7 +289,7 @@ public class EditProfileFragment extends Fragment implements
     /**
      * Setup the firebase auth object
      */
-    private void setupFirebaseAuth(){
+    private void setupFirebaseAuth() {
         Log.d(TAG, "setupFirebaseAuth: setting up firebase auth.");
 
         mAuth = FirebaseAuth.getInstance();

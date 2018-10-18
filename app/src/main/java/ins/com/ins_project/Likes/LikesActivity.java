@@ -13,14 +13,9 @@ import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import ins.com.ins_project.R;
 import ins.com.ins_project.Utils.BottomNavigationViewHelper;
 
-/**
- * Created by User on 5/28/2017.
- */
-
 public class LikesActivity extends AppCompatActivity {
     private static final String TAG = "LikesActivity";
     private static final int ACTIVITY_NUM = 3;
-
     private Context mContext = LikesActivity.this;
 
     @Override
@@ -35,11 +30,11 @@ public class LikesActivity extends AppCompatActivity {
     /**
      * BottomNavigationView setup
      */
-    private void setupBottomNavigationView(){
+    private void setupBottomNavigationView() {
         Log.d(TAG, "setupBottomNavigationView: setting up BottomNavigationView");
         BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottomNavViewBar);
         BottomNavigationViewHelper.setupBottomNavigationView(bottomNavigationViewEx);
-        BottomNavigationViewHelper.enableNavigation(mContext, this,bottomNavigationViewEx);
+        BottomNavigationViewHelper.enableNavigation(mContext, this, bottomNavigationViewEx);
         Menu menu = bottomNavigationViewEx.getMenu();
         MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
         menuItem.setChecked(true);

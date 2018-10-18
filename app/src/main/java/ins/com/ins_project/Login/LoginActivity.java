@@ -73,7 +73,6 @@ public class LoginActivity extends AppCompatActivity {
      */
 
      private void init(){
-
          //initialize the button for logging in
          Button btnLogin = (Button) findViewById(R.id.btn_login);
          btnLogin.setOnClickListener(new View.OnClickListener() {
@@ -132,12 +131,10 @@ public class LoginActivity extends AppCompatActivity {
                                              Log.e(TAG, "onComplete: NullPointerException: " + e.getMessage() );
                                          }
                                      }
-
                                      // ...
                                  }
                              });
                  }
-
              }
          });
 

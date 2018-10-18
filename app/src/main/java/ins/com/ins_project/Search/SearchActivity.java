@@ -34,10 +34,6 @@ import ins.com.ins_project.Utils.BottomNavigationViewHelper;
 import ins.com.ins_project.Utils.UserListAdapter;
 import ins.com.ins_project.models.User;
 
-/**
- * Created by User on 5/28/2017.
- */
-
 public class SearchActivity extends AppCompatActivity {
     private static final String TAG = "SearchActivity";
     private static final int ACTIVITY_NUM = 1;
@@ -65,7 +61,7 @@ public class SearchActivity extends AppCompatActivity {
         initTextListener();
     }
 
-    private void initTextListener(){
+    private void initTextListener() {
         Log.d(TAG, "initTextListener: initializing");
 
         mUserList = new ArrayList<>();
@@ -90,20 +86,20 @@ public class SearchActivity extends AppCompatActivity {
         });
     }
 
-    private void searchForMatch(String keyword){
+    private void searchForMatch(String keyword) {
         Log.d(TAG, "searchForMatch: searching for a match: " + keyword);
         mUserList.clear();
         //update the users list view
-        if(keyword.length() ==0){
+        if (keyword.length() == 0) {
 
-        }else{
+        } else {
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
             Query query = reference.child(getString(R.string.dbname_users))
                     .orderByChild(getString(R.string.field_username)).equalTo(keyword);
             query.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    for(DataSnapshot singleSnapshot :  dataSnapshot.getChildren()){
+                    for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
                         Log.d(TAG, "onDataChange: found user:" + singleSnapshot.getValue(User.class).toString());
 
                         mUserList.add(singleSnapshot.getValue(User.class));
@@ -120,7 +116,7 @@ public class SearchActivity extends AppCompatActivity {
         }
     }
 
-    private void updateUsersList(){
+    private void updateUsersList() {
         Log.d(TAG, "updateUsersList: updating users list");
 
         mAdapter = new UserListAdapter(SearchActivity.this, R.layout.layout_user_listitem, mUserList);
@@ -133,7 +129,7 @@ public class SearchActivity extends AppCompatActivity {
                 Log.d(TAG, "onItemClick: selected user: " + mUserList.get(position).toString());
 
                 //navigate to profile activity
-                Intent intent =  new Intent(SearchActivity.this, ProfileActivity.class);
+                Intent intent = new Intent(SearchActivity.this, ProfileActivity.class);
                 intent.putExtra(getString(R.string.calling_activity), getString(R.string.search_activity));
                 intent.putExtra(getString(R.string.intent_user), mUserList.get(position));
                 startActivity(intent);
@@ -142,8 +138,8 @@ public class SearchActivity extends AppCompatActivity {
     }
 
 
-    private void hideSoftKeyboard(){
-        if(getCurrentFocus() != null){
+    private void hideSoftKeyboard() {
+        if (getCurrentFocus() != null) {
             InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         }
@@ -153,11 +149,11 @@ public class SearchActivity extends AppCompatActivity {
     /**
      * BottomNavigationView setup
      */
-    private void setupBottomNavigationView(){
+    private void setupBottomNavigationView() {
         Log.d(TAG, "setupBottomNavigationView: setting up BottomNavigationView");
         BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottomNavViewBar);
         BottomNavigationViewHelper.setupBottomNavigationView(bottomNavigationViewEx);
-        BottomNavigationViewHelper.enableNavigation(mContext, this,bottomNavigationViewEx);
+        BottomNavigationViewHelper.enableNavigation(mContext, this, bottomNavigationViewEx);
         Menu menu = bottomNavigationViewEx.getMenu();
         MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
         menuItem.setChecked(true);

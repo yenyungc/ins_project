@@ -42,10 +42,6 @@ import ins.com.ins_project.models.Photo;
 import ins.com.ins_project.models.Story;
 import ins.com.ins_project.models.UserAccountSettings;
 
-/**
- * Created by User on 5/28/2017.
- */
-
 public class HomeFragment extends Fragment implements OnUpdateListener, OnLoadListener {
 
     private static final String TAG = "HomeFragment";
@@ -53,33 +49,27 @@ public class HomeFragment extends Fragment implements OnUpdateListener, OnLoadLi
     @Override
     public void onUpdate() {
         Log.d(TAG, "ElasticListView: updating list view...");
-
         getFollowing();
     }
-
 
     @Override
     public void onLoad() {
         Log.d(TAG, "ElasticListView: loading...");
-
-        // Notify load is done
         mListView.notifyLoaded();
     }
-
 
     //vars
     private ArrayList<Photo> mPhotos;
     private ArrayList<Photo> mPaginatedPhotos;
     private ArrayList<String> mFollowing;
     private int recursionIterator = 0;
-    //    private ListView mListView;
+
     private ElasticListView mListView;
     private MainFeedListAdapter adapter;
     private int resultsCount = 0;
     private ArrayList<UserAccountSettings> mUserAccountSettings;
-    //    private ArrayList<UserStories> mAllUserStories = new ArrayList<>();
-    private JSONArray mMasterStoriesArray;
 
+    private JSONArray mMasterStoriesArray;
     private RecyclerView mRecyclerView;
     public StoriesRecyclerViewAdapter mStoriesAdapter;
 
@@ -88,30 +78,26 @@ public class HomeFragment extends Fragment implements OnUpdateListener, OnLoadLi
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-//        mListView = (ListView) view.findViewById(R.id.listView);
         mListView = (ElasticListView) view.findViewById(R.id.listView);
-
         initListViewRefresh();
         getFollowing();
-
         return view;
     }
 
-    private void initListViewRefresh(){
+    private void initListViewRefresh() {
         mListView.setHorizontalFadingEdgeEnabled(true);
         mListView.setAdapter(adapter);
         mListView.enableLoadFooter(true)
                 .getLoadFooter().setLoadAction(LoadFooter.LoadAction.RELEASE_TO_LOAD);
         mListView.setOnUpdateListener(this)
                 .setOnLoadListener(this);
-//        mListView.requestUpdate();
     }
 
 
-    private void getFriendsAccountSettings(){
+    private void getFriendsAccountSettings() {
         Log.d(TAG, "getFriendsAccountSettings: getting friends account settings.");
 
-        for(int i = 0; i < mFollowing.size(); i++) {
+        for (int i = 0; i < mFollowing.size(); i++) {
             Log.d(TAG, "getFriendsAccountSettings: user: " + mFollowing.get(i));
             final int count = i;
             Query query = FirebaseDatabase.getInstance().getReference()
@@ -123,12 +109,11 @@ public class HomeFragment extends Fragment implements OnUpdateListener, OnLoadLi
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
 
-
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         Log.d(TAG, "getFriendsAccountSettings: got a user: " + snapshot.getValue(UserAccountSettings.class).getDisplay_name());
                         mUserAccountSettings.add(snapshot.getValue(UserAccountSettings.class));
 
-                        if(count == 0){
+                        if (count == 0) {
                             JSONObject userObject = new JSONObject();
                             try {
                                 userObject.put(getString(R.string.field_display_name), mUserAccountSettings.get(count).getDisplay_name());
@@ -141,9 +126,7 @@ public class HomeFragment extends Fragment implements OnUpdateListener, OnLoadLi
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-
                         }
-
                     }
                     if (count == mFollowing.size() - 1) {
                         getFriendsStories();
@@ -159,10 +142,10 @@ public class HomeFragment extends Fragment implements OnUpdateListener, OnLoadLi
     }
 
 
-    private void getFriendsStories(){
+    private void getFriendsStories() {
         Log.d(TAG, "getFriendsStories: getting stories of following.");
 
-        for(int i = 0; i < mUserAccountSettings.size(); i++){
+        for (int i = 0; i < mUserAccountSettings.size(); i++) {
             Log.d(TAG, "getFriendsStories: checking user for stories: " + mUserAccountSettings.get(i));
             final int count = i;
             Query query = FirebaseDatabase.getInstance().getReference()
@@ -177,15 +160,15 @@ public class HomeFragment extends Fragment implements OnUpdateListener, OnLoadLi
 
                     Log.d(TAG, "getFriendsStories: count: " + count);
                     Log.d(TAG, "getFriendsStories: user: " + mUserAccountSettings.get(count).getDisplay_name());
-                    try{
-                        if(count != 0){
+                    try {
+                        if (count != 0) {
                             userObject.put(getString(R.string.field_display_name), mUserAccountSettings.get(count).getDisplay_name());
                             userObject.put(getString(R.string.field_username), mUserAccountSettings.get(count).getUsername());
                             userObject.put(getString(R.string.field_profile_photo), mUserAccountSettings.get(count).getProfile_photo());
                             userObject.put(getString(R.string.field_user_id), mUserAccountSettings.get(count).getUser_id());
                         }
 
-                        for(DataSnapshot snapshot: dataSnapshot.getChildren()){
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                             JSONObject story = new JSONObject();
                             story.put(getString(R.string.field_user_id), snapshot.getValue(Story.class).getUser_id());
                             story.put(getString(R.string.field_timestamp), snapshot.getValue(Story.class).getTimestamp());
@@ -195,43 +178,35 @@ public class HomeFragment extends Fragment implements OnUpdateListener, OnLoadLi
                             story.put(getString(R.string.field_views), snapshot.getValue(Story.class).getViews());
                             story.put(getString(R.string.field_duration), snapshot.getValue(Story.class).getDuration());
 
-
                             Log.d(TAG, "getFriendsStories: got a story: " + story.get(getString(R.string.field_user_id)));
-//                            Log.d(TAG, "getFriendsStories: story: " + story.toString());
                             storiesArray.put(story);
                         }
 
                         JSONObject userSettingsStoryObject = new JSONObject();
-                        if(count != 0){
+                        if (count != 0) {
                             userSettingsStoryObject.put(getString(R.string.user_account_settings), userObject);
-                            if(storiesArray.length() > 0){
+                            if (storiesArray.length() > 0) {
                                 userSettingsStoryObject.put(getString(R.string.user_stories), storiesArray);
                                 int position = mMasterStoriesArray.length();
                                 mMasterStoriesArray.put(position, userSettingsStoryObject);
                                 Log.d(TAG, "onDataChange: adding list of stories to position #" + position);
                             }
-                        }
-                        else {
+                        } else {
                             userObject = mMasterStoriesArray.getJSONObject(0).getJSONObject(getString(R.string.user_account_settings));
                             userSettingsStoryObject.put(getString(R.string.user_account_settings), userObject);
                             userSettingsStoryObject.put(getString(R.string.user_stories), storiesArray);
-//                            int position = mMasterStoriesArray.length() - 1;
                             int position = 0;
                             mMasterStoriesArray.put(position, userSettingsStoryObject);
                             Log.d(TAG, "onDataChange: adding list of stories to position #" + position);
                         }
-
-
-                    }catch (JSONException e){
+                    } catch (JSONException e) {
                         e.printStackTrace();
                     }
 
-                    if(!dataSnapshot.exists()){
+                    if (!dataSnapshot.exists()) {
                         Log.d(TAG, "getFriendsStories: no stories could be found.");
-//                        Log.d(TAG, "getFriendsStories: " + mMasterStoriesArray.toString());
-
                     }
-                    if(count == mFollowing.size() - 1){
+                    if (count == mFollowing.size() - 1) {
                         initRecyclerView();
                     }
 
@@ -243,14 +218,11 @@ public class HomeFragment extends Fragment implements OnUpdateListener, OnLoadLi
                 }
             });
         }
-
     }
 
-
-
-    private void initRecyclerView(){
+    private void initRecyclerView() {
         Log.d(TAG, "initRecyclerView: init recyclerview.");
-        if(mRecyclerView == null){
+        if (mRecyclerView == null) {
             TextView textView = new TextView(getActivity());
             textView.setText("Stories");
             textView.setTextColor(getResources().getColor(R.color.black));
@@ -272,28 +244,28 @@ public class HomeFragment extends Fragment implements OnUpdateListener, OnLoadLi
         mRecyclerView.setAdapter(mStoriesAdapter);
     }
 
-    private void clearAll(){
-        if(mFollowing != null){
+    private void clearAll() {
+        if (mFollowing != null) {
             mFollowing.clear();
         }
-        if(mPhotos != null){
+        if (mPhotos != null) {
             mPhotos.clear();
-            if(adapter != null){
+            if (adapter != null) {
                 adapter.clear();
                 adapter.notifyDataSetChanged();
             }
         }
-        if(mUserAccountSettings != null){
+        if (mUserAccountSettings != null) {
             mUserAccountSettings.clear();
         }
-        if(mPaginatedPhotos != null){
+        if (mPaginatedPhotos != null) {
             mPaginatedPhotos.clear();
         }
         mMasterStoriesArray = new JSONArray(new ArrayList<String>());
-        if(mStoriesAdapter != null){
+        if (mStoriesAdapter != null) {
             mStoriesAdapter.notifyDataSetChanged();
         }
-        if(mRecyclerView != null){
+        if (mRecyclerView != null) {
             mRecyclerView.setAdapter(null);
         }
         mFollowing = new ArrayList<>();
@@ -303,8 +275,9 @@ public class HomeFragment extends Fragment implements OnUpdateListener, OnLoadLi
     }
 
     /**
-     //     * Retrieve all user id's that current user is following
-     //     */
+     * //     * Retrieve all user id's that current user is following
+     * //
+     */
     private void getFollowing() {
         Log.d(TAG, "getFollowing: searching for following");
 
@@ -312,7 +285,7 @@ public class HomeFragment extends Fragment implements OnUpdateListener, OnLoadLi
         //also add your own id to the list
         try {
             mFollowing.add(FirebaseAuth.getInstance().getCurrentUser().getUid());
-        } catch (NullPointerException e){
+        } catch (NullPointerException e) {
             e.printStackTrace();
         }
 
@@ -333,7 +306,6 @@ public class HomeFragment extends Fragment implements OnUpdateListener, OnLoadLi
                     }
 
                     getPhotos();
-//                getMyUserAccountSettings();
                     getFriendsAccountSettings();
                 }
 
@@ -341,30 +313,26 @@ public class HomeFragment extends Fragment implements OnUpdateListener, OnLoadLi
                 public void onCancelled(DatabaseError databaseError) {
 
                 }
-
             });
-        } catch (NullPointerException e){
+        } catch (NullPointerException e) {
             e.printStackTrace();
         }
-
-
     }
 
-    private void getPhotos(){
+    private void getPhotos() {
         Log.d(TAG, "getPhotos: getting list of photos");
 
-        for(int i = 0; i < mFollowing.size(); i++){
+        for (int i = 0; i < mFollowing.size(); i++) {
             final int count = i;
             Query query = FirebaseDatabase.getInstance().getReference()
                     .child(getActivity().getString(R.string.dbname_user_photos))
                     .child(mFollowing.get(i))
                     .orderByChild(getString(R.string.field_user_id))
-                    .equalTo(mFollowing.get(i))
-                    ;
+                    .equalTo(mFollowing.get(i));
             query.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    for ( DataSnapshot singleSnapshot :  dataSnapshot.getChildren()){
+                    for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
 
                         Photo newPhoto = new Photo();
                         Map<String, Object> objectMap = (HashMap<String, Object>) singleSnapshot.getValue();
@@ -379,7 +347,7 @@ public class HomeFragment extends Fragment implements OnUpdateListener, OnLoadLi
                         Log.d(TAG, "getPhotos: photo: " + newPhoto.getPhoto_id());
                         List<Comment> commentsList = new ArrayList<Comment>();
                         for (DataSnapshot dSnapshot : singleSnapshot
-                                .child(getString(R.string.field_comments)).getChildren()){
+                                .child(getString(R.string.field_comments)).getChildren()) {
                             Map<String, Object> object_map = (HashMap<String, Object>) dSnapshot.getValue();
                             Comment comment = new Comment();
                             comment.setUser_id(object_map.get(getString(R.string.field_user_id)).toString());
@@ -390,11 +358,9 @@ public class HomeFragment extends Fragment implements OnUpdateListener, OnLoadLi
                         newPhoto.setComments(commentsList);
                         mPhotos.add(newPhoto);
                     }
-                    if(count >= mFollowing.size() - 1){
-                        //display the photos
+                    if (count >= mFollowing.size() - 1) {
                         displayPhotos();
                     }
-
                 }
 
                 @Override
@@ -402,16 +368,13 @@ public class HomeFragment extends Fragment implements OnUpdateListener, OnLoadLi
                     Log.d(TAG, "onCancelled: query cancelled.");
                 }
             });
-
         }
     }
 
-    private void displayPhotos(){
-//        mPaginatedPhotos = new ArrayList<>();
-        if(mPhotos != null){
+    private void displayPhotos() {
+        if (mPhotos != null) {
 
-            try{
-
+            try {
                 //sort for newest to oldest
                 Collections.sort(mPhotos, new Comparator<Photo>() {
                     public int compare(Photo o1, Photo o2) {
@@ -421,12 +384,12 @@ public class HomeFragment extends Fragment implements OnUpdateListener, OnLoadLi
 
                 //we want to load 10 at a time. So if there is more than 10, just load 10 to start
                 int iterations = mPhotos.size();
-                if(iterations > 10){
+                if (iterations > 10) {
                     iterations = 10;
                 }
-//
+
                 resultsCount = 0;
-                for(int i = 0; i < iterations; i++){
+                for (int i = 0; i < iterations; i++) {
                     mPaginatedPhotos.add(mPhotos.get(i));
                     resultsCount++;
                     Log.d(TAG, "displayPhotos: adding a photo to paginated list: " + mPhotos.get(i).getPhoto_id());
@@ -437,47 +400,41 @@ public class HomeFragment extends Fragment implements OnUpdateListener, OnLoadLi
 
                 // Notify update is done
                 mListView.notifyUpdated();
-
-            }catch (IndexOutOfBoundsException e){
-                Log.e(TAG, "displayPhotos: IndexOutOfBoundsException:" + e.getMessage() );
-            }catch (NullPointerException e){
-                Log.e(TAG, "displayPhotos: NullPointerException:" + e.getMessage() );
+            } catch (IndexOutOfBoundsException e) {
+                Log.e(TAG, "displayPhotos: IndexOutOfBoundsException:" + e.getMessage());
+            } catch (NullPointerException e) {
+                Log.e(TAG, "displayPhotos: NullPointerException:" + e.getMessage());
             }
         }
     }
 
-    public void displayMorePhotos(){
+    public void displayMorePhotos() {
         Log.d(TAG, "displayMorePhotos: displaying more photos");
 
-        try{
-
-            if(mPhotos.size() > resultsCount && mPhotos.size() > 0){
-
+        try {
+            if (mPhotos.size() > resultsCount && mPhotos.size() > 0) {
                 int iterations;
-                if(mPhotos.size() > (resultsCount + 10)){
+                if (mPhotos.size() > (resultsCount + 10)) {
                     Log.d(TAG, "displayMorePhotos: there are greater than 10 more photos");
                     iterations = 10;
-                }else{
+                } else {
                     Log.d(TAG, "displayMorePhotos: there is less than 10 more photos");
                     iterations = mPhotos.size() - resultsCount;
                 }
 
                 //add the new photos to the paginated list
-                for(int i = resultsCount; i < resultsCount + iterations; i++){
+                for (int i = resultsCount; i < resultsCount + iterations; i++) {
                     mPaginatedPhotos.add(mPhotos.get(i));
                 }
-
                 resultsCount = resultsCount + iterations;
                 adapter.notifyDataSetChanged();
             }
-        }catch (IndexOutOfBoundsException e){
-            Log.e(TAG, "displayPhotos: IndexOutOfBoundsException:" + e.getMessage() );
-        }catch (NullPointerException e){
-            Log.e(TAG, "displayPhotos: NullPointerException:" + e.getMessage() );
+        } catch (IndexOutOfBoundsException e) {
+            Log.e(TAG, "displayPhotos: IndexOutOfBoundsException:" + e.getMessage());
+        } catch (NullPointerException e) {
+            Log.e(TAG, "displayPhotos: NullPointerException:" + e.getMessage());
         }
     }
-
-
 }
 
 

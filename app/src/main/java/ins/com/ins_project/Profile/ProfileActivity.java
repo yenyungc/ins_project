@@ -20,14 +20,10 @@ import ins.com.ins_project.Utils.ViewProfileFragment;
 import ins.com.ins_project.models.Photo;
 import ins.com.ins_project.models.User;
 
-/**
- * Created by User on 5/28/2017.
- */
-
 public class ProfileActivity extends AppCompatActivity implements
-        ProfileFragment.OnGridImageSelectedListener ,
+        ProfileFragment.OnGridImageSelectedListener,
         ViewPostFragment.OnCommentThreadSelectedListener,
-        ViewProfileFragment.OnGridImageSelectedListener{
+        ViewProfileFragment.OnGridImageSelectedListener {
 
     private static final String TAG = "ProfileActivity";
 
@@ -57,7 +53,7 @@ public class ProfileActivity extends AppCompatActivity implements
 
         fragment.setArguments(args);
 
-        FragmentTransaction transaction  = getSupportFragmentManager().beginTransaction();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.container, fragment);
         transaction.addToBackStack(getString(R.string.view_post_fragment));
         transaction.commit();
@@ -85,15 +81,15 @@ public class ProfileActivity extends AppCompatActivity implements
 
     }
 
-    private void init(){
+    private void init() {
         Log.d(TAG, "init: inflating " + getString(R.string.profile_fragment));
 
         Intent intent = getIntent();
-        if(intent.hasExtra(getString(R.string.calling_activity))){
+        if (intent.hasExtra(getString(R.string.calling_activity))) {
             Log.d(TAG, "init: searching for user object attached as intent extra");
-            if(intent.hasExtra(getString(R.string.intent_user))){
+            if (intent.hasExtra(getString(R.string.intent_user))) {
                 User user = intent.getParcelableExtra(getString(R.string.intent_user));
-                if(!user.getUser_id().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+                if (!user.getUser_id().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
                     Log.d(TAG, "init: inflating view profile");
                     ViewProfileFragment fragment = new ViewProfileFragment();
                     Bundle args = new Bundle();
@@ -105,7 +101,7 @@ public class ProfileActivity extends AppCompatActivity implements
                     transaction.replace(R.id.container, fragment);
                     transaction.addToBackStack(getString(R.string.view_profile_fragment));
                     transaction.commit();
-                }else{
+                } else {
                     Log.d(TAG, "init: inflating Profile");
                     ProfileFragment fragment = new ProfileFragment();
                     FragmentTransaction transaction = ProfileActivity.this.getSupportFragmentManager().beginTransaction();
@@ -113,11 +109,11 @@ public class ProfileActivity extends AppCompatActivity implements
                     transaction.addToBackStack(getString(R.string.profile_fragment));
                     transaction.commit();
                 }
-            }else{
+            } else {
                 Toast.makeText(mContext, "something went wrong", Toast.LENGTH_SHORT).show();
             }
 
-        }else{
+        } else {
             Log.d(TAG, "init: inflating Profile");
             ProfileFragment fragment = new ProfileFragment();
             FragmentTransaction transaction = ProfileActivity.this.getSupportFragmentManager().beginTransaction();
@@ -127,7 +123,6 @@ public class ProfileActivity extends AppCompatActivity implements
         }
 
     }
-
 
 
 }

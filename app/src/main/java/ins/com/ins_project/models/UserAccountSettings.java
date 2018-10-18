@@ -3,10 +3,6 @@ package ins.com.ins_project.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
- * Created by User on 6/29/2017.
- */
-
 public class UserAccountSettings implements Parcelable {
 
     private String description;
@@ -132,7 +128,6 @@ public class UserAccountSettings implements Parcelable {
     public void setWebsite(String website) {
         this.website = website;
     }
-
 
     @Override
     public String toString() {

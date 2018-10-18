@@ -2,10 +2,6 @@ package ins.com.ins_project.models;
 
 import java.util.List;
 
-/**
- * Created by User on 8/22/2017.
- */
-
 public class Comment {
 
     private String comment;

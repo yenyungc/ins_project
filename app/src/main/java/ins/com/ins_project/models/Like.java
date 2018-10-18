@@ -1,9 +1,5 @@
 package ins.com.ins_project.models;
 
-/**
- * Created by User on 8/21/2017.
- */
-
 public class Like {
 
     private String user_id;

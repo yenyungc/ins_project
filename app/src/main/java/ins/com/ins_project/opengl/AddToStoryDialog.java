@@ -17,11 +17,6 @@ import android.widget.Toast;
 import ins.com.ins_project.Home.HomeActivity;
 import ins.com.ins_project.R;
 
-
-/**
- * Created by User on 1/8/2018.
- */
-
 public class AddToStoryDialog extends DialogFragment {
 
     private static final String TAG = "AddToStoryDialog";
@@ -47,7 +42,6 @@ public class AddToStoryDialog extends DialogFragment {
                 init();
             }
         }
-
 
         return view;
     }

@@ -46,18 +46,15 @@ import ins.com.ins_project.models.Photo;
 import ins.com.ins_project.models.UserAccountSettings;
 import ins.com.ins_project.models.UserSettings;
 
-/**
- * Created by User on 6/29/2017.
- */
-
 public class ProfileFragment extends Fragment {
 
     private static final String TAG = "ProfileFragment";
 
 
-    public interface OnGridImageSelectedListener{
+    public interface OnGridImageSelectedListener {
         void onGridImageSelected(Photo photo, int activityNumber);
     }
+
     OnGridImageSelectedListener mOnGridImageSelectedListener;
 
     private static final int ACTIVITY_NUM = 4;
@@ -137,15 +134,15 @@ public class ProfileFragment extends Fragment {
 
     @Override
     public void onAttach(Context context) {
-        try{
+        try {
             mOnGridImageSelectedListener = (OnGridImageSelectedListener) getActivity();
-        }catch (ClassCastException e){
-            Log.e(TAG, "onAttach: ClassCastException: " + e.getMessage() );
+        } catch (ClassCastException e) {
+            Log.e(TAG, "onAttach: ClassCastException: " + e.getMessage());
         }
         super.onAttach(context);
     }
 
-    private void setupGridView(){
+    private void setupGridView() {
         Log.d(TAG, "setupGridView: Setting up image grid.");
 
         final ArrayList<Photo> photos = new ArrayList<>();
@@ -156,7 +153,7 @@ public class ProfileFragment extends Fragment {
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for ( DataSnapshot singleSnapshot :  dataSnapshot.getChildren()){
+                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
 
                     Photo photo = new Photo();
                     Map<String, Object> objectMap = (HashMap<String, Object>) singleSnapshot.getValue();
@@ -190,21 +187,21 @@ public class ProfileFragment extends Fragment {
                         }
                         photo.setLikes(likesList);
                         photos.add(photo);
-                    }catch(NullPointerException e){
-                        Log.e(TAG, "onDataChange: NullPointerException: " + e.getMessage() );
+                    } catch (NullPointerException e) {
+                        Log.e(TAG, "onDataChange: NullPointerException: " + e.getMessage());
                     }
                 }
 
                 //setup our image grid
                 int gridWidth = getResources().getDisplayMetrics().widthPixels;
-                int imageWidth = gridWidth/NUM_GRID_COLUMNS;
+                int imageWidth = gridWidth / NUM_GRID_COLUMNS;
                 gridView.setColumnWidth(imageWidth);
 
                 ArrayList<String> imgUrls = new ArrayList<String>();
-                for(int i = 0; i < photos.size(); i++){
+                for (int i = 0; i < photos.size(); i++) {
                     imgUrls.add(photos.get(i).getImage_path());
                 }
-                GridImageAdapter adapter = new GridImageAdapter(getActivity(),R.layout.layout_grid_imageview,
+                GridImageAdapter adapter = new GridImageAdapter(getActivity(), R.layout.layout_grid_imageview,
                         "", imgUrls);
                 gridView.setAdapter(adapter);
 
@@ -223,7 +220,7 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-    private void getFollowersCount(){
+    private void getFollowersCount() {
         mFollowersCount = 0;
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
@@ -232,7 +229,7 @@ public class ProfileFragment extends Fragment {
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot singleSnapshot :  dataSnapshot.getChildren()){
+                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
                     Log.d(TAG, "onDataChange: found follower:" + singleSnapshot.getValue());
                     mFollowersCount++;
                 }
@@ -246,7 +243,7 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-    private void getFollowingCount(){
+    private void getFollowingCount() {
         mFollowingCount = 0;
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
@@ -255,7 +252,7 @@ public class ProfileFragment extends Fragment {
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot singleSnapshot :  dataSnapshot.getChildren()){
+                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
                     Log.d(TAG, "onDataChange: found following user:" + singleSnapshot.getValue());
                     mFollowingCount++;
                 }
@@ -269,7 +266,7 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-    private void getPostsCount(){
+    private void getPostsCount() {
         mPostsCount = 0;
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
@@ -278,7 +275,7 @@ public class ProfileFragment extends Fragment {
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot singleSnapshot :  dataSnapshot.getChildren()){
+                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
                     Log.d(TAG, "onDataChange: found post:" + singleSnapshot.getValue());
                     mPostsCount++;
                 }
@@ -314,12 +311,12 @@ public class ProfileFragment extends Fragment {
     }
 
 
-        /**
+    /**
      * Responsible for setting up the profile toolbar
      */
-    private void setupToolbar(){
+    private void setupToolbar() {
 
-        ((ProfileActivity)getActivity()).setSupportActionBar(toolbar);
+        ((ProfileActivity) getActivity()).setSupportActionBar(toolbar);
 
         profileMenu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -332,13 +329,13 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-        /**
+    /**
      * BottomNavigationView setup
      */
-    private void setupBottomNavigationView(){
+    private void setupBottomNavigationView() {
         Log.d(TAG, "setupBottomNavigationView: setting up BottomNavigationView");
         BottomNavigationViewHelper.setupBottomNavigationView(bottomNavigationView);
-        BottomNavigationViewHelper.enableNavigation(mContext,getActivity() ,bottomNavigationView);
+        BottomNavigationViewHelper.enableNavigation(mContext, getActivity(), bottomNavigationView);
         Menu menu = bottomNavigationView.getMenu();
         MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
         menuItem.setChecked(true);
@@ -351,7 +348,7 @@ public class ProfileFragment extends Fragment {
     /**
      * Setup the firebase auth object
      */
-    private void setupFirebaseAuth(){
+    private void setupFirebaseAuth() {
         Log.d(TAG, "setupFirebaseAuth: setting up firebase auth.");
 
         mAuth = FirebaseAuth.getInstance();

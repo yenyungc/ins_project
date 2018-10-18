@@ -1,9 +1,5 @@
 package ins.com.ins_project.models;
 
-/**
- * Created by User on 1/7/2018.
- */
-
 public class Story {
 
     private String user_id;
@@ -35,7 +31,6 @@ public class Story {
     public void setUser_id(String user_id) {
         this.user_id = user_id;
     }
-
 
     public String getTimestamp() {
         return timestamp;

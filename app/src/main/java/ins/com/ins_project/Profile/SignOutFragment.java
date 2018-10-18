@@ -19,10 +19,6 @@ import com.google.firebase.auth.FirebaseUser;
 import ins.com.ins_project.Login.LoginActivity;
 import ins.com.ins_project.R;
 
-/**
- * Created by User on 6/4/2017.
- */
-
 public class SignOutFragment extends Fragment {
 
     private static final String TAG = "SignOutFragment";
@@ -71,7 +67,7 @@ public class SignOutFragment extends Fragment {
     /**
      * Setup the firebase auth object
      */
-    private void setupFirebaseAuth(){
+    private void setupFirebaseAuth() {
         Log.d(TAG, "setupFirebaseAuth: setting up firebase auth.");
 
         mAuth = FirebaseAuth.getInstance();

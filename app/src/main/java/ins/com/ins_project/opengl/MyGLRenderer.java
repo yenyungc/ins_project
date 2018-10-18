@@ -61,12 +61,7 @@ import ins.com.ins_project.R;
 
 import static java.lang.Math.round;
 
-
-/**
- * Created by User on 11/27/2017.
- */
-
-public class MyGLRenderer implements GLSurfaceView.Renderer{
+public class MyGLRenderer implements GLSurfaceView.Renderer {
     private static final String TAG = "fsnklsnflkds";
 
     private static final int MEDIA_TIMEOUT = 15000; //15 seconds or 15000 milliseconds
@@ -170,7 +165,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
     private SurfaceTexture mSurfaceTexture4;
     private Surface mSurface4;
     private HashMap<Integer, ArrayList<MediaSource>> videoMediaSources = new HashMap<>();
-//    private MediaSource[][] videoMediaSources;
+    //    private MediaSource[][] videoMediaSources;
     private boolean mUpdateST;
     private boolean mUpdateST2;
     private boolean mUpdateST3;
@@ -251,36 +246,33 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
 
     public void setPosition(float position) {
 
-        if(angleRectangle <= mAngleFinished - 1){
+        if (angleRectangle <= mAngleFinished - 1) {
             mAllowRotationClockwise = false;
             angleRectangle = mAngleFinished;
             correctRotation();
-        }
-        else{
+        } else {
             mAllowRotationClockwise = true;
         }
 
-        if(isRotationEnabled && !mRotateClockwise && !mRotateCounterClockwise){
-            if(mAllowRotationClockwise){
+        if (isRotationEnabled && !mRotateClockwise && !mRotateCounterClockwise) {
+            if (mAllowRotationClockwise) {
                 dx = (position) - MyGLRenderer.position;
-                if(mNumRotations > 0){
-                    if(Math.abs(dx) < 100 && Math.abs(dx) > 1){
+                if (mNumRotations > 0) {
+                    if (Math.abs(dx) < 100 && Math.abs(dx) > 1) {
                         Log.d(TAG, "setPosition: dx: " + dx);
                         updateAngle(dx);
                     }
-                }
-                else if(mNumRotations == 0 && dx < 0){
-                    if(Math.abs(dx) < 100 && Math.abs(dx) > 1){
+                } else if (mNumRotations == 0 && dx < 0) {
+                    if (Math.abs(dx) < 100 && Math.abs(dx) > 1) {
                         Log.d(TAG, "setPosition: dx: " + dx);
                         updateAngle(dx);
                     }
                 }
                 MyGLRenderer.position = position;
                 Log.d(TAG, "setPosition: position: " + MyGLRenderer.position);
-            }
-            else{
+            } else {
                 dx = (position) - MyGLRenderer.position;
-                if(dx > 1 && dx < 100){
+                if (dx > 1 && dx < 100) {
                     Log.d(TAG, "setPosition: dx: " + dx);
                     updateAngle(dx);
                 }
@@ -293,8 +285,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
 
     public void updateAngle(float displacement) {
         Log.d(TAG, "updateAngle: displacement:" + displacement);
-        if(angleRectangle + (displacement) * ( 90 / screenWidth) <= 0){
-            angleRectangle = angleRectangle + (displacement) * ( 90 / screenWidth);
+        if (angleRectangle + (displacement) * (90 / screenWidth) <= 0) {
+            angleRectangle = angleRectangle + (displacement) * (90 / screenWidth);
             Log.d(TAG, "updateAngle: angle:" + angleRectangle);
         }
     }
@@ -327,7 +319,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
     }
 
 
-//    ArrayList<UserStories> mMedia = new ArrayList<>();
+    //    ArrayList<UserStories> mMedia = new ArrayList<>();
     private JSONArray mUserStories = new JSONArray();
 
     public MyGLRenderer(Context context, float height, float width, JSONArray userStories, MyGLSurfaceView mGLView, int resourceIndex) throws JSONException {
@@ -342,43 +334,41 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
 //        mNumResources = media.size();
         mNumResources = mUserStories.length();
         mRelativeLayout = ((Activity) mContext).findViewById(R.id.parent_layout);
-        mLinearLayout = ((Activity)mContext).findViewById(R.id.linLayout);
-        mLinearLayout2 = ((Activity)mContext).findViewById(R.id.linLayout2);
+        mLinearLayout = ((Activity) mContext).findViewById(R.id.linLayout);
+        mLinearLayout2 = ((Activity) mContext).findViewById(R.id.linLayout2);
         initProgressBar();
         initPlayers();
 
         int indices = mNumResources;
-        if(mNumResources <= 4){
+        if (mNumResources <= 4) {
             indices = 4;
         }
-        for(int i = 0; i < indices; i++){
+        for (int i = 0; i < indices; i++) {
             mResources.add(i, null);
-            try{
+            try {
 //                int numMediaIndices = mMedia.get(i).getMedia().size();
                 int numMediaIndices = mUserStories.getJSONObject(i).getJSONArray(mContext.getString(R.string.user_stories)).length();
-                if(numMediaIndices > mHighestNumberMedia){
+                if (numMediaIndices > mHighestNumberMedia) {
                     mHighestNumberMedia = numMediaIndices;
                 }
-            }catch (NullPointerException e){
+            } catch (NullPointerException e) {
                 e.printStackTrace();
                 break;
-            }
-            catch (JSONException e){
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
 
         }
 
 //        if(mMedia.get(0).getMedia() != null){
-        if(mUserStories.getJSONObject(0).getJSONArray(mContext.getString(R.string.user_stories)) != null){
+        if (mUserStories.getJSONObject(0).getJSONArray(mContext.getString(R.string.user_stories)) != null) {
             initResourceIndices();
             initDefaultImage();
 
             rotateToStartingIndex();
             mAngleFinished = -90 * (mNumResources - 1);
             initBlock();
-        }
-        else{
+        } else {
             Toast.makeText(mContext, "there is no media.", Toast.LENGTH_SHORT).show();
             ((Activity) mContext).finish();
         }
@@ -392,7 +382,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
             {-1, 2, 1, 0}
     };
 
-    private void rotateToStartingIndex(){
+    private void rotateToStartingIndex() {
         Log.d(TAG, "rotateToStartingIndex: rotating to starting index.");
 
         Log.d(TAG, "rotateToStartingIndex: starting resource index: " + mStartingResourceIndex);
@@ -402,16 +392,16 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
         Log.d(TAG, "rotateToStartingIndex: rotating block to angle: " + angleRectangle);
         Log.d(TAG, "rotateToStartingIndex: settled angle: " + settledAngle);
         Log.d(TAG, "rotateToStartingIndex: number rotations: " + mNumRotations);
-        try{
+        try {
 
             int fullBlockRotations = (int) mNumRotations / 4;
-            Log.d(TAG, "rotateToStartingIndex: full block rotations: " + fullBlockRotations );
+            Log.d(TAG, "rotateToStartingIndex: full block rotations: " + fullBlockRotations);
             int startingRotationIndex = mNumRotations - (fullBlockRotations * 4);
             Log.d(TAG, "rotateToStartingIndex: starting rotation index: " + startingRotationIndex);
 
             JSONObject object1 = mResourceIndices.getJSONObject(SURFACE_1);
             object1.put(mContext.getString(R.string.rotations), rotationMatrix[startingRotationIndex][0]);
-            if(rotationMatrix[startingRotationIndex][0] == 0){
+            if (rotationMatrix[startingRotationIndex][0] == 0) {
                 mCurrentSurface = SURFACE_1;
                 Log.d(TAG, "rotateToStartingIndex: current surface: " + 1);
             }
@@ -420,7 +410,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
 
             JSONObject object2 = mResourceIndices.getJSONObject(SURFACE_2);
             object2.put(mContext.getString(R.string.rotations), rotationMatrix[startingRotationIndex][1]);
-            if(rotationMatrix[startingRotationIndex][1] == 0){
+            if (rotationMatrix[startingRotationIndex][1] == 0) {
                 mCurrentSurface = SURFACE_2;
                 Log.d(TAG, "rotateToStartingIndex: current surface: " + 2);
             }
@@ -429,7 +419,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
 
             JSONObject object3 = mResourceIndices.getJSONObject(SURFACE_3);
             object3.put(mContext.getString(R.string.rotations), rotationMatrix[startingRotationIndex][2]);
-            if(rotationMatrix[startingRotationIndex][2] == 0){
+            if (rotationMatrix[startingRotationIndex][2] == 0) {
                 mCurrentSurface = SURFACE_3;
                 Log.d(TAG, "rotateToStartingIndex: current surface: " + 3);
             }
@@ -438,7 +428,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
 
             JSONObject object4 = mResourceIndices.getJSONObject(SURFACE_4);
             object4.put(mContext.getString(R.string.rotations), rotationMatrix[startingRotationIndex][3]);
-            if(rotationMatrix[startingRotationIndex][3] == 0){
+            if (rotationMatrix[startingRotationIndex][3] == 0) {
                 mCurrentSurface = SURFACE_4;
                 Log.d(TAG, "rotateToStartingIndex: current surface: " + 4);
             }
@@ -446,23 +436,22 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
             mResourceIndices.put(SURFACE_4, object4);
 
 
-        }catch (JSONException e){
+        } catch (JSONException e) {
             e.printStackTrace();
         }
 
         //init the first 4 surfaces
-        if(mNumRotations > 0){
-            try{
+        if (mNumRotations > 0) {
+            try {
 
                 int surface1MediaIndexMultiple = (int) mNumRotations / 3;
                 Log.d(TAG, "rotateToStartingIndex: surface1MediaIndexMultiple: " + surface1MediaIndexMultiple);
-    //            if(0 + (4 * surface1MediaIndexMultiple) < mMedia.size()){
-                if(0 + (4 * surface1MediaIndexMultiple) < mNumResources){
-    //                getMedia(mMedia.get(0 + (4 * surface1MediaIndexMultiple)).getMedia(), 0); // 0
+                //            if(0 + (4 * surface1MediaIndexMultiple) < mMedia.size()){
+                if (0 + (4 * surface1MediaIndexMultiple) < mNumResources) {
+                    //                getMedia(mMedia.get(0 + (4 * surface1MediaIndexMultiple)).getMedia(), 0); // 0
                     getMedia(mUserStories.getJSONObject(0 + (4 * surface1MediaIndexMultiple))
                             .getJSONArray(mContext.getString(R.string.user_stories)), 0); // 0
-                }
-                else{
+                } else {
 //                    getMedia(mMedia.get(0 + (4 * (surface1MediaIndexMultiple - 1))).getMedia(), 0); // 0
                     getMedia(mUserStories.getJSONObject(0 + (4 * (surface1MediaIndexMultiple - 1)))
                             .getJSONArray(mContext.getString(R.string.user_stories)), 0); // 0
@@ -470,12 +459,11 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
 
                 int surface2MediaIndexMultiple = (int) (mNumRotations - 1) / 3;
                 Log.d(TAG, "rotateToStartingIndex: surface2MediaIndexMultiple: " + surface2MediaIndexMultiple);
-                if((1 + (4 * surface2MediaIndexMultiple)) < mNumResources){
+                if ((1 + (4 * surface2MediaIndexMultiple)) < mNumResources) {
 //                    getMedia(mMedia.get(1 + (4 * surface2MediaIndexMultiple)).getMedia(), 1); // 1
                     getMedia(mUserStories.getJSONObject(1 + (4 * surface2MediaIndexMultiple))
                             .getJSONArray(mContext.getString(R.string.user_stories)), 1);
-                }
-                else{
+                } else {
 //                    getMedia(mMedia.get(1 + (4 * (surface2MediaIndexMultiple - 1))).getMedia(), 1); // 1
                     getMedia(mUserStories.getJSONObject(1 + (4 * (surface2MediaIndexMultiple - 1)))
                             .getJSONArray(mContext.getString(R.string.user_stories)), 1);
@@ -483,12 +471,11 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
 
                 int surface3MediaIndexMultiple = (int) (mNumRotations - 2) / 3;
                 Log.d(TAG, "rotateToStartingIndex: surface3MediaIndexMultiple: " + surface3MediaIndexMultiple);
-                if((2 + (4 * surface3MediaIndexMultiple)) < mNumResources){
+                if ((2 + (4 * surface3MediaIndexMultiple)) < mNumResources) {
 //                    getMedia(mMedia.get(2 + (4 * surface3MediaIndexMultiple)).getMedia(), 2); // 2
                     getMedia(mUserStories.getJSONObject(2 + (4 * surface3MediaIndexMultiple))
                             .getJSONArray(mContext.getString(R.string.user_stories)), 2);
-                }
-                else{
+                } else {
 //                    getMedia(mMedia.get(2 + (4 * (surface3MediaIndexMultiple - 1))).getMedia(), 2); // 2
                     getMedia(mUserStories.getJSONObject(2 + (4 * (surface3MediaIndexMultiple - 1)))
                             .getJSONArray(mContext.getString(R.string.user_stories)), 2);
@@ -496,23 +483,21 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
 
                 int surface4MediaIndexMultiple = (int) (mNumRotations - 3) / 3;
                 Log.d(TAG, "rotateToStartingIndex: surface4MediaIndexMultiple: " + surface4MediaIndexMultiple);
-                if((3 + (4 * surface4MediaIndexMultiple)) < mNumResources){
+                if ((3 + (4 * surface4MediaIndexMultiple)) < mNumResources) {
 //                    getMedia(mMedia.get(3 + (4 * surface4MediaIndexMultiple)).getMedia(), 3); // 3
-                    getMedia(mUserStories.getJSONObject(3 + (4 * surface3MediaIndexMultiple ))
+                    getMedia(mUserStories.getJSONObject(3 + (4 * surface3MediaIndexMultiple))
                             .getJSONArray(mContext.getString(R.string.user_stories)), 3);
-                }
-                else{
+                } else {
 //                    getMedia(mMedia.get(3 + (4 * (surface4MediaIndexMultiple - 1))).getMedia(), 3); // 3
                     getMedia(mUserStories.getJSONObject(3 + (4 * (surface3MediaIndexMultiple - 1)))
                             .getJSONArray(mContext.getString(R.string.user_stories)), 3);
                 }
-            }catch (JSONException e){
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
 
-        }
-        else if(mNumRotations == 0){
-            try{
+        } else if (mNumRotations == 0) {
+            try {
 //                getMedia(mMedia.get(0).getMedia(), 0); // 0
 //                getMedia(mMedia.get(1).getMedia(), 1); // 1
 //                getMedia(mMedia.get(2).getMedia(), 2); // 2
@@ -523,7 +508,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
                 getMedia(mUserStories.getJSONObject(2).getJSONArray(mContext.getString(R.string.user_stories)), 2); // 2
                 getMedia(mUserStories.getJSONObject(3).getJSONArray(mContext.getString(R.string.user_stories)), 3); // 3
 
-            }catch (JSONException e){
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
@@ -531,7 +516,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
 
     }
 
-    private void initDefaultImage(){
+    private void initDefaultImage() {
         Log.d(TAG, "initDefaultImage: preparing default image scale factors.");
         Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(),
                 R.drawable.android_construction);
@@ -566,10 +551,9 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
     }
 
 
-
     private void initResourceIndices() {
 
-        try{
+        try {
             JSONObject resource = new JSONObject();
             resource.put(mContext.getString(R.string.surface_number), SURFACE_1);
             resource.put(mContext.getString(R.string.rotations), 0);
@@ -578,7 +562,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
             JSONArray mediaIndexArray1 = new JSONArray();
             int mediaIndex = 0;
             //populate a bunch of media indices for each potential media.
-            for(int i = 0; i < mHighestNumberMedia; i++){
+            for (int i = 0; i < mHighestNumberMedia; i++) {
                 JSONObject mediaIndexObject = new JSONObject();
                 mediaIndexObject.put(mContext.getString(R.string.media_index), mediaIndex);
                 mediaIndexArray1.put(i, mediaIndexObject);
@@ -594,7 +578,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
             mResourceIndices.put(SURFACE_2, resource);
             JSONArray mediaIndexArray2 = new JSONArray();
             //populate a bunch of media indices for each potential media.
-            for(int i = 0; i < mHighestNumberMedia; i++){
+            for (int i = 0; i < mHighestNumberMedia; i++) {
                 JSONObject mediaIndexObject = new JSONObject();
                 mediaIndexObject.put(mContext.getString(R.string.media_index), mediaIndex);
                 mediaIndexArray2.put(i, mediaIndexObject);
@@ -610,7 +594,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
             mResourceIndices.put(SURFACE_3, resource);
             JSONArray mediaIndexArray3 = new JSONArray();
             //populate a bunch of media indices for each potential media.
-            for(int i = 0; i < mHighestNumberMedia; i++){
+            for (int i = 0; i < mHighestNumberMedia; i++) {
                 JSONObject mediaIndexObject = new JSONObject();
                 mediaIndexObject.put(mContext.getString(R.string.media_index), mediaIndex);
                 mediaIndexArray3.put(i, mediaIndexObject);
@@ -626,7 +610,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
             mResourceIndices.put(SURFACE_4, resource);
             JSONArray mediaIndexArray4 = new JSONArray();
             //populate a bunch of media indices for each potential media.
-            for(int i = 0; i < mHighestNumberMedia; i++){
+            for (int i = 0; i < mHighestNumberMedia; i++) {
                 JSONObject mediaIndexObject = new JSONObject();
                 mediaIndexObject.put(mContext.getString(R.string.media_index), mediaIndex);
                 mediaIndexArray4.put(i, mediaIndexObject);
@@ -635,177 +619,172 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
             mResourceIndices.put(SURFACE_4).put(resource);
             Log.d(TAG, "initResourceIndices: resourceIndices4: " + mResourceIndices.get(SURFACE_4));
 
-        }catch (JSONException e){
-            Log.e(TAG, "initResourceIndices: JSONException: " + e.getMessage() );
+        } catch (JSONException e) {
+            Log.e(TAG, "initResourceIndices: JSONException: " + e.getMessage());
         }
 
     }
 
-    private boolean isMediaVideo(String uri){
-        if(uri.contains(".mp4") || uri.contains(".wmv") || uri.contains(".flv") || uri.contains(".avi")){
+    private boolean isMediaVideo(String uri) {
+        if (uri.contains(".mp4") || uri.contains(".wmv") || uri.contains(".flv") || uri.contains(".avi")) {
             return true;
         }
         return false;
     }
 
-//    private void getMedia(final ArrayList<Story> mediaSource, final int surfaceIndex){
-    private void getMedia(final JSONArray mediaSource, final int surfaceIndex){
+    //    private void getMedia(final ArrayList<Story> mediaSource, final int surfaceIndex){
+    private void getMedia(final JSONArray mediaSource, final int surfaceIndex) {
         Log.d(TAG, "getMedia: getting images from urls");
 
         Log.d(TAG, "getMedia: media source length: " + mediaSource.length());
         Log.d(TAG, "getMedia: getting media for surface index: " + surfaceIndex);
 //        if(mResources.get(surfaceIndex) == null) {
-            for(int i = 0; i < mediaSource.length(); i++) {
+        for (int i = 0; i < mediaSource.length(); i++) {
 
-                try{
-                    final int count = i;
-                    String videoUri = "";
-                    try{
-                        videoUri = mediaSource.getJSONObject(count).get(mContext.getString(R.string.field_video_uri)).toString();
-                    }catch (JSONException e){
-                        e.printStackTrace();
-                        videoUri = "";
-                    }
-//                    if (isMediaVideo(videoUri)) {
-                    if (!videoUri.equals("")) {
-                        JSONObject object = new JSONObject();
-                        try {
-                            object.put(mContext.getString(R.string.media_type), mContext.getString(R.string.video_uri));
-                            object.put(mContext.getString(R.string.video_uri), videoUri);
-                            object.put(mContext.getString(R.string.media_source), buildMediaSource(Uri.parse(videoUri)));
-                            object.put(mContext.getString(R.string.duration), mediaSource.getJSONObject(count).get(mContext.getString(R.string.field_duration)));
-                            Log.d(TAG, "getMedia: duration: " + mediaSource.getJSONObject(count).get(mContext.getString(R.string.field_duration)));
-                            try{
-                                JSONArray jsonArray = mResources.get(surfaceIndex);
-                                jsonArray.put(count, object);
-                                mResources.set(surfaceIndex, jsonArray);
-                                Log.d(TAG, "getMedia: RESOURCES FOR " + (surfaceIndex + 1) + ": " + mResources.get(surfaceIndex));
-                                Log.d(TAG, "getMedia: setting video for surface " + (surfaceIndex + 1) + ", " + object.get(mContext.getString(R.string.media_type)));
-                                Log.d(TAG, "getMedia: setting video for surface " + (surfaceIndex + 1) + ", " + + count);
-                            }catch (NullPointerException e) {
-                                Log.e(TAG, "onResourceReady: First video added to resources array. " + e.getMessage() );
-                                JSONArray jsonArray = new JSONArray();
-                                jsonArray.put(count, object);
-                                mResources.set(surfaceIndex, jsonArray);
-                                Log.d(TAG, "getMedia: RESOURCES FOR " + (surfaceIndex + 1) + ": " + mResources.get(surfaceIndex));
-                                Log.d(TAG, "getMedia: * setting video for surface " + (surfaceIndex + 1) + ", " + object.get(mContext.getString(R.string.media_type)));
-                                Log.d(TAG, "getMedia: * setting video for surface " + (surfaceIndex + 1) + ", " + + count);
-                            }
-                            if(surfaceIndex == SURFACE_1){
-                                mVideo1Index++;
-                            }
-                            else if(surfaceIndex == SURFACE_2){
-                                mVideo2Index++;
-                            }
-                            else if(surfaceIndex == SURFACE_3){
-                                mVideo3Index++;
-                            }
-                            else if(surfaceIndex == SURFACE_4){
-                                mVideo4Index++;
-                            }
-                            if(mVideo1Index == 1 || mVideo2Index == 1 || mVideo3Index == 1 || mVideo4Index == 1){
-                                Log.d(TAG, "getMedia: buffering first video for surface " + (surfaceIndex + 1));
-                                bufferFirstVideo(surfaceIndex, count);
-                            }
-                            else if(mVideo1Index == 2 || mVideo2Index == 2 || mVideo3Index == 2 || mVideo4Index == 2){
-                                Log.d(TAG, "getMedia: buffering second video for surface " + (surfaceIndex + 1));
-                                bufferNextVideo(surfaceIndex);
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                    } else {
-
-                        SimpleTarget target = new SimpleTarget<Bitmap>() {
-
-                            @Override
-                            public void onResourceReady(Bitmap bitmap, Transition transition) {
-                                Log.d(TAG, "getMedia: new bitmap ready.");
-
-
-                                float imageHeight = bitmap.getHeight();
-                                float imageWidth = bitmap.getWidth();
-                                float heightScaleFactor = 1f;
-                                float widthScaleFactor = 1f;
-
-    //                            Log.d(TAG, "getMedia: IMAGE WIDTH: " + imageWidth);
-    //                            Log.d(TAG, "getMedia: IMAGE HEIGHT: " + imageHeight);
-
-                                if (imageWidth > imageHeight) {
-                                    //scale the height to match the width (#1)
-                                    heightScaleFactor = (widthScaleFactor * imageHeight) / (screenRatio * imageWidth);
-                                } else if (imageHeight > imageWidth) {
-                                    if (imageWidth < screenWidth) {
-                                        //scale the width to match the height (#2)
-    //                                        widthScaleFactor = (imageWidth / imageHeight) * screenRatio;
-                                        if (screenWidth / imageWidth < 2) {
-                                            heightScaleFactor = 2 - (screenWidth / imageWidth);
-                                        }
-                                    } else if (imageWidth > screenWidth) {
-                                        // This one doesn't work for all cases. But the image sizes are so weird
-                                        // that we shouldn't have to worry about it
-                                        heightScaleFactor = (widthScaleFactor * imageHeight) / (screenRatio * imageWidth);
-                                    }
-                                }
-
-    //                            Log.d(TAG, "getMedia: count: " + count );
-    //                            Log.d(TAG, "getMedia: wsf, hsf: " + widthScaleFactor + ", " + heightScaleFactor);
-
-                                JSONObject object = new JSONObject();
-                                try {
-                                    // Log.d(TAG, "getMedia: getting " + count + " resource.");
-                                    object.put(mContext.getString(R.string.media_type), mContext.getString(R.string.encoded_bitmap));
-    //                                object.put(mContext.getString(R.string.encoded_bitmap), encodeToBase64(bitmap, Bitmap.CompressFormat.JPEG, 100));
-                                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-                                    byte[] byteArray = stream.toByteArray();
-                                    Bitmap compressedBitmap = BitmapFactory.decodeByteArray(byteArray,0,byteArray.length);
-                                    object.put(mContext.getString(R.string.encoded_bitmap), compressedBitmap);
-                                    object.put(mContext.getString(R.string.width_scale_factor), widthScaleFactor);
-                                    object.put(mContext.getString(R.string.height_scale_factor), heightScaleFactor);
-
-                                    try{
-                                        JSONArray jsonArray = mResources.get(surfaceIndex);
-                                        jsonArray.put(count, object);
-                                        mResources.set(surfaceIndex, jsonArray);
-                                        Log.d(TAG, "onResourceReady: RESOURCES FOR " + (surfaceIndex + 1) + ": " + mResources.get(surfaceIndex));
-                                        Log.d(TAG, "onResourceReady: setting image for surface " + (surfaceIndex + 1) + ", " + object.get(mContext.getString(R.string.media_type)));
-                                        Log.d(TAG, "onResourceReady: setting image for surface " + (surfaceIndex + 1) + ", " + + count);
-                                    }catch (NullPointerException e) {
-                                        Log.e(TAG, "onResourceReady: First photo added to resources array." + e.getMessage() );
-                                        e.printStackTrace();
-                                        JSONArray jsonArray = new JSONArray();
-                                        jsonArray.put(count, object);
-                                        mResources.set(surfaceIndex, jsonArray);
-                                        Log.d(TAG, "onResourceReady: RESOURCES FOR " + (surfaceIndex + 1) + ": " + mResources.get(surfaceIndex));
-                                        Log.d(TAG, "onResourceReady: * setting image for surface " + (surfaceIndex + 1) + ", " + object.get(mContext.getString(R.string.media_type)));
-                                        Log.d(TAG, "onResourceReady: * setting image for surface " + (surfaceIndex + 1) + ", " + + count);
-                                    }
-                                }
-                                catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        };
-                        String imageUri = mediaSource.getJSONObject(count).get(mContext.getString(R.string.field_image_uri)).toString();
-                        Glide.with(mContext.getApplicationContext())
-                                .asBitmap()
-                                .load(imageUri)
-                                .into(target);
-                        mTargets.add(target);
-                    }
-    //                printCurrentResources();
-                }catch (JSONException e){
+            try {
+                final int count = i;
+                String videoUri = "";
+                try {
+                    videoUri = mediaSource.getJSONObject(count).get(mContext.getString(R.string.field_video_uri)).toString();
+                } catch (JSONException e) {
                     e.printStackTrace();
+                    videoUri = "";
                 }
+//                    if (isMediaVideo(videoUri)) {
+                if (!videoUri.equals("")) {
+                    JSONObject object = new JSONObject();
+                    try {
+                        object.put(mContext.getString(R.string.media_type), mContext.getString(R.string.video_uri));
+                        object.put(mContext.getString(R.string.video_uri), videoUri);
+                        object.put(mContext.getString(R.string.media_source), buildMediaSource(Uri.parse(videoUri)));
+                        object.put(mContext.getString(R.string.duration), mediaSource.getJSONObject(count).get(mContext.getString(R.string.field_duration)));
+                        Log.d(TAG, "getMedia: duration: " + mediaSource.getJSONObject(count).get(mContext.getString(R.string.field_duration)));
+                        try {
+                            JSONArray jsonArray = mResources.get(surfaceIndex);
+                            jsonArray.put(count, object);
+                            mResources.set(surfaceIndex, jsonArray);
+                            Log.d(TAG, "getMedia: RESOURCES FOR " + (surfaceIndex + 1) + ": " + mResources.get(surfaceIndex));
+                            Log.d(TAG, "getMedia: setting video for surface " + (surfaceIndex + 1) + ", " + object.get(mContext.getString(R.string.media_type)));
+                            Log.d(TAG, "getMedia: setting video for surface " + (surfaceIndex + 1) + ", " + +count);
+                        } catch (NullPointerException e) {
+                            Log.e(TAG, "onResourceReady: First video added to resources array. " + e.getMessage());
+                            JSONArray jsonArray = new JSONArray();
+                            jsonArray.put(count, object);
+                            mResources.set(surfaceIndex, jsonArray);
+                            Log.d(TAG, "getMedia: RESOURCES FOR " + (surfaceIndex + 1) + ": " + mResources.get(surfaceIndex));
+                            Log.d(TAG, "getMedia: * setting video for surface " + (surfaceIndex + 1) + ", " + object.get(mContext.getString(R.string.media_type)));
+                            Log.d(TAG, "getMedia: * setting video for surface " + (surfaceIndex + 1) + ", " + +count);
+                        }
+                        if (surfaceIndex == SURFACE_1) {
+                            mVideo1Index++;
+                        } else if (surfaceIndex == SURFACE_2) {
+                            mVideo2Index++;
+                        } else if (surfaceIndex == SURFACE_3) {
+                            mVideo3Index++;
+                        } else if (surfaceIndex == SURFACE_4) {
+                            mVideo4Index++;
+                        }
+                        if (mVideo1Index == 1 || mVideo2Index == 1 || mVideo3Index == 1 || mVideo4Index == 1) {
+                            Log.d(TAG, "getMedia: buffering first video for surface " + (surfaceIndex + 1));
+                            bufferFirstVideo(surfaceIndex, count);
+                        } else if (mVideo1Index == 2 || mVideo2Index == 2 || mVideo3Index == 2 || mVideo4Index == 2) {
+                            Log.d(TAG, "getMedia: buffering second video for surface " + (surfaceIndex + 1));
+                            bufferNextVideo(surfaceIndex);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                } else {
+
+                    SimpleTarget target = new SimpleTarget<Bitmap>() {
+
+                        @Override
+                        public void onResourceReady(Bitmap bitmap, Transition transition) {
+                            Log.d(TAG, "getMedia: new bitmap ready.");
+
+
+                            float imageHeight = bitmap.getHeight();
+                            float imageWidth = bitmap.getWidth();
+                            float heightScaleFactor = 1f;
+                            float widthScaleFactor = 1f;
+
+                            //                            Log.d(TAG, "getMedia: IMAGE WIDTH: " + imageWidth);
+                            //                            Log.d(TAG, "getMedia: IMAGE HEIGHT: " + imageHeight);
+
+                            if (imageWidth > imageHeight) {
+                                //scale the height to match the width (#1)
+                                heightScaleFactor = (widthScaleFactor * imageHeight) / (screenRatio * imageWidth);
+                            } else if (imageHeight > imageWidth) {
+                                if (imageWidth < screenWidth) {
+                                    //scale the width to match the height (#2)
+                                    //                                        widthScaleFactor = (imageWidth / imageHeight) * screenRatio;
+                                    if (screenWidth / imageWidth < 2) {
+                                        heightScaleFactor = 2 - (screenWidth / imageWidth);
+                                    }
+                                } else if (imageWidth > screenWidth) {
+                                    // This one doesn't work for all cases. But the image sizes are so weird
+                                    // that we shouldn't have to worry about it
+                                    heightScaleFactor = (widthScaleFactor * imageHeight) / (screenRatio * imageWidth);
+                                }
+                            }
+
+                            //                            Log.d(TAG, "getMedia: count: " + count );
+                            //                            Log.d(TAG, "getMedia: wsf, hsf: " + widthScaleFactor + ", " + heightScaleFactor);
+
+                            JSONObject object = new JSONObject();
+                            try {
+                                // Log.d(TAG, "getMedia: getting " + count + " resource.");
+                                object.put(mContext.getString(R.string.media_type), mContext.getString(R.string.encoded_bitmap));
+                                //                                object.put(mContext.getString(R.string.encoded_bitmap), encodeToBase64(bitmap, Bitmap.CompressFormat.JPEG, 100));
+                                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                                byte[] byteArray = stream.toByteArray();
+                                Bitmap compressedBitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+                                object.put(mContext.getString(R.string.encoded_bitmap), compressedBitmap);
+                                object.put(mContext.getString(R.string.width_scale_factor), widthScaleFactor);
+                                object.put(mContext.getString(R.string.height_scale_factor), heightScaleFactor);
+
+                                try {
+                                    JSONArray jsonArray = mResources.get(surfaceIndex);
+                                    jsonArray.put(count, object);
+                                    mResources.set(surfaceIndex, jsonArray);
+                                    Log.d(TAG, "onResourceReady: RESOURCES FOR " + (surfaceIndex + 1) + ": " + mResources.get(surfaceIndex));
+                                    Log.d(TAG, "onResourceReady: setting image for surface " + (surfaceIndex + 1) + ", " + object.get(mContext.getString(R.string.media_type)));
+                                    Log.d(TAG, "onResourceReady: setting image for surface " + (surfaceIndex + 1) + ", " + +count);
+                                } catch (NullPointerException e) {
+                                    Log.e(TAG, "onResourceReady: First photo added to resources array." + e.getMessage());
+                                    e.printStackTrace();
+                                    JSONArray jsonArray = new JSONArray();
+                                    jsonArray.put(count, object);
+                                    mResources.set(surfaceIndex, jsonArray);
+                                    Log.d(TAG, "onResourceReady: RESOURCES FOR " + (surfaceIndex + 1) + ": " + mResources.get(surfaceIndex));
+                                    Log.d(TAG, "onResourceReady: * setting image for surface " + (surfaceIndex + 1) + ", " + object.get(mContext.getString(R.string.media_type)));
+                                    Log.d(TAG, "onResourceReady: * setting image for surface " + (surfaceIndex + 1) + ", " + +count);
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    };
+                    String imageUri = mediaSource.getJSONObject(count).get(mContext.getString(R.string.field_image_uri)).toString();
+                    Glide.with(mContext.getApplicationContext())
+                            .asBitmap()
+                            .load(imageUri)
+                            .into(target);
+                    mTargets.add(target);
+                }
+                //                printCurrentResources();
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
+        }
 //        }
 
     }
 
 
-    private void setImageToIndex(GL10 gl, int surfaceNumber, boolean imageRenderError){
+    private void setImageToIndex(GL10 gl, int surfaceNumber, boolean imageRenderError) {
 
 //        if(surfaceNumber == mCurrentSurface){
 //            hideProgressBar();
@@ -815,24 +794,23 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
             final int mediaIndex = mResourceIndices.getJSONObject(surfaceNumber).getJSONArray(mContext.getString(R.string.media_index))
                     .getJSONObject(resourceIndex / 4).getInt(mContext.getString(R.string.media_index));
 
-            if(mediaIndex >= 0){
+            if (mediaIndex >= 0) {
                 String resourceType = "";
-                try{
+                try {
                     resourceType = mResources.get(resourceIndex).getJSONObject(mediaIndex).get(mContext.getString(R.string.media_type)).toString();
-                }catch (JSONException e){
+                } catch (JSONException e) {
 //                    Log.e(TAG, "setImageToIndex: JSONException: " + e.getMessage() );
                     resourceType = mContext.getString(R.string.image_load_error);
-                }
-                catch (NullPointerException e) {
+                } catch (NullPointerException e) {
                     Log.e(TAG, "setImageToIndex: NullPointerException: " + e.getMessage());
                     resourceType = mContext.getString(R.string.image_load_error);
                 }
-                if(resourceType.equals(mContext.getString(R.string.image_load_error)) || resourceType.equals(mContext.getString(R.string.encoded_bitmap))){
-                    if(!isImage1Set && surfaceNumber == SURFACE_1) {
+                if (resourceType.equals(mContext.getString(R.string.image_load_error)) || resourceType.equals(mContext.getString(R.string.encoded_bitmap))) {
+                    if (!isImage1Set && surfaceNumber == SURFACE_1) {
                         Log.d(TAG, "setImageToIndex: setting image to surface: " + (SURFACE_1 + 1) + ", Media Index: " + mediaIndex);
 
                         printCurrentResources();
-                        if(mCurrentSurface == SURFACE_1 && mediaIndex == 0){
+                        if (mCurrentSurface == SURFACE_1 && mediaIndex == 0) {
                             initProgressBars();
                         }
 
@@ -844,11 +822,10 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
 
 //                            Bitmap bitmap = decodeBase64(mResources.get(mResourceIndices[0][0][0]).getJSONObject(mMediaIndex).get(mContext.getString(R.string.encoded_bitmap)).toString());
                         Bitmap bitmap = null;
-                        if(imageRenderError){
+                        if (imageRenderError) {
                             bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.android_construction);
                             Log.d(TAG, "setImageToIndex: setting default image to surface 1.");
-                        }
-                        else{
+                        } else {
                             Log.d(TAG, "setImageToIndex: setting resource image to surface 1.");
 //                            bitmap = decodeBase64(mResources.get(resourceIndex).getJSONObject(mediaIndex).get(mContext.getString(R.string.encoded_bitmap)).toString());
                             bitmap = (Bitmap) mResources.get(resourceIndex).getJSONObject(mediaIndex).get(mContext.getString(R.string.encoded_bitmap));
@@ -859,10 +836,10 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
                         GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
 
                     }
-                    if(!isImage2Set &&  surfaceNumber == SURFACE_2) {
+                    if (!isImage2Set && surfaceNumber == SURFACE_2) {
                         Log.d(TAG, "setImageToIndex: setting image to surface: " + (SURFACE_2 + 1) + ", Media Index: " + mediaIndex);
 
-                        if(mCurrentSurface == SURFACE_2 && mediaIndex == 0){
+                        if (mCurrentSurface == SURFACE_2 && mediaIndex == 0) {
                             initProgressBars();
                         }
 
@@ -874,11 +851,10 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
 
 //                            Bitmap bitmap = decodeBase64(mResources.get(mResourceIndices[0][0][0]).getJSONObject(mMediaIndex).get(mContext.getString(R.string.encoded_bitmap)).toString());
                         Bitmap bitmap = null;
-                        if(imageRenderError){
+                        if (imageRenderError) {
                             bitmap = BitmapFactory.decodeResource(mContext.getResources(),
                                     R.drawable.android_construction);
-                        }
-                        else{
+                        } else {
 //                            bitmap = decodeBase64(mResources.get(resourceIndex).getJSONObject(mediaIndex).get(mContext.getString(R.string.encoded_bitmap)).toString());
                             bitmap = (Bitmap) mResources.get(resourceIndex).getJSONObject(mediaIndex).get(mContext.getString(R.string.encoded_bitmap));
                             isImage2Set = true;
@@ -887,10 +863,10 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
 
 
                     }
-                    if(!isImage3Set &&  surfaceNumber == SURFACE_3) {
+                    if (!isImage3Set && surfaceNumber == SURFACE_3) {
                         Log.d(TAG, "setImageToIndex: setting image to surface: " + (SURFACE_3 + 1) + ", Media Index: " + mediaIndex);
 
-                        if(mCurrentSurface == SURFACE_3 && mediaIndex == 0){
+                        if (mCurrentSurface == SURFACE_3 && mediaIndex == 0) {
                             initProgressBars();
                         }
 
@@ -902,11 +878,10 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
 
 //                            Bitmap bitmap = decodeBase64(mResources.get(mResourceIndices[0][0][0]).getJSONObject(mMediaIndex).get(mContext.getString(R.string.encoded_bitmap)).toString());
                         Bitmap bitmap = null;
-                        if(imageRenderError){
+                        if (imageRenderError) {
                             bitmap = BitmapFactory.decodeResource(mContext.getResources(),
                                     R.drawable.android_construction);
-                        }
-                        else{
+                        } else {
 //                            bitmap = decodeBase64(mResources.get(resourceIndex).getJSONObject(mediaIndex).get(mContext.getString(R.string.encoded_bitmap)).toString());
                             bitmap = (Bitmap) mResources.get(resourceIndex).getJSONObject(mediaIndex).get(mContext.getString(R.string.encoded_bitmap));
                             isImage3Set = true;
@@ -914,10 +889,10 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
                         GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
 
                     }
-                    if(!isImage4Set &&  surfaceNumber == SURFACE_4) {
+                    if (!isImage4Set && surfaceNumber == SURFACE_4) {
                         Log.d(TAG, "setImageToIndex: setting image to surface: " + (SURFACE_4 + 1) + ", Media Index: " + mediaIndex);
 
-                        if(mCurrentSurface == SURFACE_4 && mediaIndex == 0){
+                        if (mCurrentSurface == SURFACE_4 && mediaIndex == 0) {
                             initProgressBars();
                         }
 
@@ -929,11 +904,10 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
 
 //                            Bitmap bitmap = decodeBase64(mResources.get(mResourceIndices[0][0][0]).getJSONObject(mMediaIndex).get(mContext.getString(R.string.encoded_bitmap)).toString());
                         Bitmap bitmap = null;
-                        if(imageRenderError){
+                        if (imageRenderError) {
                             bitmap = BitmapFactory.decodeResource(mContext.getResources(),
                                     R.drawable.android_construction);
-                        }
-                        else {
+                        } else {
 //                            bitmap = decodeBase64(mResources.get(resourceIndex).getJSONObject(mediaIndex).get(mContext.getString(R.string.encoded_bitmap)).toString());
                             bitmap = (Bitmap) mResources.get(resourceIndex).getJSONObject(mediaIndex).get(mContext.getString(R.string.encoded_bitmap));
                             isImage4Set = true;
@@ -944,10 +918,10 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
                     }
 
                 }
-            //scale the media
+                //scale the media
 //                gl.glScalef(mScaleFactors[mSurfaceIndex][mMediaIndex][0], mScaleFactors[mSurfaceIndex][mMediaIndex][1], 1);
 //                gl.glScalef(mScaleFactors[mSurfaceIndex][mMediaIndices[mSurfaceIndex][0]][0], mScaleFactors[mSurfaceIndex][mMediaIndices[mSurfaceIndex][0]][1], 1);
-        }
+            }
         } catch (NullPointerException e) {
             Log.e(TAG, "setImageToIndex: NullPointerException: " + e.getMessage());
         } catch (JSONException e) {
@@ -1938,8 +1912,6 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
     }
 
 
-
-
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         Log.d(TAG, "onSurfaceCreated: SURFACE CREATED.");
         gl.glClearDepthf(1.0f);            // Set depth's clear-value to farthest
@@ -1953,12 +1925,10 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
     }
 
 
-
-
     public void onSurfaceChanged(GL10 gl, int width, int height) {
         Log.d(TAG, "onSurfaceChanged: SURFACE CHANGED.");
         if (height == 0) height = 1;   // To prevent divide by zero
-        float aspect = (float)width / height;
+        float aspect = (float) width / height;
 
         // Set the viewport (display area) to cover the entire window
         gl.glViewport(0, 0, width, height);
@@ -1974,59 +1944,52 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
     }
 
 
-    private void incrementSurface(){
+    private void incrementSurface() {
         Log.d(TAG, "incrementSurface: incrementing current surface.");
 
-        if(mCurrentSurface == SURFACE_1){
+        if (mCurrentSurface == SURFACE_1) {
             mCurrentSurface = SURFACE_2;
             Log.d(TAG, "incrementSurface: CURRENT SURFACE: SURFACE 2");
-        }
-        else if(mCurrentSurface == SURFACE_2){
+        } else if (mCurrentSurface == SURFACE_2) {
             mCurrentSurface = SURFACE_3;
             Log.d(TAG, "incrementSurface: CURRENT SURFACE: SURFACE 3");
-        }
-        else if(mCurrentSurface == SURFACE_3){
+        } else if (mCurrentSurface == SURFACE_3) {
             mCurrentSurface = SURFACE_4;
             Log.d(TAG, "incrementSurface: CURRENT SURFACE: SURFACE 4");
-        }
-        else if(mCurrentSurface == SURFACE_4){
+        } else if (mCurrentSurface == SURFACE_4) {
             mCurrentSurface = SURFACE_1;
             Log.d(TAG, "incrementSurface: CURRENT SURFACE: SURFACE 1");
         }
         updateRotations(1);
     }
 
-    private void deincrementSurface(){
+    private void deincrementSurface() {
         Log.d(TAG, "deincrementSurface: deincrementing current surface.");
 
-        if(mCurrentSurface == SURFACE_1){
+        if (mCurrentSurface == SURFACE_1) {
             mCurrentSurface = SURFACE_4;
             Log.d(TAG, "deincrementSurface: CURRENT SURFACE: SURFACE 4");
-        }
-        else if(mCurrentSurface == SURFACE_2){
+        } else if (mCurrentSurface == SURFACE_2) {
             mCurrentSurface = SURFACE_1;
             Log.d(TAG, "deincrementSurface: CURRENT SURFACE: SURFACE 1");
-        }
-        else if(mCurrentSurface == SURFACE_3){
+        } else if (mCurrentSurface == SURFACE_3) {
             mCurrentSurface = SURFACE_2;
             Log.d(TAG, "deincrementSurface: CURRENT SURFACE: SURFACE 2");
-        }
-        else if(mCurrentSurface == SURFACE_4){
+        } else if (mCurrentSurface == SURFACE_4) {
             mCurrentSurface = SURFACE_3;
             Log.d(TAG, "deincrementSurface: CURRENT SURFACE: SURFACE 3");
         }
         updateRotations(-1);
     }
 
-    private void updateRotations(final int direction){
-        if(direction > 0){
+    private void updateRotations(final int direction) {
+        if (direction > 0) {
             mNumRotations++;
-        }
-        else{
+        } else {
             mNumRotations--;
         }
         Log.d(TAG, "updateRotations: NUM ROTATIONS: " + mNumRotations);
-        try{
+        try {
             int numRotations1 = mResourceIndices.getJSONObject(SURFACE_1).getInt(mContext.getString(R.string.rotations));
             numRotations1 = numRotations1 + direction;
             JSONObject object1 = mResourceIndices.getJSONObject(SURFACE_1);
@@ -2055,16 +2018,15 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
             mResourceIndices.put(SURFACE_4, object4);
             Log.d(TAG, "updateRotations: num rotations4: " + numRotations4);
 
-            if(numRotations1 % 3 == 0 && numRotations1 != 0){
+            if (numRotations1 % 3 == 0 && numRotations1 != 0) {
                 int temp = numRotations1;
-                if(direction > 0){
+                if (direction > 0) {
                     numRotations1 = -1;
-                }
-                else{
+                } else {
                     numRotations1 = 1;
                 }
 
-                if(mSurfaceTexture == null){
+                if (mSurfaceTexture == null) {
                     initVideoSurface1(PLAYER_ONE);
                 }
                 object1.put(mContext.getString(R.string.rotations), numRotations1);
@@ -2076,14 +2038,14 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
                 Runnable myRunnable = new Runnable() {
                     @Override
                     public void run() {
-                        try{
+                        try {
                             //update the resource index to show new resource
                             int oldResourceIndex = mResourceIndices.getJSONObject(SURFACE_1).getInt(mContext.getString(R.string.resource_index));
 
-                            int newResourceIndex = oldResourceIndex + 4*direction;
+                            int newResourceIndex = oldResourceIndex + 4 * direction;
 
 //                            if(newResourceIndex < mMedia.size() && direction > 0){
-                            if(newResourceIndex < mNumResources){
+                            if (newResourceIndex < mNumResources) {
 //                                getMedia(mMedia.get(newResourceIndex), newResourceIndex);
 //                                JSONObject tempObj = mResourceIndices.getJSONObject(SURFACE_1);
 //                                tempObj.put(mContext.getString(R.string.resource_index), newResourceIndex);
@@ -2093,7 +2055,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
 //                                //when a full rotation occurs, reset the media of that index
 //                                resetMediaIndex(SURFACE_1, oldResourceIndex, direction);
 
-                                if(direction > 0){
+                                if (direction > 0) {
 //                                    getMedia(mMedia.get(newResourceIndex).getMedia(), newResourceIndex);
                                     getMedia(mUserStories.getJSONObject(newResourceIndex)
                                             .getJSONArray(mContext.getString(R.string.user_stories)), newResourceIndex);
@@ -2107,8 +2069,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
                                     Log.d(TAG, "updateRotations: old resource index: " + oldResourceIndex);
                                     Log.d(TAG, "updateRotations: new resource index: " + newResourceIndex);
                                     Log.d(TAG, "updateRotations: RESOURCE SURFACE OBJECT: " + mResourceIndices.get(SURFACE_1).toString());
-                                }
-                                else if(direction < 0 && oldResourceIndex > mNumRotations && oldResourceIndex >= 4){
+                                } else if (direction < 0 && oldResourceIndex > mNumRotations && oldResourceIndex >= 4) {
 //                                    getMedia(mMedia.get(oldResourceIndex - 4).getMedia(), oldResourceIndex - 4);
                                     getMedia(mUserStories.getJSONObject(oldResourceIndex - 4)
                                             .getJSONArray(mContext.getString(R.string.user_stories)), oldResourceIndex - 4);
@@ -2128,22 +2089,20 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
 //                                Log.d(TAG, "updateRotations: surface# 4 resource indices: " + mResourceIndices.getJSONObject(SURFACE_4));
 
                             }
-                        }catch (JSONException e){
+                        } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
                 };
                 mainHandler.post(myRunnable);
-            }
-            else if(numRotations2 % 3 == 0 && numRotations2 != 0){
+            } else if (numRotations2 % 3 == 0 && numRotations2 != 0) {
                 int temp = numRotations2;
-                if(direction > 0){
+                if (direction > 0) {
                     numRotations2 = -1;
-                }
-                else{
+                } else {
                     numRotations2 = 1;
                 }
-                if(mSurfaceTexture2 == null){
+                if (mSurfaceTexture2 == null) {
                     initVideoSurface1(PLAYER_TWO);
                 }
                 object2.put(mContext.getString(R.string.rotations), numRotations2);
@@ -2155,13 +2114,13 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
                 Runnable myRunnable = new Runnable() {
                     @Override
                     public void run() {
-                        try{
+                        try {
                             //update the resource index to show new resource
                             int oldResourceIndex = mResourceIndices.getJSONObject(SURFACE_2).getInt(mContext.getString(R.string.resource_index));
 
-                            int newResourceIndex = oldResourceIndex + 4*direction;
+                            int newResourceIndex = oldResourceIndex + 4 * direction;
 
-                            if(newResourceIndex < mNumResources){
+                            if (newResourceIndex < mNumResources) {
 //                                getMedia(mMedia.get(newResourceIndex), newResourceIndex);
 //
 //                                JSONObject tempObj = mResourceIndices.getJSONObject(SURFACE_2);
@@ -2172,7 +2131,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
 //                                //when a full rotation occurs, reset the media of that index
 //                                resetMediaIndex(SURFACE_2, oldResourceIndex, direction);
 
-                                if(direction > 0){
+                                if (direction > 0) {
 //                                    getMedia(mMedia.get(newResourceIndex).getMedia(), newResourceIndex);
                                     getMedia(mUserStories.getJSONObject(newResourceIndex)
                                             .getJSONArray(mContext.getString(R.string.user_stories)), newResourceIndex);
@@ -2186,8 +2145,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
                                     Log.d(TAG, "updateRotations: old resource index: " + oldResourceIndex);
                                     Log.d(TAG, "updateRotations: new resource index: " + newResourceIndex);
                                     Log.d(TAG, "updateRotations: RESOURCE SURFACE OBJECT: " + mResourceIndices.get(SURFACE_2).toString());
-                                }
-                                else if(direction < 0 && oldResourceIndex > mNumRotations && oldResourceIndex >= 4){
+                                } else if (direction < 0 && oldResourceIndex > mNumRotations && oldResourceIndex >= 4) {
 //                                    getMedia(mMedia.get(oldResourceIndex - 4).getMedia(), oldResourceIndex - 4);
                                     getMedia(mUserStories.getJSONObject(oldResourceIndex - 4)
                                             .getJSONArray(mContext.getString(R.string.user_stories)), oldResourceIndex - 4);
@@ -2207,22 +2165,20 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
 //                                Log.d(TAG, "updateRotations: surface# 4 resource indices: " + mResourceIndices.getJSONObject(SURFACE_4));
 
                             }
-                        }catch (JSONException e){
+                        } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
                 };
                 mainHandler.post(myRunnable);
-            }
-            else if(numRotations3 % 3 == 0 && numRotations3 != 0){
+            } else if (numRotations3 % 3 == 0 && numRotations3 != 0) {
                 int temp = numRotations3;
-                if(direction > 0){
+                if (direction > 0) {
                     numRotations3 = -1;
-                }
-                else{
+                } else {
                     numRotations3 = 1;
                 }
-                if(mSurfaceTexture3 == null){
+                if (mSurfaceTexture3 == null) {
                     initVideoSurface1(PLAYER_THREE);
                 }
                 object3.put(mContext.getString(R.string.rotations), numRotations3);
@@ -2230,8 +2186,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
                 Log.d(TAG, "updateRotations: surface3 transition. Num rotations from: " + temp + " to " + numRotations3);
 
                 // special case for first rotation for surface 3. Disable transition
-                if(!mFirstRotationSurface3){
-                    if(mNumRotations == 0){
+                if (!mFirstRotationSurface3) {
+                    if (mNumRotations == 0) {
                         mFirstRotationSurface3 = true;
                     }
 
@@ -2240,14 +2196,14 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
                     Runnable myRunnable = new Runnable() {
                         @Override
                         public void run() {
-                            try{
+                            try {
                                 //update the resource index to show new resource
                                 int oldResourceIndex = mResourceIndices.getJSONObject(SURFACE_3).getInt(mContext.getString(R.string.resource_index));
 
-                                int newResourceIndex = oldResourceIndex + 4*direction;
+                                int newResourceIndex = oldResourceIndex + 4 * direction;
 
 //                                if(newResourceIndex < mMedia.size() && direction > 0){
-                                if(newResourceIndex < mNumResources){
+                                if (newResourceIndex < mNumResources) {
 //                                    getMedia(mMedia.get(newResourceIndex), newResourceIndex);
 //
 //                                    JSONObject tempObj = mResourceIndices.getJSONObject(SURFACE_3);
@@ -2258,7 +2214,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
 //                                    //when a full rotation occurs, reset the media of that index
 //                                    resetMediaIndex(SURFACE_3, oldResourceIndex, direction);
 
-                                    if(direction > 0){
+                                    if (direction > 0) {
 //                                        getMedia(mMedia.get(newResourceIndex).getMedia(), newResourceIndex);
                                         getMedia(mUserStories.getJSONObject(newResourceIndex)
                                                 .getJSONArray(mContext.getString(R.string.user_stories)), newResourceIndex);
@@ -2272,8 +2228,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
                                         Log.d(TAG, "updateRotations: old resource index: " + oldResourceIndex);
                                         Log.d(TAG, "updateRotations: new resource index: " + newResourceIndex);
                                         Log.d(TAG, "updateRotations: RESOURCE SURFACE OBJECT: " + mResourceIndices.get(SURFACE_3).toString());
-                                    }
-                                    else if(direction < 0 && oldResourceIndex > mNumRotations && oldResourceIndex >= 4){
+                                    } else if (direction < 0 && oldResourceIndex > mNumRotations && oldResourceIndex >= 4) {
 //                                        getMedia(mMedia.get(oldResourceIndex - 4).getMedia(), oldResourceIndex - 4);
                                         getMedia(mUserStories.getJSONObject(oldResourceIndex - 4)
                                                 .getJSONArray(mContext.getString(R.string.user_stories)), oldResourceIndex - 4);
@@ -2293,31 +2248,27 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
 //                                    Log.d(TAG, "updateRotations: surface# 4 resource indices: " + mResourceIndices.getJSONObject(SURFACE_4));
 
                                 }
-                            }catch (JSONException e){
+                            } catch (JSONException e) {
                                 e.printStackTrace();
                             }
                         }
                     };
                     mainHandler.post(myRunnable);
-                }
-                else{
+                } else {
                     Log.d(TAG, "updateRotations: first rotation of surface 3.");
                     mFirstRotationSurface3 = false;
 //                    isImage3Set = false;
 
                 }
 
-            }
-
-            else if(numRotations4 % 3 == 0 && numRotations4 != 0){
+            } else if (numRotations4 % 3 == 0 && numRotations4 != 0) {
                 int temp = numRotations4;
-                if(direction > 0){
+                if (direction > 0) {
                     numRotations4 = -1;
-                }
-                else{
+                } else {
                     numRotations4 = 1;
                 }
-                if(mSurfaceTexture4 == null){
+                if (mSurfaceTexture4 == null) {
                     initVideoSurface1(PLAYER_FOUR);
                 }
                 object4.put(mContext.getString(R.string.rotations), numRotations4);
@@ -2327,8 +2278,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
                 // special case for first rotation for surface 4. Disable transition
                 // Also use mNumRotations to catch special case for restarting completely
 
-                if(!mFirstRotationSurface4){
-                    if(mNumRotations == 0){
+                if (!mFirstRotationSurface4) {
+                    if (mNumRotations == 0) {
                         mFirstRotationSurface4 = true;
 
                     }
@@ -2337,17 +2288,17 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
                     Runnable myRunnable = new Runnable() {
                         @Override
                         public void run() {
-                            try{
+                            try {
                                 int oldResourceIndex = mResourceIndices.getJSONObject(SURFACE_4).getInt(mContext.getString(R.string.resource_index));
 
-                                int newResourceIndex = oldResourceIndex + 4*direction;
+                                int newResourceIndex = oldResourceIndex + 4 * direction;
 //                                if(oldResourceIndex == 3){
 //                                    return;
 //                                }
 
 //                                if(newResourceIndex < mMedia.size() && direction > 0){
-                                if(newResourceIndex < mNumResources){
-                                    if(direction > 0){
+                                if (newResourceIndex < mNumResources) {
+                                    if (direction > 0) {
 //                                        getMedia(mMedia.get(newResourceIndex).getMedia(), newResourceIndex);
                                         getMedia(mUserStories.getJSONObject(newResourceIndex)
                                                 .getJSONArray(mContext.getString(R.string.user_stories)), newResourceIndex);
@@ -2360,8 +2311,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
                                         Log.d(TAG, "updateRotations: old resource index: " + oldResourceIndex);
                                         Log.d(TAG, "updateRotations: new resource index: " + newResourceIndex);
                                         Log.d(TAG, "updateRotations: RESOURCE SURFACE OBJECT: " + mResourceIndices.get(SURFACE_4).toString());
-                                    }
-                                    else if(direction < 0 && oldResourceIndex > mNumRotations && oldResourceIndex >= 4){
+                                    } else if (direction < 0 && oldResourceIndex > mNumRotations && oldResourceIndex >= 4) {
 //                                        getMedia(mMedia.get(oldResourceIndex - 4).getMedia(), oldResourceIndex - 4);
                                         getMedia(mUserStories.getJSONObject(oldResourceIndex - 4)
                                                 .getJSONArray(mContext.getString(R.string.user_stories)), oldResourceIndex - 4);
@@ -2383,14 +2333,13 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
 
                                 }
 
-                            }catch (JSONException e){
+                            } catch (JSONException e) {
                                 e.printStackTrace();
                             }
                         }
                     };
                     mainHandler.post(myRunnable);
-                }
-                else{
+                } else {
                     Log.d(TAG, "updateRotations: first rotation of surface 4.");
                     mFirstRotationSurface4 = false;
                 }
@@ -2413,75 +2362,68 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
                 public void run() {
                     mProgressBarInitHandler.postDelayed(mProgressBarInitRunnable, 200);
                     Log.d(TAG, "rotateCounterClockwise: checking to see if progress bars are initialized.");
-                    if(isProgressBarsInitialized){
-                        try{
-                            if(mCurrentSurface == SURFACE_1) {
+                    if (isProgressBarsInitialized) {
+                        try {
+                            if (mCurrentSurface == SURFACE_1) {
                                 final int surface1ResourceIndex = mResourceIndices.getJSONObject(SURFACE_1).getInt(mContext.getString(R.string.resource_index));
                                 final int surface1MediaIndex = mResourceIndices.getJSONObject(SURFACE_1).getJSONArray(mContext.getString(R.string.media_index))
                                         .getJSONObject(surface1ResourceIndex / 4).getInt(mContext.getString(R.string.media_index));
                                 Log.d(TAG, "correctRotation: RESOURCE SURFACE OBJECT: " + mResources.get(surface1ResourceIndex).getJSONObject(surface1MediaIndex).get(mContext.getString(R.string.media_type)));
-                                if(mResources.get(surface1ResourceIndex).getJSONObject(surface1MediaIndex).get(mContext.getString(R.string.media_type)).equals(mContext.getString(R.string.video_uri))) {
+                                if (mResources.get(surface1ResourceIndex).getJSONObject(surface1MediaIndex).get(mContext.getString(R.string.media_type)).equals(mContext.getString(R.string.video_uri))) {
                                     Log.d(TAG, "correctRotation: playing video on surface 1.");
                                     setProgressBars(0); //by passing 0 it won't fill the most recent progress bar
                                     restartPlayer1();
                                     startProgressBar();
-                                }
-                                else{
+                                } else {
                                     setProgressBars(1);
                                     restartProgressBarRunnable();
                                 }
-                            }
-                            else if(mCurrentSurface == SURFACE_2) {
+                            } else if (mCurrentSurface == SURFACE_2) {
                                 final int surface2ResourceIndex = mResourceIndices.getJSONObject(SURFACE_2).getInt(mContext.getString(R.string.resource_index));
                                 final int surface2MediaIndex = mResourceIndices.getJSONObject(SURFACE_2).getJSONArray(mContext.getString(R.string.media_index))
                                         .getJSONObject(surface2ResourceIndex / 4).getInt(mContext.getString(R.string.media_index));
                                 Log.d(TAG, "correctRotation: RESOURCE SURFACE OBJECT: " + mResources.get(surface2ResourceIndex).getJSONObject(surface2MediaIndex).get(mContext.getString(R.string.media_type)));
-                                if(mResources.get(surface2ResourceIndex).getJSONObject(surface2MediaIndex).get(mContext.getString(R.string.media_type)).equals(mContext.getString(R.string.video_uri))) {
+                                if (mResources.get(surface2ResourceIndex).getJSONObject(surface2MediaIndex).get(mContext.getString(R.string.media_type)).equals(mContext.getString(R.string.video_uri))) {
                                     Log.d(TAG, "correctRotation: playing video on surface 2.");
                                     setProgressBars(0);
                                     restartPlayer2();
                                     startProgressBar();
-                                }
-                                else{
+                                } else {
                                     setProgressBars(1);
                                     restartProgressBarRunnable();
                                 }
-                            }
-                            else if(mCurrentSurface == SURFACE_3) {
+                            } else if (mCurrentSurface == SURFACE_3) {
                                 final int surface3ResourceIndex = mResourceIndices.getJSONObject(SURFACE_3).getInt(mContext.getString(R.string.resource_index));
                                 final int surface3MediaIndex = mResourceIndices.getJSONObject(SURFACE_3).getJSONArray(mContext.getString(R.string.media_index))
                                         .getJSONObject(surface3ResourceIndex / 4).getInt(mContext.getString(R.string.media_index));
                                 Log.d(TAG, "correctRotation: RESOURCE SURFACE OBJECT: " + mResources.get(surface3ResourceIndex).getJSONObject(surface3MediaIndex).get(mContext.getString(R.string.media_type)));
-                                if(mResources.get(surface3ResourceIndex).getJSONObject(surface3MediaIndex).get(mContext.getString(R.string.media_type)).equals(mContext.getString(R.string.video_uri))) {
+                                if (mResources.get(surface3ResourceIndex).getJSONObject(surface3MediaIndex).get(mContext.getString(R.string.media_type)).equals(mContext.getString(R.string.video_uri))) {
                                     Log.d(TAG, "correctRotation: playing video on surface 3.");
                                     setProgressBars(0);
                                     restartPlayer3();
                                     startProgressBar();
-                                }
-                                else{
+                                } else {
                                     setProgressBars(1);
                                     restartProgressBarRunnable();
                                 }
-                            }
-                            else if(mCurrentSurface == SURFACE_4) {
+                            } else if (mCurrentSurface == SURFACE_4) {
                                 final int surface4ResourceIndex = mResourceIndices.getJSONObject(SURFACE_4).getInt(mContext.getString(R.string.resource_index));
                                 final int surface4MediaIndex = mResourceIndices.getJSONObject(SURFACE_4).getJSONArray(mContext.getString(R.string.media_index))
                                         .getJSONObject(surface4ResourceIndex / 4).getInt(mContext.getString(R.string.media_index));
                                 Log.d(TAG, "correctRotation: RESOURCE SURFACE OBJECT: " + mResources.get(surface4ResourceIndex).getJSONObject(surface4MediaIndex).get(mContext.getString(R.string.media_type)));
-                                if(mResources.get(surface4ResourceIndex).getJSONObject(surface4MediaIndex).get(mContext.getString(R.string.media_type)).equals(mContext.getString(R.string.video_uri))) {
+                                if (mResources.get(surface4ResourceIndex).getJSONObject(surface4MediaIndex).get(mContext.getString(R.string.media_type)).equals(mContext.getString(R.string.video_uri))) {
                                     Log.d(TAG, "correctRotation: playing video on surface 4.");
                                     setProgressBars(0);
                                     restartPlayer4();
                                     startProgressBar();
-                                }
-                                else{
+                                } else {
                                     setProgressBars(1);
                                     restartProgressBarRunnable();
                                 }
                             }
 
 
-                        }catch (JSONException e){
+                        } catch (JSONException e) {
                             e.printStackTrace();
                         }
                         mProgressBarInitHandler.removeCallbacks(mProgressBarInitRunnable);
@@ -2492,95 +2434,87 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
             renderContinuously();
 
 
-        }catch (JSONException e){
+        } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    private void printCurrentResources(){
+    private void printCurrentResources() {
         Log.d(TAG, "printCurrentResources: printing resources");
 
         int surface1ResourceIndex = 0;
-        try{
+        try {
             surface1ResourceIndex = mResourceIndices.getJSONObject(SURFACE_1).getInt(mContext.getString(R.string.resource_index));
         } catch (JSONException e) {
             e.printStackTrace();
-        }
-        catch (NullPointerException e) {
+        } catch (NullPointerException e) {
             e.printStackTrace();
         }
         Log.d(TAG, "printCurrentResources: SURFACE 1 \n---------------------------------------------------------------------------------------");
-        for(int i = 0; i < mHighestNumberMedia; i++){
+        for (int i = 0; i < mHighestNumberMedia; i++) {
             try {
                 Log.d(TAG, "printCurrentResources: SURFACE 1 " + i + " : " + mResources.get(surface1ResourceIndex).getJSONObject(i).get(mContext.getString(R.string.media_type)));
             } catch (JSONException e) {
-                Log.e(TAG, "printCurrentResources: SURFACE 1 JSONEXCEPTION: " + e.getMessage() );
-            }
-            catch (NullPointerException e) {
+                Log.e(TAG, "printCurrentResources: SURFACE 1 JSONEXCEPTION: " + e.getMessage());
+            } catch (NullPointerException e) {
                 e.printStackTrace();
             }
         }
 
         int surface2ResourceIndex = 0;
-        try{
+        try {
             surface2ResourceIndex = mResourceIndices.getJSONObject(SURFACE_2).getInt(mContext.getString(R.string.resource_index));
         } catch (JSONException e) {
             e.printStackTrace();
-        }
-        catch (NullPointerException e) {
+        } catch (NullPointerException e) {
             e.printStackTrace();
         }
         Log.d(TAG, "printCurrentResources: SURFACE 2 \n---------------------------------------------------------------------------------------");
-        for(int i = 0; i < mHighestNumberMedia; i++){
+        for (int i = 0; i < mHighestNumberMedia; i++) {
             try {
                 Log.d(TAG, "printCurrentResources: SURFACE 2 " + i + " : " + mResources.get(surface2ResourceIndex).getJSONObject(i).get(mContext.getString(R.string.media_type)));
             } catch (JSONException e) {
-                Log.e(TAG, "printCurrentResources: SURFACE 2 JSONEXCEPTION: " + e.getMessage() );
-            }
-            catch (NullPointerException e) {
+                Log.e(TAG, "printCurrentResources: SURFACE 2 JSONEXCEPTION: " + e.getMessage());
+            } catch (NullPointerException e) {
                 e.printStackTrace();
             }
         }
 
         int surface3ResourceIndex = 0;
-        try{
+        try {
             surface3ResourceIndex = mResourceIndices.getJSONObject(SURFACE_3).getInt(mContext.getString(R.string.resource_index));
         } catch (JSONException e) {
             e.printStackTrace();
-        }
-        catch (NullPointerException e) {
+        } catch (NullPointerException e) {
             e.printStackTrace();
         }
         Log.d(TAG, "printCurrentResources: SURFACE 3 \n---------------------------------------------------------------------------------------");
-        for(int i = 0; i < mHighestNumberMedia; i++){
+        for (int i = 0; i < mHighestNumberMedia; i++) {
             try {
                 Log.d(TAG, "printCurrentResources: SURFACE 3 " + i + " : " + mResources.get(surface3ResourceIndex).getJSONObject(i).get(mContext.getString(R.string.media_type)));
             } catch (JSONException e) {
-                Log.e(TAG, "printCurrentResources: SURFACE 3 JSONEXCEPTION: " + e.getMessage() );
-            }
-            catch (NullPointerException e) {
+                Log.e(TAG, "printCurrentResources: SURFACE 3 JSONEXCEPTION: " + e.getMessage());
+            } catch (NullPointerException e) {
                 e.printStackTrace();
             }
         }
 
 
         int surface4ResourceIndex = 0;
-        try{
+        try {
             surface4ResourceIndex = mResourceIndices.getJSONObject(SURFACE_4).getInt(mContext.getString(R.string.resource_index));
         } catch (JSONException e) {
             e.printStackTrace();
-        }
-        catch (NullPointerException e) {
+        } catch (NullPointerException e) {
             e.printStackTrace();
         }
         Log.d(TAG, "printCurrentResources: SURFACE 4 \n---------------------------------------------------------------------------------------");
-        for(int i = 0; i < mHighestNumberMedia; i++){
+        for (int i = 0; i < mHighestNumberMedia; i++) {
             try {
                 Log.d(TAG, "printCurrentResources: SURFACE 4 " + i + " : " + mResources.get(surface4ResourceIndex).getJSONObject(i).get(mContext.getString(R.string.media_type)));
             } catch (JSONException e) {
-                Log.e(TAG, "printCurrentResources: SURFACE 4 JSONEXCEPTION: " + e.getMessage() );
-            }
-            catch (NullPointerException e) {
+                Log.e(TAG, "printCurrentResources: SURFACE 4 JSONEXCEPTION: " + e.getMessage());
+            } catch (NullPointerException e) {
                 e.printStackTrace();
             }
         }
@@ -2691,32 +2625,29 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
 //        }
 //    }
 
-    private void resetPlayerDefaults(int surfaceNum){
-        if(surfaceNum == SURFACE_1){
+    private void resetPlayerDefaults(int surfaceNum) {
+        if (surfaceNum == SURFACE_1) {
             Log.d(TAG, "resetPlayerDefaults: resetting player 1 to defaults.");
             setPlayerState(ACTIVE_PLAYER);
             setSecondaryPlayerState(NOT_ACTIVE_PLAYER);
             mPlayer.release();
             mSecondaryPlayer.release();
             initPlayer1();
-        }
-        else if(surfaceNum == SURFACE_2){
+        } else if (surfaceNum == SURFACE_2) {
             Log.d(TAG, "resetPlayerDefaults: resetting player 2 to defaults.");
             setPlayer2State(ACTIVE_PLAYER);
             setSecondaryPlayer2State(NOT_ACTIVE_PLAYER);
             mPlayer2.release();
             mSecondaryPlayer2.release();
             initPlayer2();
-        }
-        else if(surfaceNum == SURFACE_3){
+        } else if (surfaceNum == SURFACE_3) {
             Log.d(TAG, "resetPlayerDefaults: resetting player 3 to defaults.");
             setPlayer3State(ACTIVE_PLAYER);
             setSecondaryPlayer3State(NOT_ACTIVE_PLAYER);
             mPlayer3.release();
             mSecondaryPlayer3.release();
             initPlayer3();
-        }
-        else if(surfaceNum == SURFACE_4){
+        } else if (surfaceNum == SURFACE_4) {
             Log.d(TAG, "resetPlayerDefaults: resetting player 4 to defaults.");
             setPlayer4State(ACTIVE_PLAYER);
             setSecondaryPlayer4State(NOT_ACTIVE_PLAYER);
@@ -2727,55 +2658,46 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
     }
 
 
-    private void rotateCounterClockwise(GL10 gl){
+    private void rotateCounterClockwise(GL10 gl) {
 //        Log.d(TAG, "rotateCounterClockwise: rotating.");
 //        Log.d(TAG, "rotateCounterClockwise: ");
 
-        if(angleRectangle > 0){
+        if (angleRectangle > 0) {
             angleRectangle = 0;
             mRotateCounterClockwise = false;
-            if(mCurrentSurface == SURFACE_1){
+            if (mCurrentSurface == SURFACE_1) {
                 unpausePlayer1();
-            }
-            else if(mCurrentSurface == SURFACE_2){
+            } else if (mCurrentSurface == SURFACE_2) {
                 unpausePlayer2();
-            }
-            else if(mCurrentSurface == SURFACE_3){
+            } else if (mCurrentSurface == SURFACE_3) {
                 unpausePlayer3();
-            }
-            else if(mCurrentSurface == SURFACE_4){
+            } else if (mCurrentSurface == SURFACE_4) {
                 unpausePlayer4();
             }
-        }
-        else if(angleRectangle < mAngleFinished){
+        } else if (angleRectangle < mAngleFinished) {
             angleRectangle = mAngleFinished;
             mRotateCounterClockwise = false;
-            if(mCurrentSurface == SURFACE_1){
+            if (mCurrentSurface == SURFACE_1) {
                 unpausePlayer1();
-            }
-            else if(mCurrentSurface == SURFACE_2){
+            } else if (mCurrentSurface == SURFACE_2) {
                 unpausePlayer2();
-            }
-            else if(mCurrentSurface == SURFACE_3){
+            } else if (mCurrentSurface == SURFACE_3) {
                 unpausePlayer3();
-            }
-            else if(mCurrentSurface == SURFACE_4){
+            } else if (mCurrentSurface == SURFACE_4) {
                 unpausePlayer4();
             }
-        }
-        else{
-            if(Math.abs(angleRectangle) > (Math.abs(settledAngle) + 90)){
+        } else {
+            if (Math.abs(angleRectangle) > (Math.abs(settledAngle) + 90)) {
                 mRotateCounterClockwise = false;
                 correctRotation();
                 return;
             }
             Log.d(TAG, "rotateCounterClockwise: rotating.");
-            if(angleRectangle > settledAngle + 89){
+            if (angleRectangle > settledAngle + 89) {
                 mRotateCounterClockwise = false;
                 correctRotation();
                 return;
-            }
-            else if(angleRectangle < settledAngle - 89){
+            } else if (angleRectangle < settledAngle - 89) {
                 mRotateCounterClockwise = false;
                 correctRotation();
                 return;
@@ -2783,7 +2705,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
             angleRectangle = angleRectangle + STEP_SIZE;
 //            Log.d(TAG, "rotateCounterClockwise: angle: " + angleRectangle);
 //            Log.d(TAG, "rotateCounterClockwise: %: " + Math.abs(angleRectangle) % 90);
-            if(Math.abs(angleRectangle) % 90 > 0 && Math.abs(angleRectangle) % 90 < STEP_SIZE){
+            if (Math.abs(angleRectangle) % 90 > 0 && Math.abs(angleRectangle) % 90 < STEP_SIZE) {
                 Log.d(TAG, "rotateCounterClockwise: Rotation Complete.");
                 mRotateCounterClockwise = false;
                 correctRotation();
@@ -2791,55 +2713,46 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
         }
     }
 
-    private void rotateClockwise(GL10 gl){
+    private void rotateClockwise(GL10 gl) {
 //        Log.d(TAG, "rotateClockwise: rotating.");
 //        Log.d(TAG, "rotateClockwise: ");
-        if(angleRectangle > 0){
+        if (angleRectangle > 0) {
             angleRectangle = 0;
             mRotateClockwise = false;
-            if(mCurrentSurface == SURFACE_1){
+            if (mCurrentSurface == SURFACE_1) {
                 unpausePlayer1();
-            }
-            else if(mCurrentSurface == SURFACE_2){
+            } else if (mCurrentSurface == SURFACE_2) {
                 unpausePlayer2();
-            }
-            else if(mCurrentSurface == SURFACE_3){
+            } else if (mCurrentSurface == SURFACE_3) {
                 unpausePlayer3();
-            }
-            else if(mCurrentSurface == SURFACE_4){
+            } else if (mCurrentSurface == SURFACE_4) {
                 unpausePlayer4();
             }
-        }
-        else if(angleRectangle < mAngleFinished){
+        } else if (angleRectangle < mAngleFinished) {
             angleRectangle = mAngleFinished;
             mRotateClockwise = false;
-            if(mCurrentSurface == SURFACE_1){
+            if (mCurrentSurface == SURFACE_1) {
                 unpausePlayer1();
-            }
-            else if(mCurrentSurface == SURFACE_2){
+            } else if (mCurrentSurface == SURFACE_2) {
                 unpausePlayer2();
-            }
-            else if(mCurrentSurface == SURFACE_3){
+            } else if (mCurrentSurface == SURFACE_3) {
                 unpausePlayer3();
-            }
-            else if(mCurrentSurface == SURFACE_4){
+            } else if (mCurrentSurface == SURFACE_4) {
                 unpausePlayer4();
             }
-        }
-        else{
-            if(Math.abs(angleRectangle) > (Math.abs(settledAngle) + 90)){
+        } else {
+            if (Math.abs(angleRectangle) > (Math.abs(settledAngle) + 90)) {
                 mRotateClockwise = false;
                 correctRotation();
                 return;
             }
 
             Log.d(TAG, "rotateClockwise: rotating.");
-            if(angleRectangle > settledAngle + 89){
+            if (angleRectangle > settledAngle + 89) {
                 mRotateClockwise = false;
                 correctRotation();
                 return;
-            }
-            else if(angleRectangle < settledAngle - 89){
+            } else if (angleRectangle < settledAngle - 89) {
                 mRotateClockwise = false;
                 correctRotation();
                 return;
@@ -2847,7 +2760,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
             angleRectangle = angleRectangle - STEP_SIZE;
 //            Log.d(TAG, "rotateClockwise: angle: " + angleRectangle);
 //            Log.d(TAG, "rotateClockwise: %: " + Math.abs(angleRectangle) % 90);
-            if(Math.abs(angleRectangle) % 90 > 0 && Math.abs(angleRectangle) % 90 < STEP_SIZE && mStartingAngle < 89){
+            if (Math.abs(angleRectangle) % 90 > 0 && Math.abs(angleRectangle) % 90 < STEP_SIZE && mStartingAngle < 89) {
 //                Log.d(TAG, "rotateClockwise: Rotation Complete.");
                 mRotateClockwise = false;
                 correctRotation();
@@ -2855,55 +2768,50 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
         }
     }
 
-    private void correctRotation(){
+    private void correctRotation() {
         angleRectangle = round(angleRectangle / 10) * 10;
-        if(angleRectangle > settledAngle + 89){
+        if (angleRectangle > settledAngle + 89) {
             deincrementSurface();
             settledAngle = angleRectangle;
-        }
-        else if(angleRectangle < settledAngle - 89){
+        } else if (angleRectangle < settledAngle - 89) {
             incrementSurface();
             settledAngle = angleRectangle;
-        }
-        else{
-            try{
+        } else {
+            try {
                 final int surfaceResourceIndex = mResourceIndices.getJSONObject(mCurrentSurface).getInt(mContext.getString(R.string.resource_index));
                 final int surfaceMediaIndex = mResourceIndices.getJSONObject(mCurrentSurface).getJSONArray(mContext.getString(R.string.media_index))
                         .getJSONObject(surfaceResourceIndex / 4).getInt(mContext.getString(R.string.media_index));
                 Log.d(TAG, "correctRotation: RESOURCE SURFACE OBJECT: " + mResources.get(surfaceResourceIndex).getJSONObject(surfaceMediaIndex).get(mContext.getString(R.string.media_type)));
-                if(mCurrentSurface == SURFACE_1) {
+                if (mCurrentSurface == SURFACE_1) {
                     Log.d(TAG, "correctRotation: playing video on surface 1.");
-                    if(mResources.get(surfaceResourceIndex).getJSONObject(surfaceMediaIndex).get(mContext.getString(R.string.media_type)).equals(mContext.getString(R.string.video_uri))) {
+                    if (mResources.get(surfaceResourceIndex).getJSONObject(surfaceMediaIndex).get(mContext.getString(R.string.media_type)).equals(mContext.getString(R.string.video_uri))) {
                         unpausePlayer1();
                     }
-                }
-                else if(mCurrentSurface == SURFACE_2) {
+                } else if (mCurrentSurface == SURFACE_2) {
                     Log.d(TAG, "correctRotation: playing video on surface 2.");
-                    if(mResources.get(surfaceResourceIndex).getJSONObject(surfaceMediaIndex).get(mContext.getString(R.string.media_type)).equals(mContext.getString(R.string.video_uri))) {
+                    if (mResources.get(surfaceResourceIndex).getJSONObject(surfaceMediaIndex).get(mContext.getString(R.string.media_type)).equals(mContext.getString(R.string.video_uri))) {
                         unpausePlayer2();
                     }
-                }
-                else if(mCurrentSurface == SURFACE_3) {
+                } else if (mCurrentSurface == SURFACE_3) {
                     Log.d(TAG, "correctRotation: playing video on surface 3.");
-                    if(mResources.get(surfaceResourceIndex).getJSONObject(surfaceMediaIndex).get(mContext.getString(R.string.media_type)).equals(mContext.getString(R.string.video_uri))) {
+                    if (mResources.get(surfaceResourceIndex).getJSONObject(surfaceMediaIndex).get(mContext.getString(R.string.media_type)).equals(mContext.getString(R.string.video_uri))) {
                         unpausePlayer3();
                     }
-                }
-                else if(mCurrentSurface == SURFACE_4) {
+                } else if (mCurrentSurface == SURFACE_4) {
                     Log.d(TAG, "correctRotation: playing video on surface 4.");
-                    if(mResources.get(surfaceResourceIndex).getJSONObject(surfaceMediaIndex).get(mContext.getString(R.string.media_type)).equals(mContext.getString(R.string.video_uri))) {
+                    if (mResources.get(surfaceResourceIndex).getJSONObject(surfaceMediaIndex).get(mContext.getString(R.string.media_type)).equals(mContext.getString(R.string.video_uri))) {
                         unpausePlayer4();
                     }
                 }
 
-            }catch (JSONException e){
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
         Log.d(TAG, "correctRotation: angle: " + angleRectangle);
     }
 
-    private void setDepth(GL10 gl){
+    private void setDepth(GL10 gl) {
         float max = -5.25f;
         float min = -6.25f;
         float A = (max - min) / 2;
@@ -2915,13 +2823,13 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
     }
 
 
-
     /**
      * setup the height, width and depth matrices
+     *
      * @param width
      * @param height
      */
-    private void setMatrices(float width, float height){
+    private void setMatrices(float width, float height) {
 
         float[][] heightMatrix = {
                 {-height, -height, height, height},
@@ -2937,7 +2845,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
                 {width, -width, width, -width},
                 {-width, -width, -width, -width},
         };
-        this.widthMatrix =  widthMatrix;
+        this.widthMatrix = widthMatrix;
 
         float[][] depthMatrix = {
                 {width, width, width, width},
@@ -2950,16 +2858,14 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
     }
 
 
-
-    public void pausePlayer(){
+    public void pausePlayer() {
         //////////////////
         // Player1
-        if(mPlayerState == ACTIVE_PLAYER && mPlayer.getPlayWhenReady()){
+        if (mPlayerState == ACTIVE_PLAYER && mPlayer.getPlayWhenReady()) {
             Log.d(TAG, "pausePlayer: pausing Player1");
             setPlayerState(PAUSED_PLAYER);
             mPlayer.setPlayWhenReady(false);
-        }
-        else if (mSecondaryPlayerState == ACTIVE_PLAYER && mSecondaryPlayer.getPlayWhenReady()){
+        } else if (mSecondaryPlayerState == ACTIVE_PLAYER && mSecondaryPlayer.getPlayWhenReady()) {
             Log.d(TAG, "pausePlayer: pausing Secondary Player1");
             setSecondaryPlayerState(PAUSED_PLAYER);
             mSecondaryPlayer.setPlayWhenReady(false);
@@ -2967,12 +2873,11 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
 
         //////////////////
         // Player2
-        else if (mPlayer2State == ACTIVE_PLAYER && mPlayer2.getPlayWhenReady()){
+        else if (mPlayer2State == ACTIVE_PLAYER && mPlayer2.getPlayWhenReady()) {
             Log.d(TAG, "pausePlayer: pausing Player2");
             setPlayer2State(PAUSED_PLAYER);
             mPlayer2.setPlayWhenReady(false);
-        }
-        else if (mSecondaryPlayer2State == ACTIVE_PLAYER && mSecondaryPlayer2.getPlayWhenReady()){
+        } else if (mSecondaryPlayer2State == ACTIVE_PLAYER && mSecondaryPlayer2.getPlayWhenReady()) {
             Log.d(TAG, "pausePlayer: pausing Secondary Player2");
             setSecondaryPlayer2State(PAUSED_PLAYER);
             mSecondaryPlayer2.setPlayWhenReady(false);
@@ -2980,12 +2885,11 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
 
         //////////////////
         // Player3
-        else if (mPlayer3State == ACTIVE_PLAYER && mPlayer3.getPlayWhenReady()){
+        else if (mPlayer3State == ACTIVE_PLAYER && mPlayer3.getPlayWhenReady()) {
             Log.d(TAG, "pausePlayer: pausing Player3");
             setPlayer3State(PAUSED_PLAYER);
             mPlayer3.setPlayWhenReady(false);
-        }
-        else if (mSecondaryPlayer3State == ACTIVE_PLAYER && mSecondaryPlayer3.getPlayWhenReady()){
+        } else if (mSecondaryPlayer3State == ACTIVE_PLAYER && mSecondaryPlayer3.getPlayWhenReady()) {
             Log.d(TAG, "pausePlayer: pausing Secondary Player3");
             setSecondaryPlayer3State(PAUSED_PLAYER);
             mSecondaryPlayer3.setPlayWhenReady(false);
@@ -2993,35 +2897,33 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
 
         //////////////////
         // Player4
-        else if (mPlayer4State == ACTIVE_PLAYER && mPlayer4.getPlayWhenReady()){
+        else if (mPlayer4State == ACTIVE_PLAYER && mPlayer4.getPlayWhenReady()) {
             Log.d(TAG, "pausePlayer: pausing Player4");
             setPlayer4State(PAUSED_PLAYER);
             mPlayer4.setPlayWhenReady(false);
-        }
-        else if (mSecondaryPlayer4State == ACTIVE_PLAYER && mSecondaryPlayer4.getPlayWhenReady()){
+        } else if (mSecondaryPlayer4State == ACTIVE_PLAYER && mSecondaryPlayer4.getPlayWhenReady()) {
             Log.d(TAG, "pausePlayer: pausing Secondary Player4");
             setSecondaryPlayer4State(PAUSED_PLAYER);
             mSecondaryPlayer4.setPlayWhenReady(false);
         }
     }
 
-    private void restartProgressBarRunnable(){
+    private void restartProgressBarRunnable() {
         Log.d(TAG, "restartProgressBarRunnable: removing progress runnable callback.");
-        if(mProgressRunnable != null){
+        if (mProgressRunnable != null) {
             mProgressHandler.removeCallbacks(mProgressRunnable);
         }
     }
 
-    public void restartPlayer1(){
+    public void restartPlayer1() {
 
 //        mCurrentProgress = 0;
-        if(mPlayerState == PAUSED_PLAYER && !mPlayer.getPlayWhenReady()){
+        if (mPlayerState == PAUSED_PLAYER && !mPlayer.getPlayWhenReady()) {
             Log.d(TAG, "restartPlayer1: unpausing Player1");
             mPlayer.seekTo(0);
 
             setPlayerState(ACTIVE_PLAYER);
-        }
-        else if (mSecondaryPlayerState == PAUSED_PLAYER && !mSecondaryPlayer.getPlayWhenReady()){
+        } else if (mSecondaryPlayerState == PAUSED_PLAYER && !mSecondaryPlayer.getPlayWhenReady()) {
             Log.d(TAG, "restartPlayer1: unpausing secondary Player1");
             mSecondaryPlayer.seekTo(0);
             setSecondaryPlayerState(ACTIVE_PLAYER);
@@ -3029,97 +2931,90 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
 
     }
 
-    public void restartPlayer2(){
+    public void restartPlayer2() {
 //        mCurrentProgress = 0;
-        if(mPlayer2State == PAUSED_PLAYER && !mPlayer2.getPlayWhenReady()){
+        if (mPlayer2State == PAUSED_PLAYER && !mPlayer2.getPlayWhenReady()) {
             Log.d(TAG, "restartPlayer2: unpausing Player2");
             mPlayer2.seekTo(0);
             setPlayer2State(ACTIVE_PLAYER);
-        }
-        else if (mSecondaryPlayer2State == PAUSED_PLAYER && !mSecondaryPlayer2.getPlayWhenReady()){
+        } else if (mSecondaryPlayer2State == PAUSED_PLAYER && !mSecondaryPlayer2.getPlayWhenReady()) {
             Log.d(TAG, "restartPlayer2: unpausing secondary Player2");
             mSecondaryPlayer2.seekTo(0);
             setSecondaryPlayer2State(ACTIVE_PLAYER);
         }
     }
 
-    public void restartPlayer3(){
+    public void restartPlayer3() {
 //        mCurrentProgress = 0;
-        if(mPlayer3State == PAUSED_PLAYER && !mPlayer3.getPlayWhenReady()){
+        if (mPlayer3State == PAUSED_PLAYER && !mPlayer3.getPlayWhenReady()) {
             Log.d(TAG, "restartPlayer3: unpausing Player3");
             mPlayer3.seekTo(0);
             setPlayer3State(ACTIVE_PLAYER);
-        }
-        else if (mSecondaryPlayer3State == PAUSED_PLAYER && !mSecondaryPlayer3.getPlayWhenReady()){
+        } else if (mSecondaryPlayer3State == PAUSED_PLAYER && !mSecondaryPlayer3.getPlayWhenReady()) {
             Log.d(TAG, "restartPlayer3: unpausing secondary Player3");
             mSecondaryPlayer3.seekTo(0);
             setSecondaryPlayer3State(ACTIVE_PLAYER);
         }
     }
 
-    public void restartPlayer4(){
+    public void restartPlayer4() {
 //        mCurrentProgress = 0;
-        if(mPlayer4State == PAUSED_PLAYER && !mPlayer4.getPlayWhenReady()){
+        if (mPlayer4State == PAUSED_PLAYER && !mPlayer4.getPlayWhenReady()) {
             Log.d(TAG, "restartPlayer4: unpausing Player4");
             mPlayer4.seekTo(0);
             setPlayer4State(ACTIVE_PLAYER);
-        }
-        else if (mSecondaryPlayer4State == PAUSED_PLAYER && !mSecondaryPlayer4.getPlayWhenReady()){
+        } else if (mSecondaryPlayer4State == PAUSED_PLAYER && !mSecondaryPlayer4.getPlayWhenReady()) {
             Log.d(TAG, "restartPlayer4: unpausing secondary Player4");
             mSecondaryPlayer4.seekTo(0);
             setSecondaryPlayer4State(ACTIVE_PLAYER);
         }
     }
 
-    public void unpausePlayer1(){
-        if(mPlayerState == PAUSED_PLAYER && !mPlayer.getPlayWhenReady()){
+    public void unpausePlayer1() {
+        if (mPlayerState == PAUSED_PLAYER && !mPlayer.getPlayWhenReady()) {
             Log.d(TAG, "unpausePlayer1: unpausing Player1");
             setPlayerState(ACTIVE_PLAYER);
-        }
-        else if (mSecondaryPlayerState == PAUSED_PLAYER && !mSecondaryPlayer.getPlayWhenReady()){
+        } else if (mSecondaryPlayerState == PAUSED_PLAYER && !mSecondaryPlayer.getPlayWhenReady()) {
             Log.d(TAG, "unpausePlayer1: unpausing secondary Player1");
             setSecondaryPlayerState(ACTIVE_PLAYER);
         }
     }
 
-    public void unpausePlayer2(){
-        if(mPlayer2State == PAUSED_PLAYER && !mPlayer2.getPlayWhenReady()){
+    public void unpausePlayer2() {
+        if (mPlayer2State == PAUSED_PLAYER && !mPlayer2.getPlayWhenReady()) {
             Log.d(TAG, "unpausePlayer2: unpausing Player2");
             setPlayer2State(ACTIVE_PLAYER);
-        }
-        else if (mSecondaryPlayer2State == PAUSED_PLAYER && !mSecondaryPlayer2.getPlayWhenReady()){
+        } else if (mSecondaryPlayer2State == PAUSED_PLAYER && !mSecondaryPlayer2.getPlayWhenReady()) {
             Log.d(TAG, "unpausePlayer2: unpausing secondary Player2");
             setSecondaryPlayer2State(ACTIVE_PLAYER);
         }
     }
 
-    public void unpausePlayer3(){
-        if(mPlayer3State == PAUSED_PLAYER && !mPlayer3.getPlayWhenReady()){
+    public void unpausePlayer3() {
+        if (mPlayer3State == PAUSED_PLAYER && !mPlayer3.getPlayWhenReady()) {
             Log.d(TAG, "unpausePlayer3: unpausing Player3");
             setPlayer3State(ACTIVE_PLAYER);
-        }
-        else if (mSecondaryPlayer3State == PAUSED_PLAYER && !mSecondaryPlayer3.getPlayWhenReady()){
+        } else if (mSecondaryPlayer3State == PAUSED_PLAYER && !mSecondaryPlayer3.getPlayWhenReady()) {
             Log.d(TAG, "unpausePlayer3: unpausing secondary Player3");
             setSecondaryPlayer3State(ACTIVE_PLAYER);
         }
     }
 
-    public void unpausePlayer4(){
-        if(mPlayer4State == PAUSED_PLAYER && !mPlayer4.getPlayWhenReady()){
+    public void unpausePlayer4() {
+        if (mPlayer4State == PAUSED_PLAYER && !mPlayer4.getPlayWhenReady()) {
             Log.d(TAG, "unpausePlayer4: unpausing Player4");
             setPlayer4State(ACTIVE_PLAYER);
-        }
-        else if (mSecondaryPlayer4State == PAUSED_PLAYER && !mSecondaryPlayer4.getPlayWhenReady()){
+        } else if (mSecondaryPlayer4State == PAUSED_PLAYER && !mSecondaryPlayer4.getPlayWhenReady()) {
             Log.d(TAG, "unpausePlayer4: unpausing secondary Player4");
             setSecondaryPlayer4State(ACTIVE_PLAYER);
         }
     }
 
-    private void pauseRendering(){
+    private void pauseRendering() {
         mGLView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
     }
 
-    private void renderContinuously(){
+    private void renderContinuously() {
         mGLView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
     }
 
@@ -3128,11 +3023,11 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
         pausePlayer();
         int resourceIndex = mResourceIndices.getJSONObject(mCurrentSurface).getInt(mContext.getString(R.string.resource_index));
         int mediaIndex = mResourceIndices.getJSONObject(mCurrentSurface).getJSONArray(mContext.getString(R.string.media_index))
-                .getJSONObject( resourceIndex / 4).getInt(mContext.getString(R.string.media_index));
+                .getJSONObject(resourceIndex / 4).getInt(mContext.getString(R.string.media_index));
         Log.d(TAG, "incrementMediaIndex: media index: " + mediaIndex);
 
         int numResourcesForIndex = mResources.get(resourceIndex).length();
-        if(mediaIndex < numResourcesForIndex - 1) {
+        if (mediaIndex < numResourcesForIndex - 1) {
             Log.d(TAG, "incrementMediaIndex: incrementing index.");
             mediaIndex++;
             JSONObject surfaceObject = mResourceIndices.getJSONObject(mCurrentSurface);
@@ -3157,15 +3052,14 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
 
             playNextVideo();
             startProgressBar();
-        }
-        else if(mediaIndex == numResourcesForIndex - 1){
+        } else if (mediaIndex == numResourcesForIndex - 1) {
             Log.d(TAG, "incrementMediaIndex: rotating to next surface.");
             mRotateClockwise = true;
         }
 
     }
 
-    private void stopPlayers(){
+    private void stopPlayers() {
         Log.d(TAG, "stopPlayers: stopping players");
         mPlayer.setPlayWhenReady(false);
         mSecondaryPlayer.setPlayWhenReady(false);
@@ -3177,7 +3071,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
         mSecondaryPlayer4.setPlayWhenReady(false);
     }
 
-    private void bufferFirstVideo(int surfaceNum, int mediaIndex){
+    private void bufferFirstVideo(int surfaceNum, int mediaIndex) {
         try {
             Log.d(TAG, "bufferFirstVideo: buffering first video.");
             int resourceIndex = mResourceIndices.getJSONObject(surfaceNum).getInt(mContext.getString(R.string.resource_index));
@@ -3186,54 +3080,51 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
             MediaSource firstMediaSource = (MediaSource) mResources.get(resourceIndex).getJSONObject(mediaIndex).get(mContext.getString(R.string.media_source));
 
             if (firstMediaSource != null) {
-                if(surfaceNum == SURFACE_1 && !hasFirstVideo1Played){
+                if (surfaceNum == SURFACE_1 && !hasFirstVideo1Played) {
                     mPlayer.setPlayWhenReady(false);
                     Log.d(TAG, "bufferFirstVideo: buffering first video for player 1.");
                     mPlayer.prepare(firstMediaSource);
-                    if(mediaIndex == 0){
+                    if (mediaIndex == 0) {
                         initVideoSurface1(PLAYER_ONE);
                         hasFirstVideo1Played = true;
                         initProgressBars();
                     }
-                }
-                else if(surfaceNum == SURFACE_2 && !hasFirstVideo2Played){
+                } else if (surfaceNum == SURFACE_2 && !hasFirstVideo2Played) {
                     mPlayer2.setPlayWhenReady(false);
                     Log.d(TAG, "bufferFirstVideo: buffering first video for player 2.");
                     mPlayer2.prepare(firstMediaSource);
-                    if(mediaIndex == 0){
+                    if (mediaIndex == 0) {
                         initVideoSurface2(PLAYER_TWO);
                         hasFirstVideo2Played = true;
                         initProgressBars();
                     }
-                }
-                else if(surfaceNum == SURFACE_3 && !hasFirstVideo3Played){
+                } else if (surfaceNum == SURFACE_3 && !hasFirstVideo3Played) {
                     mPlayer3.setPlayWhenReady(false);
                     Log.d(TAG, "bufferFirstVideo: buffering first video for player 3.");
                     mPlayer3.prepare(firstMediaSource);
-                    if(mediaIndex == 0){
+                    if (mediaIndex == 0) {
                         initVideoSurface3(PLAYER_THREE);
                         hasFirstVideo3Played = true;
                         initProgressBars();
                     }
-                }
-                else if(surfaceNum == SURFACE_4 && !hasFirstVideo4Played){
+                } else if (surfaceNum == SURFACE_4 && !hasFirstVideo4Played) {
                     mPlayer4.setPlayWhenReady(false);
                     Log.d(TAG, "bufferFirstVideo: buffering first video for player 4.");
                     mPlayer4.prepare(firstMediaSource);
-                    if(mediaIndex == 0){
+                    if (mediaIndex == 0) {
                         initVideoSurface4(PLAYER_FOUR);
                         hasFirstVideo4Played = true;
                         initProgressBars();
                     }
                 }
             }
-        } catch (JSONException e){
-            Log.e(TAG, "bufferFirstVideo: NullPointerException: " + e.getMessage() ); //null pointer for if there is no video
+        } catch (JSONException e) {
+            Log.e(TAG, "bufferFirstVideo: NullPointerException: " + e.getMessage()); //null pointer for if there is no video
         }
     }
 
 
-    private void bufferNextVideo(int surfaceNum){
+    private void bufferNextVideo(int surfaceNum) {
         try {
             // Log.d(TAG, "bufferNextVideo: buffering next video");
             //look for the next video
@@ -3252,8 +3143,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
                 } catch (NullPointerException e) {
                     mediaType = "none";
                     e.printStackTrace();
-                }
-                catch (JSONException e) {
+                } catch (JSONException e) {
                     mediaType = "none";
                     e.printStackTrace();
                 }
@@ -3261,7 +3151,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
                 if (mediaType.equals(mContext.getString(R.string.video_uri))) {
                     //then we have our next video resource
                     nextMediaSource = (MediaSource) mResources.get(resourceIndex).getJSONObject(i).get(mContext.getString(R.string.media_source));
-                    Log.d(TAG, "bufferNextVideo: media index, next video: " + i +" , " + mResources.get(resourceIndex).getJSONObject(i).get(mContext.getString(R.string.video_uri)));
+                    Log.d(TAG, "bufferNextVideo: media index, next video: " + i + " , " + mResources.get(resourceIndex).getJSONObject(i).get(mContext.getString(R.string.video_uri)));
                     break;
                 }
             }
@@ -3271,17 +3161,17 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
                 bufferMediaSource(surfaceNum, nextMediaSource);
             }
 
-        } catch (JSONException e){
+        } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
 
-    private void bufferMediaSource(int surfaceNum, MediaSource nextMediaSource){
+    private void bufferMediaSource(int surfaceNum, MediaSource nextMediaSource) {
         Log.d(TAG, "bufferMediaSource: buffering next media source.");
         Log.d(TAG, "bufferMediaSource: surface #: " + surfaceNum);
 
-        if(surfaceNum == SURFACE_1){
+        if (surfaceNum == SURFACE_1) {
             if (mPlayerState == ACTIVE_PLAYER) {
                 mSecondaryPlayer.setPlayWhenReady(false);
                 Log.d(TAG, "bufferMediaSource: buffering next video for secondary player.");
@@ -3291,8 +3181,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
                 Log.d(TAG, "bufferMediaSource: buffering next video for player 1.");
                 mPlayer.prepare(nextMediaSource);
             }
-        }
-        else if(surfaceNum == SURFACE_2){
+        } else if (surfaceNum == SURFACE_2) {
             if (mPlayer2State == ACTIVE_PLAYER) {
                 mSecondaryPlayer2.setPlayWhenReady(false);
                 Log.d(TAG, "bufferMediaSource: buffering next video for secondary player 2.");
@@ -3302,8 +3191,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
                 Log.d(TAG, "bufferMediaSource: buffering next video for player 2.");
                 mPlayer2.prepare(nextMediaSource);
             }
-        }
-        else if(surfaceNum == SURFACE_3){
+        } else if (surfaceNum == SURFACE_3) {
             if (mPlayer3State == ACTIVE_PLAYER) {
                 mSecondaryPlayer3.setPlayWhenReady(false);
                 Log.d(TAG, "bufferMediaSource: buffering next video for secondary player 3.");
@@ -3313,8 +3201,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
                 Log.d(TAG, "bufferMediaSource: buffering next video for player 3.");
                 mPlayer3.prepare(nextMediaSource);
             }
-        }
-        else if(surfaceNum == SURFACE_4){
+        } else if (surfaceNum == SURFACE_4) {
             if (mPlayer4State == ACTIVE_PLAYER) {
                 mSecondaryPlayer4.setPlayWhenReady(false);
                 Log.d(TAG, "bufferMediaSource: buffering next video for secondary player 4.");
@@ -3327,168 +3214,150 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
         }
     }
 
-    private void bufferNextVideo(int surfaceNum, int mediaIndex){
+    private void bufferNextVideo(int surfaceNum, int mediaIndex) {
         try {
             int resourceIndex = mResourceIndices.getJSONObject(surfaceNum).getInt(mContext.getString(R.string.resource_index));
-            MediaSource nextMediaSource  = (MediaSource) mResources.get(resourceIndex).getJSONObject(mediaIndex).get(mContext.getString(R.string.media_source));
+            MediaSource nextMediaSource = (MediaSource) mResources.get(resourceIndex).getJSONObject(mediaIndex).get(mContext.getString(R.string.media_source));
 
             if (nextMediaSource != null) {
-                if(surfaceNum == SURFACE_1){
-                        if (mPlayerState == ACTIVE_PLAYER) {
-                            mSecondaryPlayer.setPlayWhenReady(false);
-                            Log.d(TAG, "bufferNextVideo: buffering next video for secondary player1.");
-                            mSecondaryPlayer.prepare(nextMediaSource);
-                        }
-                        else if (mSecondaryPlayerState == ACTIVE_PLAYER) {
-                            mPlayer.setPlayWhenReady(false);
-                            Log.d(TAG, "bufferNextVideo: buffering next video for player 1.");
-                            mPlayer.prepare(nextMediaSource);
-                        }
+                if (surfaceNum == SURFACE_1) {
+                    if (mPlayerState == ACTIVE_PLAYER) {
+                        mSecondaryPlayer.setPlayWhenReady(false);
+                        Log.d(TAG, "bufferNextVideo: buffering next video for secondary player1.");
+                        mSecondaryPlayer.prepare(nextMediaSource);
+                    } else if (mSecondaryPlayerState == ACTIVE_PLAYER) {
+                        mPlayer.setPlayWhenReady(false);
+                        Log.d(TAG, "bufferNextVideo: buffering next video for player 1.");
+                        mPlayer.prepare(nextMediaSource);
                     }
-                    else if(surfaceNum == SURFACE_2){
-                        if (mPlayer2State == ACTIVE_PLAYER) {
-                            mSecondaryPlayer2.setPlayWhenReady(false);
-                            Log.d(TAG, "bufferNextVideo: buffering next video for secondary player 2.");
-                            mSecondaryPlayer2.prepare(nextMediaSource);
-                        }
-                        else if (mSecondaryPlayer2State == ACTIVE_PLAYER) {
-                            mPlayer2.setPlayWhenReady(false);
-                            Log.d(TAG, "bufferNextVideo: buffering next video for player 2.");
-                            mPlayer2.prepare(nextMediaSource);
-                        }
+                } else if (surfaceNum == SURFACE_2) {
+                    if (mPlayer2State == ACTIVE_PLAYER) {
+                        mSecondaryPlayer2.setPlayWhenReady(false);
+                        Log.d(TAG, "bufferNextVideo: buffering next video for secondary player 2.");
+                        mSecondaryPlayer2.prepare(nextMediaSource);
+                    } else if (mSecondaryPlayer2State == ACTIVE_PLAYER) {
+                        mPlayer2.setPlayWhenReady(false);
+                        Log.d(TAG, "bufferNextVideo: buffering next video for player 2.");
+                        mPlayer2.prepare(nextMediaSource);
                     }
-                    else if(surfaceNum == SURFACE_3){
-                        if (mPlayer3State == ACTIVE_PLAYER) {
-                            mSecondaryPlayer3.setPlayWhenReady(false);
-                            Log.d(TAG, "bufferNextVideo: buffering next video for secondary player 3.");
-                            mSecondaryPlayer3.prepare(nextMediaSource);
-                        }
-                        else if (mSecondaryPlayer3State == ACTIVE_PLAYER) {
-                            mPlayer3.setPlayWhenReady(false);
-                            Log.d(TAG, "bufferNextVideo: buffering next video for player 3.");
-                            mPlayer3.prepare(nextMediaSource);
-                        }
+                } else if (surfaceNum == SURFACE_3) {
+                    if (mPlayer3State == ACTIVE_PLAYER) {
+                        mSecondaryPlayer3.setPlayWhenReady(false);
+                        Log.d(TAG, "bufferNextVideo: buffering next video for secondary player 3.");
+                        mSecondaryPlayer3.prepare(nextMediaSource);
+                    } else if (mSecondaryPlayer3State == ACTIVE_PLAYER) {
+                        mPlayer3.setPlayWhenReady(false);
+                        Log.d(TAG, "bufferNextVideo: buffering next video for player 3.");
+                        mPlayer3.prepare(nextMediaSource);
                     }
-                    else if(surfaceNum == SURFACE_4){
-                        if (mPlayer4State == ACTIVE_PLAYER) {
-                            mSecondaryPlayer4.setPlayWhenReady(false);
-                            Log.d(TAG, "bufferNextVideo: buffering next video for secondary player 4.");
-                            mSecondaryPlayer4.prepare(nextMediaSource);
-                        }
-                        else if (mSecondaryPlayer4State == ACTIVE_PLAYER) {
-                            mPlayer4.setPlayWhenReady(false);
-                            Log.d(TAG, "bufferNextVideo: buffering next video for player 4.");
-                            mPlayer4.prepare(nextMediaSource);
-                        }
+                } else if (surfaceNum == SURFACE_4) {
+                    if (mPlayer4State == ACTIVE_PLAYER) {
+                        mSecondaryPlayer4.setPlayWhenReady(false);
+                        Log.d(TAG, "bufferNextVideo: buffering next video for secondary player 4.");
+                        mSecondaryPlayer4.prepare(nextMediaSource);
+                    } else if (mSecondaryPlayer4State == ACTIVE_PLAYER) {
+                        mPlayer4.setPlayWhenReady(false);
+                        Log.d(TAG, "bufferNextVideo: buffering next video for player 4.");
+                        mPlayer4.prepare(nextMediaSource);
+                    }
                 }
             }
 
-        } catch (JSONException e){
+        } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    private void playNextVideo(){
-        try{
+    private void playNextVideo() {
+        try {
             int resourceIndex = mResourceIndices.getJSONObject(mCurrentSurface).getInt(mContext.getString(R.string.resource_index));
             int mediaIndex = mResourceIndices.getJSONObject(mCurrentSurface).getJSONArray(mContext.getString(R.string.media_index))
                     .getJSONObject(resourceIndex / 4).getInt(mContext.getString(R.string.media_index));
             String currentMediaType = mResources.get(resourceIndex).getJSONObject(mediaIndex).getString(mContext.getString(R.string.media_type));
             Log.d(TAG, "playNextVideo: resource: " + mResourceIndices.getJSONObject(mCurrentSurface));
-            if(currentMediaType.equals(mContext.getString(R.string.video_uri))){
-                if(mCurrentSurface == SURFACE_1) {
+            if (currentMediaType.equals(mContext.getString(R.string.video_uri))) {
+                if (mCurrentSurface == SURFACE_1) {
                     Log.d(TAG, "playNextVideo: current surface is 1.");
-                    if(hasFirstVideo1Played){
+                    if (hasFirstVideo1Played) {
                         Log.d(TAG, "playNextVideo: first video on surface 1 has played.");
-                        if(mPlayerState == ACTIVE_PLAYER || mPlayerState == PAUSED_PLAYER){
+                        if (mPlayerState == ACTIVE_PLAYER || mPlayerState == PAUSED_PLAYER) {
                             Log.d(TAG, "playNextVideo: init secondary player1 surface.");
                             setPlayerState(NOT_ACTIVE_PLAYER);
                             initVideoSurface1(PLAYER_ONE_SECONDARY);
                             setSecondaryPlayerState(ACTIVE_PLAYER);
-                        }
-                        else if(mSecondaryPlayerState == ACTIVE_PLAYER || mSecondaryPlayerState == PAUSED_PLAYER){
+                        } else if (mSecondaryPlayerState == ACTIVE_PLAYER || mSecondaryPlayerState == PAUSED_PLAYER) {
                             Log.d(TAG, "playNextVideo: init player1 surface.");
                             setSecondaryPlayerState(NOT_ACTIVE_PLAYER);
                             initVideoSurface1(PLAYER_ONE);
                             setPlayerState(ACTIVE_PLAYER);
                         }
-                    }
-                    else{
+                    } else {
                         Log.d(TAG, "playNextVideo: hasFirstVideoPlayed1 is now TRUE.");
                         initVideoSurface1(PLAYER_ONE);
                         hasFirstVideo1Played = true;
                     }
 
                     bufferNextVideo(SURFACE_1);
-                }
-                else if(mCurrentSurface == SURFACE_2) {
+                } else if (mCurrentSurface == SURFACE_2) {
                     Log.d(TAG, "playNextVideo: current surface is 2.");
-                    if(hasFirstVideo2Played){
+                    if (hasFirstVideo2Played) {
                         Log.d(TAG, "playNextVideo: first video on surface 2 has played.");
-                        if(mPlayer2State == ACTIVE_PLAYER || mPlayer2State == PAUSED_PLAYER){
+                        if (mPlayer2State == ACTIVE_PLAYER || mPlayer2State == PAUSED_PLAYER) {
                             Log.d(TAG, "playNextVideo: init secondary player2 surface.");
                             setPlayer2State(NOT_ACTIVE_PLAYER);
                             initVideoSurface2(PLAYER_TWO_SECONDARY);
                             setSecondaryPlayer2State(ACTIVE_PLAYER);
-                        }
-                        else if(mSecondaryPlayer2State == ACTIVE_PLAYER || mSecondaryPlayer2State == PAUSED_PLAYER){
+                        } else if (mSecondaryPlayer2State == ACTIVE_PLAYER || mSecondaryPlayer2State == PAUSED_PLAYER) {
                             Log.d(TAG, "playNextVideo: init player2 surface.");
                             setSecondaryPlayer2State(NOT_ACTIVE_PLAYER);
                             initVideoSurface2(PLAYER_TWO);
                             setPlayer2State(ACTIVE_PLAYER);
                         }
-                    }
-                    else{
+                    } else {
                         Log.d(TAG, "playNextVideo: hasFirstVideoPlayed2 is now TRUE.");
                         initVideoSurface2(PLAYER_TWO);
                         hasFirstVideo2Played = true;
                     }
 
                     bufferNextVideo(SURFACE_2);
-                }
-                else if(mCurrentSurface == SURFACE_3) {
+                } else if (mCurrentSurface == SURFACE_3) {
                     Log.d(TAG, "playNextVideo: current surface is 3.");
-                    if(hasFirstVideo3Played){
+                    if (hasFirstVideo3Played) {
                         Log.d(TAG, "playNextVideo: first video on surface 3 has played.");
-                        if(mPlayer3State == ACTIVE_PLAYER || mPlayer3State == PAUSED_PLAYER){
+                        if (mPlayer3State == ACTIVE_PLAYER || mPlayer3State == PAUSED_PLAYER) {
                             Log.d(TAG, "playNextVideo: init secondary player3 surface.");
                             setPlayer3State(NOT_ACTIVE_PLAYER);
                             initVideoSurface3(PLAYER_THREE_SECONDARY);
                             setSecondaryPlayer3State(ACTIVE_PLAYER);
-                        }
-                        else if(mSecondaryPlayer3State == ACTIVE_PLAYER || mSecondaryPlayer3State == PAUSED_PLAYER){
+                        } else if (mSecondaryPlayer3State == ACTIVE_PLAYER || mSecondaryPlayer3State == PAUSED_PLAYER) {
                             Log.d(TAG, "playNextVideo: init player3 surface.");
                             setSecondaryPlayer3State(NOT_ACTIVE_PLAYER);
                             initVideoSurface3(PLAYER_THREE);
                             setPlayer3State(ACTIVE_PLAYER);
                         }
-                    }
-                    else{
+                    } else {
                         Log.d(TAG, "playNextVideo: hasFirstVideoPlayed3 is now TRUE.");
                         initVideoSurface3(PLAYER_THREE);
                         hasFirstVideo3Played = true;
                     }
 
                     bufferNextVideo(SURFACE_3);
-                }
-                else if(mCurrentSurface == SURFACE_4) {
+                } else if (mCurrentSurface == SURFACE_4) {
                     Log.d(TAG, "playNextVideo: current surface is 4.");
-                    if(hasFirstVideo4Played){
+                    if (hasFirstVideo4Played) {
                         Log.d(TAG, "playNextVideo: first video on surface 4 has played.");
-                        if(mPlayer4State == ACTIVE_PLAYER || mPlayer4State == PAUSED_PLAYER){
+                        if (mPlayer4State == ACTIVE_PLAYER || mPlayer4State == PAUSED_PLAYER) {
                             Log.d(TAG, "playNextVideo: init secondary player4 surface.");
                             setPlayer4State(NOT_ACTIVE_PLAYER);
                             initVideoSurface4(PLAYER_FOUR_SECONDARY);
                             setSecondaryPlayer4State(ACTIVE_PLAYER);
-                        }
-                        else if(mSecondaryPlayer4State == ACTIVE_PLAYER || mSecondaryPlayer4State == PAUSED_PLAYER){
+                        } else if (mSecondaryPlayer4State == ACTIVE_PLAYER || mSecondaryPlayer4State == PAUSED_PLAYER) {
                             Log.d(TAG, "playNextVideo: init player4 surface.");
                             setSecondaryPlayer4State(NOT_ACTIVE_PLAYER);
                             initVideoSurface4(PLAYER_FOUR);
                             setPlayer4State(ACTIVE_PLAYER);
                         }
-                    }
-                    else{
+                    } else {
                         Log.d(TAG, "playNextVideo: hasFirstVideoPlayed4 is now TRUE.");
                         initVideoSurface4(PLAYER_FOUR);
                         hasFirstVideo4Played = true;
@@ -3498,13 +3367,13 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
                 }
             }
 
-    } catch (JSONException e){
-        Log.e(TAG, "bufferNextVideo: NullPointerException: " + e.getMessage() ); //null pointer for if there is no video
-    }
+        } catch (JSONException e) {
+            Log.e(TAG, "bufferNextVideo: NullPointerException: " + e.getMessage()); //null pointer for if there is no video
+        }
     }
 
 
-    private void initVideoSurface1(final int player){
+    private void initVideoSurface1(final int player) {
         mSurfaceTexture = new SurfaceTexture(textureId1[0]);
 
         mSurfaceTexture.setOnFrameAvailableListener(new SurfaceTexture.OnFrameAvailableListener() {
@@ -3517,18 +3386,16 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
         });
 
         mSurface = new Surface(mSurfaceTexture);
-        if(player == PLAYER_ONE){
+        if (player == PLAYER_ONE) {
             mPlayer.setVideoSurface(mSurface);
-        }
-        else if(player == PLAYER_ONE_SECONDARY){
+        } else if (player == PLAYER_ONE_SECONDARY) {
             mSecondaryPlayer.setVideoSurface(mSurface);
         }
-        
+
     }
 
 
-
-    private void initVideoSurface2(final int player){
+    private void initVideoSurface2(final int player) {
 
         mSurfaceTexture2 = new SurfaceTexture(textureId2[0]);
 
@@ -3541,15 +3408,14 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
         });
 
         mSurface2 = new Surface(mSurfaceTexture2);
-        if(player == PLAYER_TWO){
+        if (player == PLAYER_TWO) {
             mPlayer2.setVideoSurface(mSurface2);
-        }
-        else if(player == PLAYER_TWO_SECONDARY){
+        } else if (player == PLAYER_TWO_SECONDARY) {
             mSecondaryPlayer2.setVideoSurface(mSurface2);
         }
     }
 
-    private void initVideoSurface3(final int player){
+    private void initVideoSurface3(final int player) {
 
         mSurfaceTexture3 = new SurfaceTexture(textureId3[0]);
         mSurfaceTexture3.setOnFrameAvailableListener(new SurfaceTexture.OnFrameAvailableListener() {
@@ -3560,15 +3426,14 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
             }
         });
         mSurface3 = new Surface(mSurfaceTexture3);
-        if(player == PLAYER_THREE){
+        if (player == PLAYER_THREE) {
             mPlayer3.setVideoSurface(mSurface3);
-        }
-        else if(player == PLAYER_THREE_SECONDARY){
+        } else if (player == PLAYER_THREE_SECONDARY) {
             mSecondaryPlayer3.setVideoSurface(mSurface3);
         }
     }
 
-    private void initVideoSurface4(final int player){
+    private void initVideoSurface4(final int player) {
         mSurfaceTexture4 = new SurfaceTexture(textureId4[0]);
         mSurfaceTexture4.setOnFrameAvailableListener(new SurfaceTexture.OnFrameAvailableListener() {
             @Override
@@ -3578,43 +3443,48 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
             }
         });
         mSurface4 = new Surface(mSurfaceTexture4);
-        if(player == PLAYER_FOUR){
+        if (player == PLAYER_FOUR) {
             mPlayer4.setVideoSurface(mSurface4);
-        }
-        else if(player == PLAYER_FOUR_SECONDARY){
+        } else if (player == PLAYER_FOUR_SECONDARY) {
             mSecondaryPlayer4.setVideoSurface(mSurface4);
         }
     }
 
 
-
-    private void setSecondaryPlayerState(int state){
+    private void setSecondaryPlayerState(int state) {
         mSecondaryPlayerState = state;
     }
-    private void setPlayerState(int state){
+
+    private void setPlayerState(int state) {
         mPlayerState = state;
     }
-    private void setSecondaryPlayer2State(int state){
+
+    private void setSecondaryPlayer2State(int state) {
         mSecondaryPlayer2State = state;
     }
-    private void setPlayer2State(int state){
+
+    private void setPlayer2State(int state) {
         mPlayer2State = state;
     }
-    private void setSecondaryPlayer3State(int state){
+
+    private void setSecondaryPlayer3State(int state) {
         mSecondaryPlayer3State = state;
     }
-    private void setPlayer3State(int state){
+
+    private void setPlayer3State(int state) {
         mPlayer3State = state;
     }
-    private void setSecondaryPlayer4State(int state){
+
+    private void setSecondaryPlayer4State(int state) {
         mSecondaryPlayer4State = state;
     }
-    private void setPlayer4State(int state){
+
+    private void setPlayer4State(int state) {
         mPlayer4State = state;
     }
 
 
-    private void initBlock(){
+    private void initBlock() {
         float screenRatio = screenHeight / screenWidth;
         float width = 1;
         float height = screenRatio;
@@ -3684,7 +3554,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
     }
 
 
-    public void releasePlayers(){
+    public void releasePlayers() {
         mPlayer.release();
         mSecondaryPlayer.release();
         mPlayer2.release();
@@ -3697,25 +3567,25 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
         removeAllCallbacks();
     }
 
-    private void removeAllCallbacks(){
-        if(mProgressBarInitHandler != null){
+    private void removeAllCallbacks() {
+        if (mProgressBarInitHandler != null) {
             mProgressBarInitHandler.removeCallbacks(mProgressBarInitRunnable);
         }
-        if(mProgressHandler != null){
+        if (mProgressHandler != null) {
             mProgressHandler.removeCallbacks(mProgressRunnable);
         }
 
     }
 
-    public void releasePlayer1(){
+    public void releasePlayer1() {
         mPlayer.release();
     }
 
-    public void releasePlayer2(){
+    public void releasePlayer2() {
         mSecondaryPlayer.release();
     }
 
-    private void initPlayers(){
+    private void initPlayers() {
         mVideoTrackSelectionFactory = new AdaptiveTrackSelection.Factory(BANDWIDTH_METER);
         mTrackSelector = new DefaultTrackSelector(mVideoTrackSelectionFactory);
 
@@ -3725,28 +3595,28 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
         initPlayer4();
     }
 
-    private void initPlayer1(){
+    private void initPlayer1() {
         mPlayer = ExoPlayerFactory.newSimpleInstance(mContext, mTrackSelector);
         mSecondaryPlayer = ExoPlayerFactory.newSimpleInstance(mContext, mTrackSelector);
         mPlayer.setPlayWhenReady(false);
         mSecondaryPlayer.setPlayWhenReady(false);
     }
 
-    private void initPlayer2(){
+    private void initPlayer2() {
         mPlayer2 = ExoPlayerFactory.newSimpleInstance(mContext, mTrackSelector);
         mSecondaryPlayer2 = ExoPlayerFactory.newSimpleInstance(mContext, mTrackSelector);
         mPlayer2.setPlayWhenReady(false);
         mSecondaryPlayer2.setPlayWhenReady(false);
     }
 
-    private void initPlayer3(){
+    private void initPlayer3() {
         mPlayer3 = ExoPlayerFactory.newSimpleInstance(mContext, mTrackSelector);
         mSecondaryPlayer3 = ExoPlayerFactory.newSimpleInstance(mContext, mTrackSelector);
         mPlayer3.setPlayWhenReady(false);
         mSecondaryPlayer3.setPlayWhenReady(false);
     }
 
-    private void initPlayer4(){
+    private void initPlayer4() {
         mPlayer4 = ExoPlayerFactory.newSimpleInstance(mContext, mTrackSelector);
         mSecondaryPlayer4 = ExoPlayerFactory.newSimpleInstance(mContext, mTrackSelector);
         mPlayer4.setPlayWhenReady(false);
@@ -3754,14 +3624,14 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
     }
 
 
-    public MediaSource buildMediaSource(Uri uri){
+    public MediaSource buildMediaSource(Uri uri) {
         // Produces DataSource instances through which media data is loaded.
         DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(mContext,
                 Util.getUserAgent(mContext, "MitchsApp"), null);
         return new ExtractorMediaSource(uri, dataSourceFactory, new DefaultExtractorsFactory(), null, null);
     }
 
-    private void showProgressBar(){
+    private void showProgressBar() {
         Log.d(TAG, "showProgressBar: showing progress bar.");
 //        ProgressBar mProgressBar = ((Activity)mContext).findViewById(PROGRESS_BAR_ID);
 //        mProgressBar.setVisibility(View.VISIBLE);
@@ -3770,7 +3640,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
         Runnable myRunnable = new Runnable() {
             @Override
             public void run() {
-                ProgressBar mProgressBar = ((Activity)mContext).findViewById(PROGRESS_BAR_ID);
+                ProgressBar mProgressBar = ((Activity) mContext).findViewById(PROGRESS_BAR_ID);
                 mProgressBar.bringToFront();
                 mProgressBar.setVisibility(View.VISIBLE);
             }
@@ -3778,7 +3648,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
         mainHandler.post(myRunnable);
     }
 
-    private void hideProgressBar(){
+    private void hideProgressBar() {
         Log.d(TAG, "hideProgressBar: hiding progress bar.");
 //        ProgressBar mProgressBar = ((Activity)mContext).findViewById(PROGRESS_BAR_ID);
 //        mProgressBar.setVisibility(View.INVISIBLE);
@@ -3787,7 +3657,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
         Runnable myRunnable = new Runnable() {
             @Override
             public void run() {
-                ProgressBar mProgressBar = ((Activity)mContext).findViewById(PROGRESS_BAR_ID);
+                ProgressBar mProgressBar = ((Activity) mContext).findViewById(PROGRESS_BAR_ID);
                 mProgressBar.setVisibility(View.INVISIBLE);
             }
         };
@@ -3795,7 +3665,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
     }
 
     private static final int PROGRESS_BAR_ID = 123456;
-    private void initProgressBar(){
+
+    private void initProgressBar() {
         Log.d(TAG, "initProgressBar: initializing progress bar.");
 
         //post to main ui thread
@@ -3803,7 +3674,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                RelativeLayout.LayoutParams rlp = new RelativeLayout.LayoutParams(180,180);
+                RelativeLayout.LayoutParams rlp = new RelativeLayout.LayoutParams(180, 180);
                 rlp.addRule(RelativeLayout.CENTER_IN_PARENT);
 
                 ProgressBar mProgressBar = new ProgressBar(mContext, null, android.R.attr.progressBarStyleLarge);
@@ -3817,10 +3688,10 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
         handler.post(runnable);
     }
 
-    private void initProgressBars(){
+    private void initProgressBars() {
         Log.d(TAG, "initProgressBars: initializing progress bar widgets.");
 
-        try{
+        try {
             //remove the previous surface's progress bars
             Handler handler = new Handler(mContext.getMainLooper());
             Runnable runnable = new Runnable() {
@@ -3846,7 +3717,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
 
             //make the progress bars and add them to the layout
             //their id's will be saved in the 'mIds' array
-            for(int i = 0; i < numSources; i++){
+            for (int i = 0; i < numSources; i++) {
                 Log.d(TAG, "initProgressBars: i: " + i);
 
                 final int count = i;
@@ -3862,7 +3733,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
 //                                LinearLayout.LayoutParams.WRAP_CONTENT
                         );
 
-                        layoutParams.setMargins(5, 0 ,0, 0);
+                        layoutParams.setMargins(5, 0, 0, 0);
                         MyProgressBar progressBar = new MyProgressBar(mContext,
                                 null,
                                 android.R.attr.progressBarStyleHorizontal);
@@ -3876,7 +3747,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
                         mIds[count] = progressBar.getId();
                         mLinearLayout.addView(progressBar);
 
-                        if(count == 0){
+                        if (count == 0) {
                             //set the flag so we know the progress bars are initialized
                             isProgressBarsInitialized = true;
                             startProgressBar();
@@ -3908,12 +3779,11 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
                             profileImage.setVisibility(View.VISIBLE);
                             profileImage.bringToFront();
                             profileImage.setLayoutParams(imageViewParams);
-                            if(!profileUrl.equals("")){
+                            if (!profileUrl.equals("")) {
                                 Glide.with(mContext)
                                         .load(profileUrl)
                                         .into(profileImage);
-                            }
-                            else{
+                            } else {
                                 profileImage.setImageDrawable(mContext.getResources().getDrawable(R.drawable.android_construction));
                             }
 
@@ -3928,10 +3798,9 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
                             name.setTextSize(14f);
                             name.setTextColor(Color.WHITE);
                             name.setLayoutParams(textViewParams);
-                            if(!username.equals("")){
+                            if (!username.equals("")) {
                                 name.setText(username);
-                            }
-                            else{
+                            } else {
                                 name.setText("N/A");
                             }
 
@@ -3947,20 +3816,20 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
 
             }
 
-        }catch (JSONException e){
+        } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    private void setProgressBars(int number){
+    private void setProgressBars(int number) {
         Log.d(TAG, "setProgressBars: setting progress bar to match media index.");
-        try{
+        try {
             int resourceIndex = mResourceIndices.getJSONObject(mCurrentSurface).getInt(mContext.getString(R.string.resource_index));
             int surfaceMediaIndexCount = mResourceIndices.getJSONObject(mCurrentSurface).getJSONArray(mContext.getString(R.string.media_index))
-                    .getJSONObject( resourceIndex / 4).getInt(mContext.getString(R.string.media_index));
+                    .getJSONObject(resourceIndex / 4).getInt(mContext.getString(R.string.media_index));
             Log.d(TAG, "setProgressBars: media index count: " + surfaceMediaIndexCount);
             //iterate through the media index and fill the progress bars
-            for(int i = 0; i < surfaceMediaIndexCount + number; i++){
+            for (int i = 0; i < surfaceMediaIndexCount + number; i++) {
                 Log.d(TAG, "setProgressBars: filling progress bar with id = " + i);
                 MyProgressBar progressBar = ((Activity) mContext).findViewById(mIds[i]);
 
@@ -3971,7 +3840,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
                 progressBar.setCurrentProgress(1);
                 progressBar.setTotalDuration(1);
             }
-        }catch (JSONException e){
+        } catch (JSONException e) {
             e.printStackTrace();
         }
 
@@ -3979,23 +3848,22 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
     }
 
 
-
-    private void startProgressBar(){
+    private void startProgressBar() {
         Log.d(TAG, "startProgressBar: starting progress bar.");
-        try{
+        try {
             int resourceIndex = mResourceIndices.getJSONObject(mCurrentSurface).getInt(mContext.getString(R.string.resource_index));
             int surfaceMediaIndex = mResourceIndices.getJSONObject(mCurrentSurface).getJSONArray(mContext.getString(R.string.media_index))
-                    .getJSONObject( resourceIndex / 4).getInt(mContext.getString(R.string.media_index));
+                    .getJSONObject(resourceIndex / 4).getInt(mContext.getString(R.string.media_index));
             mCurrentProgressBar = ((Activity) mContext).findViewById(mIds[surfaceMediaIndex]);
 
-            if(mCurrentProgressBar != null){
+            if (mCurrentProgressBar != null) {
                 Log.d(TAG, "startProgressBar: current progress bar is not null.");
 
                 String resourceType = "";
                 boolean imageRenderError = false;
-                try{
+                try {
                     resourceType = mResources.get(resourceIndex).getJSONObject(surfaceMediaIndex).get(mContext.getString(R.string.media_type)).toString();
-                }catch (JSONException e){
+                } catch (JSONException e) {
                     imageRenderError = true;
                 }
 
@@ -4012,64 +3880,56 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
 
                     //hide the circular progress bar if it's showing
                     hideProgressBar();
-                }
-                else if(resourceType.equals(mContext.getString(R.string.video_uri))){
+                } else if (resourceType.equals(mContext.getString(R.string.video_uri))) {
                     Log.d(TAG, "startProgressBar: next resource is a video.");
 
                     //get the total duration
-                    try{
+                    try {
                         mTotalDuration = Integer.parseInt(mResources.get(resourceIndex).getJSONObject(surfaceMediaIndex)
                                 .get(mContext.getString(R.string.duration)).toString()) * 1000;
-                    }catch (JSONException e){
+                    } catch (JSONException e) {
                         mTotalDuration = MEDIA_TIMEOUT;
                     }
 
-                    if(getCurrentPlayer() == PLAYER_ONE){
+                    if (getCurrentPlayer() == PLAYER_ONE) {
                         Log.d(TAG, "startProgressBar: starting progress bar for player1");
                         startProgressRunnable(mPlayer);
-                    }
-                    else if(getCurrentPlayer() == PLAYER_ONE_SECONDARY){
+                    } else if (getCurrentPlayer() == PLAYER_ONE_SECONDARY) {
                         Log.d(TAG, "startProgressBar: starting progress bar for secondary player1");
                         startProgressRunnable(mSecondaryPlayer);
-                    }
-                    else if(getCurrentPlayer() == PLAYER_TWO){
+                    } else if (getCurrentPlayer() == PLAYER_TWO) {
                         Log.d(TAG, "startProgressBar: starting progress bar for player2");
                         startProgressRunnable(mPlayer2);
-                    }
-                    else if(getCurrentPlayer() == PLAYER_TWO_SECONDARY){
+                    } else if (getCurrentPlayer() == PLAYER_TWO_SECONDARY) {
                         Log.d(TAG, "startProgressBar: starting progress bar for secondary player2");
                         startProgressRunnable(mSecondaryPlayer2);
-                    }
-                    else if(getCurrentPlayer() == PLAYER_THREE){
+                    } else if (getCurrentPlayer() == PLAYER_THREE) {
                         Log.d(TAG, "startProgressBar: starting progress bar for player3");
                         startProgressRunnable(mPlayer3);
-                    }
-                    else if(getCurrentPlayer() == PLAYER_THREE_SECONDARY){
+                    } else if (getCurrentPlayer() == PLAYER_THREE_SECONDARY) {
                         Log.d(TAG, "startProgressBar: starting progress bar for secondary player3");
                         startProgressRunnable(mSecondaryPlayer3);
-                    }
-                    else if(getCurrentPlayer() == PLAYER_FOUR){
+                    } else if (getCurrentPlayer() == PLAYER_FOUR) {
                         Log.d(TAG, "startProgressBar: starting progress bar for player4");
                         startProgressRunnable(mPlayer4);
-                    }
-                    else if(getCurrentPlayer() == PLAYER_FOUR_SECONDARY){
+                    } else if (getCurrentPlayer() == PLAYER_FOUR_SECONDARY) {
                         Log.d(TAG, "startProgressBar: starting progress bar for secondary player4");
                         startProgressRunnable(mSecondaryPlayer4);
                     }
                 }
             }
 
-        }catch (JSONException e){
+        } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    private void startProgressRunnable(final Player player_){
+    private void startProgressRunnable(final Player player_) {
         Log.d(TAG, "startProgressRunnable: attempting to start progress runnable.");
-        if(player_ != null){
+        if (player_ != null) {
             Log.d(TAG, "startProgressRunnable: starting the progress runnable for progress updates.");
 
-            if(mProgressRunnable != null){
+            if (mProgressRunnable != null) {
                 Log.d(TAG, "startProgressRunnable: TIMEOUT.");
                 mProgressHandler.removeCallbacks(mProgressRunnable);
                 mProgressRunnable = null;
@@ -4077,10 +3937,10 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
             mCurrentProgress = 0;
             frameAvailableCount = 0;
             videoRetryTimer = 0;
-            mProgressHandler = new Handler(Looper.getMainLooper()){
+            mProgressHandler = new Handler(Looper.getMainLooper()) {
                 @Override
                 public void handleMessage(Message msg) {
-                    if(msg.what == INIT_VIDEO_PROGRESS_BAR){
+                    if (msg.what == INIT_VIDEO_PROGRESS_BAR) {
                         Log.d(TAG, "startProgressRunnable: initializing progress bar for video: " + mCurrentProgress);
                         mCurrentProgressBar.setMax(mTotalDuration);
                         mCurrentProgressBar.setProgress(mCurrentProgress);
@@ -4091,63 +3951,52 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
 
                         //show the circular progress bar
                         showProgressBar();
-                    }
-                    else if(msg.what == UPDATE_UI_WITH_VIDEO_PROGRESS){
+                    } else if (msg.what == UPDATE_UI_WITH_VIDEO_PROGRESS) {
                         Log.d(TAG, "startProgressRunnable: updating UI thread with progress: " + mCurrentProgress);
                         mCurrentProgressBar.setProgress(mCurrentProgress);
-                    }
-                    else if(msg.what == REMOVE_PROGRESS_BAR_CALLBACKS){
+                    } else if (msg.what == REMOVE_PROGRESS_BAR_CALLBACKS) {
                         Log.d(TAG, "startProgressRunnable: updating UI thread with progress: " + mCurrentProgress);
                         mProgressHandler.removeCallbacks(mProgressRunnable);
-                    }
-                    else if(msg.what == HIDE_PROGRESS_BAR){
+                    } else if (msg.what == HIDE_PROGRESS_BAR) {
                         Log.d(TAG, "startProgressRunnable: Hiding circular progress bar from UI Thread");
                         hideProgressBar();
-                    }
-                    else if(msg.what == getCurrentPlayer()) {
+                    } else if (msg.what == getCurrentPlayer()) {
                         Log.d(TAG, "startProgressRunnable: Retrying video playback.");
                         showProgressBar();
                         try {
                             int resourceIndex = mResourceIndices.getJSONObject(mCurrentSurface).getInt(mContext.getString(R.string.resource_index));
                             int mediaIndex = mResourceIndices.getJSONObject(mCurrentSurface).getJSONArray(mContext.getString(R.string.media_index))
-                                    .getJSONObject( resourceIndex / 4).getInt(mContext.getString(R.string.media_index));
+                                    .getJSONObject(resourceIndex / 4).getInt(mContext.getString(R.string.media_index));
                             MediaSource nextMediaSource = (MediaSource) mResources.get(resourceIndex).getJSONObject(mediaIndex).get(mContext.getString(R.string.media_source));
-                            if(getCurrentPlayer() == PLAYER_ONE){
+                            if (getCurrentPlayer() == PLAYER_ONE) {
                                 Log.d(TAG, "startProgressRunnable: attempting to restart player1");
                                 mPlayer.prepare(nextMediaSource);
                                 mPlayer.setPlayWhenReady(true);
-                            }
-                            else if(getCurrentPlayer() == PLAYER_ONE_SECONDARY){
+                            } else if (getCurrentPlayer() == PLAYER_ONE_SECONDARY) {
                                 Log.d(TAG, "startProgressRunnable: attempting to restart secondary player1");
                                 mSecondaryPlayer.prepare(nextMediaSource);
                                 mSecondaryPlayer.setPlayWhenReady(true);
-                            }
-                            else if(getCurrentPlayer() == PLAYER_TWO){
+                            } else if (getCurrentPlayer() == PLAYER_TWO) {
                                 Log.d(TAG, "startProgressRunnable: attempting to restart player2");
                                 mPlayer2.prepare(nextMediaSource);
                                 mPlayer2.setPlayWhenReady(true);
-                            }
-                            else if(getCurrentPlayer() == PLAYER_TWO_SECONDARY){
+                            } else if (getCurrentPlayer() == PLAYER_TWO_SECONDARY) {
                                 Log.d(TAG, "startProgressRunnable: attempting to restart secondary player2");
                                 mSecondaryPlayer2.prepare(nextMediaSource);
                                 mSecondaryPlayer2.setPlayWhenReady(true);
-                            }
-                            else if(getCurrentPlayer() == PLAYER_THREE){
+                            } else if (getCurrentPlayer() == PLAYER_THREE) {
                                 Log.d(TAG, "startProgressRunnable: attempting to restart player3");
                                 mPlayer3.prepare(nextMediaSource);
                                 mPlayer3.setPlayWhenReady(true);
-                            }
-                            else if(getCurrentPlayer() == PLAYER_THREE_SECONDARY){
+                            } else if (getCurrentPlayer() == PLAYER_THREE_SECONDARY) {
                                 Log.d(TAG, "startProgressRunnable: attempting to restart secondary player3");
                                 mSecondaryPlayer3.prepare(nextMediaSource);
                                 mSecondaryPlayer3.setPlayWhenReady(true);
-                            }
-                            else if(getCurrentPlayer() == PLAYER_FOUR){
+                            } else if (getCurrentPlayer() == PLAYER_FOUR) {
                                 Log.d(TAG, "startProgressRunnable: attempting to restart player4");
                                 mPlayer4.prepare(nextMediaSource);
                                 mPlayer4.setPlayWhenReady(true);
-                            }
-                            else if(getCurrentPlayer() == PLAYER_FOUR_SECONDARY){
+                            } else if (getCurrentPlayer() == PLAYER_FOUR_SECONDARY) {
                                 Log.d(TAG, "startProgressRunnable: attempting to restart secondary player4");
                                 mSecondaryPlayer4.prepare(nextMediaSource);
                                 mSecondaryPlayer4.setPlayWhenReady(true);
@@ -4165,152 +4014,137 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
                     mProgressHandler.postDelayed(this, 200);
                     int progress = 0;
                     boolean isPlaying = false;
-                    if(getCurrentPlayer() == PLAYER_ONE){
+                    if (getCurrentPlayer() == PLAYER_ONE) {
                         progress = (int) mPlayer.getCurrentPosition();
-                        if(mPlayer.getPlayWhenReady()){
+                        if (mPlayer.getPlayWhenReady()) {
                             isPlaying = true;
                         }
-                        if(!mUpdateST){
+                        if (!mUpdateST) {
                             frameAvailableCount++;
                             Log.d(TAG, "startProgressRunnable: player1 frame Available count: " + frameAvailableCount);
-                            if(frameAvailableCount >= VIDEO_REFRESH_COUNT_LIMIT){
+                            if (frameAvailableCount >= VIDEO_REFRESH_COUNT_LIMIT) {
                                 Log.d(TAG, "startProgressRunnable: forcing frame refresh on player1.");
                                 mUpdateST = true;
                             }
-                        }
-                        else{
+                        } else {
                             frameAvailableCount = 0;
                         }
                         Log.d(TAG, "startProgressRunnable: player 1 current progress: " + progress);
-                    }
-                    else if(getCurrentPlayer() == PLAYER_ONE_SECONDARY){
+                    } else if (getCurrentPlayer() == PLAYER_ONE_SECONDARY) {
                         progress = (int) mSecondaryPlayer.getCurrentPosition();
-                        if(mSecondaryPlayer.getPlayWhenReady()){
+                        if (mSecondaryPlayer.getPlayWhenReady()) {
                             isPlaying = true;
                         }
-                        if(!mUpdateST){
+                        if (!mUpdateST) {
                             frameAvailableCount++;
                             Log.d(TAG, "startProgressRunnable: secondary player1 frame Available count: " + frameAvailableCount);
-                            if(frameAvailableCount >= VIDEO_REFRESH_COUNT_LIMIT){
+                            if (frameAvailableCount >= VIDEO_REFRESH_COUNT_LIMIT) {
                                 Log.d(TAG, "startProgressRunnable: forcing frame refresh on secondary player1.");
                                 mUpdateST = true;
                             }
-                        }
-                        else{
+                        } else {
                             frameAvailableCount = 0;
                         }
                         Log.d(TAG, "startProgressRunnable: current progress: " + progress);
-                    }
-                    else if(getCurrentPlayer() == PLAYER_TWO){
+                    } else if (getCurrentPlayer() == PLAYER_TWO) {
                         progress = (int) mPlayer2.getCurrentPosition();
-                        if(mPlayer2.getPlayWhenReady()){
+                        if (mPlayer2.getPlayWhenReady()) {
                             isPlaying = true;
                         }
-                        if(!mUpdateST2){
+                        if (!mUpdateST2) {
                             frameAvailableCount++;
                             Log.d(TAG, "startProgressRunnable: player2 frame Available count: " + frameAvailableCount);
-                            if(frameAvailableCount >= VIDEO_REFRESH_COUNT_LIMIT){
+                            if (frameAvailableCount >= VIDEO_REFRESH_COUNT_LIMIT) {
                                 Log.d(TAG, "startProgressRunnable: forcing frame refresh on player2.");
                                 mUpdateST2 = true;
                             }
-                        }
-                        else{
+                        } else {
                             frameAvailableCount = 0;
                         }
                         Log.d(TAG, "startProgressRunnable: current progress: " + progress);
-                    }
-                    else if(getCurrentPlayer() == PLAYER_TWO_SECONDARY){
+                    } else if (getCurrentPlayer() == PLAYER_TWO_SECONDARY) {
                         progress = (int) mSecondaryPlayer2.getCurrentPosition();
-                        if(mSecondaryPlayer2.getPlayWhenReady()){
+                        if (mSecondaryPlayer2.getPlayWhenReady()) {
                             isPlaying = true;
                         }
-                        if(!mUpdateST2){
+                        if (!mUpdateST2) {
                             frameAvailableCount++;
                             Log.d(TAG, "startProgressRunnable: secondary player2 frame Available count: " + frameAvailableCount);
-                            if(frameAvailableCount >= VIDEO_REFRESH_COUNT_LIMIT){
+                            if (frameAvailableCount >= VIDEO_REFRESH_COUNT_LIMIT) {
                                 Log.d(TAG, "startProgressRunnable: forcing frame refresh on secondary player2.");
                                 mUpdateST2 = true;
                             }
-                        }
-                        else{
+                        } else {
                             frameAvailableCount = 0;
                         }
                         Log.d(TAG, "startProgressRunnable: current progress: " + progress);
-                    }
-                    else if(getCurrentPlayer() == PLAYER_THREE){
+                    } else if (getCurrentPlayer() == PLAYER_THREE) {
                         progress = (int) mPlayer3.getCurrentPosition();
-                        if(mPlayer3.getPlayWhenReady()){
+                        if (mPlayer3.getPlayWhenReady()) {
                             isPlaying = true;
                         }
-                        if(!mUpdateST3){
+                        if (!mUpdateST3) {
                             frameAvailableCount++;
                             Log.d(TAG, "startProgressRunnable: player3 frame Available count: " + frameAvailableCount);
-                            if(frameAvailableCount >= VIDEO_REFRESH_COUNT_LIMIT){
+                            if (frameAvailableCount >= VIDEO_REFRESH_COUNT_LIMIT) {
                                 Log.d(TAG, "startProgressRunnable: forcing frame refresh on player3.");
                                 mUpdateST3 = true;
                             }
-                        }
-                        else{
+                        } else {
                             frameAvailableCount = 0;
                         }
                         Log.d(TAG, "startProgressRunnable: current progress: " + progress);
-                    }
-                    else if(getCurrentPlayer() == PLAYER_THREE_SECONDARY){
+                    } else if (getCurrentPlayer() == PLAYER_THREE_SECONDARY) {
                         progress = (int) mSecondaryPlayer3.getCurrentPosition();
-                        if(mSecondaryPlayer3.getPlayWhenReady()){
+                        if (mSecondaryPlayer3.getPlayWhenReady()) {
                             isPlaying = true;
                         }
-                        if(!mUpdateST3){
+                        if (!mUpdateST3) {
                             frameAvailableCount++;
                             Log.d(TAG, "startProgressRunnable: secondary player3 frame Available count: " + frameAvailableCount);
-                            if(frameAvailableCount >= VIDEO_REFRESH_COUNT_LIMIT){
+                            if (frameAvailableCount >= VIDEO_REFRESH_COUNT_LIMIT) {
                                 Log.d(TAG, "startProgressRunnable: forcing frame refresh on secondary player3.");
-                                mUpdateST3= true;
+                                mUpdateST3 = true;
                             }
-                        }
-                        else{
+                        } else {
                             frameAvailableCount = 0;
                         }
                         Log.d(TAG, "startProgressRunnable: current progress: " + progress);
-                    }
-                    else if(getCurrentPlayer() == PLAYER_FOUR){
+                    } else if (getCurrentPlayer() == PLAYER_FOUR) {
                         progress = (int) mPlayer4.getCurrentPosition();
-                        if(mPlayer4.getPlayWhenReady()){
+                        if (mPlayer4.getPlayWhenReady()) {
                             isPlaying = true;
                         }
-                        if(!mUpdateST4){
+                        if (!mUpdateST4) {
                             frameAvailableCount++;
                             Log.d(TAG, "startProgressRunnable: player4 frame Available count: " + frameAvailableCount);
-                            if(frameAvailableCount >= VIDEO_REFRESH_COUNT_LIMIT){
+                            if (frameAvailableCount >= VIDEO_REFRESH_COUNT_LIMIT) {
                                 Log.d(TAG, "startProgressRunnable: forcing frame refresh on player4.");
                                 mUpdateST4 = true;
                             }
-                        }
-                        else{
+                        } else {
                             frameAvailableCount = 0;
                         }
                         Log.d(TAG, "startProgressRunnable: current progress: " + progress);
-                    }
-                    else if(getCurrentPlayer() == PLAYER_FOUR_SECONDARY){
+                    } else if (getCurrentPlayer() == PLAYER_FOUR_SECONDARY) {
                         progress = (int) mSecondaryPlayer4.getCurrentPosition();
-                        if(mSecondaryPlayer4.getPlayWhenReady()){
+                        if (mSecondaryPlayer4.getPlayWhenReady()) {
                             isPlaying = true;
                         }
-                        if(!mUpdateST4){
+                        if (!mUpdateST4) {
                             frameAvailableCount++;
                             Log.d(TAG, "startProgressRunnable: secondary player4 frame Available count: " + frameAvailableCount);
-                            if(frameAvailableCount >= VIDEO_REFRESH_COUNT_LIMIT){
+                            if (frameAvailableCount >= VIDEO_REFRESH_COUNT_LIMIT) {
                                 Log.d(TAG, "startProgressRunnable: forcing frame refresh on secondary player4.");
                                 mUpdateST4 = true;
                             }
-                        }
-                        else{
+                        } else {
                             frameAvailableCount = 0;
                         }
                         Log.d(TAG, "startProgressRunnable: current progress: " + progress);
                     }
 
-                    if(mCurrentProgress == 0){
+                    if (mCurrentProgress == 0) {
                         mCurrentProgress = 1;
                         Log.d(TAG, "startProgressRunnable: dispatching message from progress handler. progress: " + mCurrentProgress);
                         mProgressHandler.dispatchMessage(Message.obtain(mProgressHandler, INIT_VIDEO_PROGRESS_BAR));
@@ -4322,13 +4156,13 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
                         Log.d(TAG, "startProgressRunnable: dispatching message from progress handler. progress: " + mCurrentProgress);
                         mProgressHandler.dispatchMessage(Message.obtain(mProgressHandler, UPDATE_UI_WITH_VIDEO_PROGRESS));
                     }
-                    if(mCurrentProgress >= mTotalDuration){
+                    if (mCurrentProgress >= mTotalDuration) {
                         Log.d(TAG, "startProgressRunnable: DONE.");
                         mProgressHandler.dispatchMessage(Message.obtain(mProgressHandler, REMOVE_PROGRESS_BAR_CALLBACKS));
                     }
-                    if(progress == 0 && isPlaying){ // video is not playing. Might have to retry
+                    if (progress == 0 && isPlaying) { // video is not playing. Might have to retry
                         videoRetryTimer += 200;
-                        if(videoRetryTimer >= 2000){ // Retry playing the video if it's been trying for 3 seconds
+                        if (videoRetryTimer >= 2000) { // Retry playing the video if it's been trying for 3 seconds
                             Log.d(TAG, "startProgressRunnable: attempting to retry playing the video.");
                             videoRetryTimer = 0;
                             mProgressHandler.dispatchMessage(Message.obtain(mProgressHandler, getCurrentPlayer()));
@@ -4347,25 +4181,24 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
         }
     }
 
-    private void fillCurrentProgressBar(){
+    private void fillCurrentProgressBar() {
         Log.d(TAG, "fillCurrentProgressBar: filling current progress bar.");
 
-        try{
+        try {
             //make sure the progress bar is full
             int resourceIndex = mResourceIndices.getJSONObject(mCurrentSurface).getInt(mContext.getString(R.string.resource_index));
             int surfaceMediaIndex = mResourceIndices.getJSONObject(mCurrentSurface).getJSONArray(mContext.getString(R.string.media_index))
-                    .getJSONObject( resourceIndex / 4).getInt(mContext.getString(R.string.media_index));
+                    .getJSONObject(resourceIndex / 4).getInt(mContext.getString(R.string.media_index));
             String resourceType = "";
             boolean imageRenderError = false;
-            try{
+            try {
                 resourceType = mResources.get(resourceIndex).getJSONObject(surfaceMediaIndex).get(mContext.getString(R.string.media_type)).toString();
-            }catch (JSONException e){
+            } catch (JSONException e) {
                 imageRenderError = true;
-                Log.e(TAG, "fillCurrentProgressBar: JSONException: " + e.getMessage() );
-            }
-            catch (NullPointerException e){
+                Log.e(TAG, "fillCurrentProgressBar: JSONException: " + e.getMessage());
+            } catch (NullPointerException e) {
                 imageRenderError = true;
-                Log.e(TAG, "fillCurrentProgressBar: NullPointerException: " + e.getMessage() );
+                Log.e(TAG, "fillCurrentProgressBar: NullPointerException: " + e.getMessage());
             }
 
             if (resourceType.equals(mContext.getString(R.string.encoded_bitmap)) || imageRenderError) {
@@ -4373,14 +4206,13 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
                 MyProgressBar progressBar = ((Activity) mContext).findViewById(mIds[surfaceMediaIndex]);
                 progressBar.setProgress(1);
                 progressBar.setCurrentProgress(1);
-            }
-            else if(resourceType.equals(mContext.getString(R.string.video_uri))){
+            } else if (resourceType.equals(mContext.getString(R.string.video_uri))) {
                 Log.d(TAG, "fillCurrentProgressBar: current resource is a video.");
                 //fill the previous progress bar before working with the new one
-                if(mCurrentProgressBar != null){
+                if (mCurrentProgressBar != null) {
                     mCurrentProgress = MEDIA_TIMEOUT;
                     mCurrentProgressBar.setProgress(mCurrentProgress);
-                    if(mProgressRunnable != null){
+                    if (mProgressRunnable != null) {
                         Log.d(TAG, "incrementMediaIndex: TIMEOUT.");
                         mProgressHandler.removeCallbacks(mProgressRunnable);
                         mProgressRunnable = null;
@@ -4388,44 +4220,37 @@ public class MyGLRenderer implements GLSurfaceView.Renderer{
                 }
             }
 
-        }catch (JSONException e){
+        } catch (JSONException e) {
             Log.d(TAG, "fillCurrentProgressBar: JSONException: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
-    private int getCurrentPlayer(){
+    private int getCurrentPlayer() {
         Log.d(TAG, "getCurrentPlayer: getting the current player.");
 
-        if(mCurrentSurface == SURFACE_1){
+        if (mCurrentSurface == SURFACE_1) {
             if (mPlayerState == ACTIVE_PLAYER) {
                 return PLAYER_ONE;
-            }
-            else if (mSecondaryPlayerState == ACTIVE_PLAYER) {
+            } else if (mSecondaryPlayerState == ACTIVE_PLAYER) {
                 return PLAYER_ONE_SECONDARY;
             }
-        }
-        else if(mCurrentSurface == SURFACE_2){
+        } else if (mCurrentSurface == SURFACE_2) {
             if (mPlayer2State == ACTIVE_PLAYER) {
                 return PLAYER_TWO;
-            }
-            else if (mSecondaryPlayer2State == ACTIVE_PLAYER) {
+            } else if (mSecondaryPlayer2State == ACTIVE_PLAYER) {
                 return PLAYER_TWO_SECONDARY;
             }
-        }
-        else if(mCurrentSurface == SURFACE_3){
+        } else if (mCurrentSurface == SURFACE_3) {
             if (mPlayer3State == ACTIVE_PLAYER) {
                 return PLAYER_THREE;
-            }
-            else if (mSecondaryPlayer3State == ACTIVE_PLAYER) {
+            } else if (mSecondaryPlayer3State == ACTIVE_PLAYER) {
                 return PLAYER_THREE_SECONDARY;
             }
-        }
-        else if(mCurrentSurface == SURFACE_4){
+        } else if (mCurrentSurface == SURFACE_4) {
             if (mPlayer4State == ACTIVE_PLAYER) {
                 return PLAYER_FOUR;
-            }
-            else if (mSecondaryPlayer4State == ACTIVE_PLAYER) {
+            } else if (mSecondaryPlayer4State == ACTIVE_PLAYER) {
                 return PLAYER_FOUR_SECONDARY;
             }
         }

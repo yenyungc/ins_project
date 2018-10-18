@@ -1,6 +1,5 @@
 package ins.com.ins_project.opengl;
 
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,11 +13,6 @@ import java.io.File;
 import ins.com.ins_project.R;
 import ins.com.ins_project.Utils.FilePaths;
 import ins.com.ins_project.materialcamera.MaterialCamera;
-
-
-/**
- * Created by User on 1/8/2018.
- */
 
 public class NewStoryActivity extends Activity {
 
@@ -43,7 +37,7 @@ public class NewStoryActivity extends Activity {
         init();
     }
 
-    private void init(){
+    private void init() {
         Log.d(TAG, "init: initializing material camera.");
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -51,18 +45,17 @@ public class NewStoryActivity extends Activity {
         DisplayMetrics displaymetrics = new DisplayMetrics();
         this.getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
 
-//        File saveFolder = new File(Environment.getExternalStorageDirectory(), "Stories/" + getTimestamp());
         FilePaths filePaths = new FilePaths();
         File saveFolder = new File(filePaths.STORIES);
-        try{
-            if (!saveFolder.mkdirs());
-        }catch (RuntimeException e){
+        try {
+            if (!saveFolder.mkdirs()) ;
+        } catch (RuntimeException e) {
             e.printStackTrace();
         }
 
         mMaterialCamera = new MaterialCamera(this);                               // Constructor takes an Activity
 
-        if(mStartType == RESULT_START_VIDEO) {
+        if (mStartType == RESULT_START_VIDEO) {
             Log.d(TAG, "init: starting camera with VIDEO enabled.");
             mMaterialCamera
                     .allowRetry(true)                                  // Whether or not 'Retry' is visible during playback
@@ -97,8 +90,7 @@ public class NewStoryActivity extends Activity {
                     .audioDisabled(false)                              // Set to true to record video without any audio.
                     .countdownSeconds(15f)
                     .start(CAMERA_RQ);
-        }
-        else{
+        } else {
             Log.d(TAG, "init: starting camera with STILLSHOT enabled.");
             mMaterialCamera
                     .allowRetry(true)                                  // Whether or not 'Retry' is visible during playback
@@ -137,7 +129,6 @@ public class NewStoryActivity extends Activity {
     }
 
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -149,21 +140,18 @@ public class NewStoryActivity extends Activity {
             if (resultCode == RESULT_OK) {
                 Log.d(TAG, "onActivityResult: result is OK.");
 //                Toast.makeText(this, "Saved to: " + data.getDataString(), Toast.LENGTH_LONG).show();
-            }
-            else if(resultCode == RESULT_START_CAMERA){
+            } else if (resultCode == RESULT_START_CAMERA) {
                 Log.d(TAG, "onActivityResult: got activity result. Opening Camera.");
                 mStartType = RESULT_START_CAMERA;
                 init();
-            }
-            else if(resultCode == RESULT_START_VIDEO){
+            } else if (resultCode == RESULT_START_VIDEO) {
                 Log.d(TAG, "onActivityResult: got activity result. Opening video.");
                 mStartType = RESULT_START_VIDEO;
                 init();
-            }
-            else if(resultCode == RESULT_ADD_NEW_STORY){
+            } else if (resultCode == RESULT_ADD_NEW_STORY) {
                 Log.d(TAG, "onActivityResult: preparing to add new story.");
                 Log.d(TAG, "onActivityResult: upload uri: " + data.getData());
-                if(data.hasExtra(MaterialCamera.DELETE_UPLOAD_FILE_EXTRA)){
+                if (data.hasExtra(MaterialCamera.DELETE_UPLOAD_FILE_EXTRA)) {
                     setResult(
                             RESULT_ADD_NEW_STORY,
                             getIntent()
@@ -171,8 +159,7 @@ public class NewStoryActivity extends Activity {
                                     .putExtra(MaterialCamera.STATUS_EXTRA, MaterialCamera.STATUS_RECORDED)
                                     .setDataAndType(data.getData(), data.getType()));
                     finish();
-                }
-                else{
+                } else {
                     setResult(
                             RESULT_ADD_NEW_STORY,
                             getIntent()
@@ -181,10 +168,7 @@ public class NewStoryActivity extends Activity {
                                     .setDataAndType(data.getData(), data.getType()));
                     finish();
                 }
-
-
-            }
-            else if(data != null) {
+            } else if (data != null) {
                 Log.d(TAG, "onActivityResult: something went wrong.");
                 Exception e = (Exception) data.getSerializableExtra(MaterialCamera.ERROR_EXTRA);
                 e.printStackTrace();
@@ -192,10 +176,6 @@ public class NewStoryActivity extends Activity {
             }
         }
     }
-
-
-
-
 }
 
 

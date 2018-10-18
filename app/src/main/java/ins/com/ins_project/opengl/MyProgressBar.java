@@ -4,10 +4,6 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.ProgressBar;
 
-/**
- * Created by User on 11/27/2017.
- */
-
 public class MyProgressBar extends ProgressBar {
 
     public int totalDuration = 0;

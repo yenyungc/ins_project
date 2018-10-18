@@ -16,17 +16,13 @@ import ins.com.ins_project.Profile.AccountSettingsActivity;
 import ins.com.ins_project.R;
 import ins.com.ins_project.Utils.Permissions;
 
-/**
- * Created by User on 5/28/2017.
- */
-
 public class PhotoFragment extends Fragment {
     private static final String TAG = "PhotoFragment";
 
     //constant
     private static final int PHOTO_FRAGMENT_NUM = 1;
     private static final int GALLERY_FRAGMENT_NUM = 2;
-    private static final int  CAMERA_REQUEST_CODE = 5;
+    private static final int CAMERA_REQUEST_CODE = 5;
 
 
     @Nullable
@@ -41,12 +37,12 @@ public class PhotoFragment extends Fragment {
             public void onClick(View v) {
                 Log.d(TAG, "onClick: launching camera.");
 
-                if(((ShareActivity)getActivity()).getCurrentTabNumber() == PHOTO_FRAGMENT_NUM){
-                    if(((ShareActivity)getActivity()).checkPermissions(Permissions.CAMERA_PERMISSION[0])){
+                if (((ShareActivity) getActivity()).getCurrentTabNumber() == PHOTO_FRAGMENT_NUM) {
+                    if (((ShareActivity) getActivity()).checkPermissions(Permissions.CAMERA_PERMISSION[0])) {
                         Log.d(TAG, "onClick: starting camera");
                         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                         startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
-                    }else{
+                    } else {
                         Intent intent = new Intent(getActivity(), ShareActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
@@ -58,11 +54,10 @@ public class PhotoFragment extends Fragment {
         return view;
     }
 
-    private boolean isRootTask(){
-        if(((ShareActivity)getActivity()).getTask() == 0){
+    private boolean isRootTask() {
+        if (((ShareActivity) getActivity()).getTask() == 0) {
             return true;
-        }
-        else{
+        } else {
             return false;
         }
     }
@@ -71,33 +66,33 @@ public class PhotoFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == CAMERA_REQUEST_CODE){
+        if (requestCode == CAMERA_REQUEST_CODE) {
             Log.d(TAG, "onActivityResult: done taking a photo.");
             Log.d(TAG, "onActivityResult: attempting to navigate to final share screen.");
 
             Bitmap bitmap;
             bitmap = (Bitmap) data.getExtras().get("data");
 
-            if(isRootTask()){
-                try{
+            if (isRootTask()) {
+                try {
                     Log.d(TAG, "onActivityResult: received new bitmap from camera: " + bitmap);
                     Intent intent = new Intent(getActivity(), NextActivity.class);
                     intent.putExtra(getString(R.string.selected_bitmap), bitmap);
                     startActivity(intent);
-                }catch (NullPointerException e){
+                } catch (NullPointerException e) {
                     Log.d(TAG, "onActivityResult: NullPointerException: " + e.getMessage());
                 }
-            }else{
-               try{
-                   Log.d(TAG, "onActivityResult: received new bitmap from camera: " + bitmap);
-                   Intent intent = new Intent(getActivity(), AccountSettingsActivity.class);
-                   intent.putExtra(getString(R.string.selected_bitmap), bitmap);
-                   intent.putExtra(getString(R.string.return_to_fragment), getString(R.string.edit_profile_fragment));
-                   startActivity(intent);
-                   getActivity().finish();
-               }catch (NullPointerException e){
-                   Log.d(TAG, "onActivityResult: NullPointerException: " + e.getMessage());
-               }
+            } else {
+                try {
+                    Log.d(TAG, "onActivityResult: received new bitmap from camera: " + bitmap);
+                    Intent intent = new Intent(getActivity(), AccountSettingsActivity.class);
+                    intent.putExtra(getString(R.string.selected_bitmap), bitmap);
+                    intent.putExtra(getString(R.string.return_to_fragment), getString(R.string.edit_profile_fragment));
+                    startActivity(intent);
+                    getActivity().finish();
+                } catch (NullPointerException e) {
+                    Log.d(TAG, "onActivityResult: NullPointerException: " + e.getMessage());
+                }
             }
 
         }

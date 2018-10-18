@@ -1,11 +1,6 @@
 package ins.com.ins_project.models;
 
-/**
- * Created by User on 6/30/2017.
- */
-
 public class UserSettings {
-
     private User user;
     private UserAccountSettings settings;
 
@@ -17,7 +12,6 @@ public class UserSettings {
     public UserSettings() {
 
     }
-
 
     public User getUser() {
         return user;
