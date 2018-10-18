@@ -35,11 +35,8 @@ import android.util.SparseIntArray;
 import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -135,18 +132,10 @@ public class Camera extends AppCompatActivity implements ActivityCompat.OnReques
      * The flash mode: 1 means auto Flash, 0 means Flash off
      */
     private static int FLASHMODE = 1;
-    /**
-     * The flash mode: 1 means auto Flash, 0 means Flash off
-     */
-    private static int FILTER_USED = 0;
 
     // The widgets used
     private Switch switch1;
     private Switch switch2;
-    private Spinner spinner;
-    private List<String> filter_list;
-    private ArrayAdapter<String> arr_adapter;
-
 
 
 
@@ -488,17 +477,6 @@ public class Camera extends AppCompatActivity implements ActivityCompat.OnReques
         Button button = (Button) findViewById(R.id.picture);
         switch1 = (Switch) findViewById(R.id.flash);
         switch2 = (Switch) findViewById(R.id.grid);
-        Spinner spinner = (Spinner) findViewById(R.id.filer);
-
-        //The filters provided
-        initFilers();
-
-        // Initialize the filters
-        arr_adapter= new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, filter_list);
-        arr_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(arr_adapter);
-
-
         //the file name of the picture to take
         String fileName = String.valueOf(System.currentTimeMillis())+".jpg";
         mFile = new File(getExternalFilesDir(null), fileName);
@@ -514,20 +492,6 @@ public class Camera extends AppCompatActivity implements ActivityCompat.OnReques
 
             }});
 
-        //The filters spinner
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-        {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                selectFilers(position);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-
-        });
 
         switch1.setOnCheckedChangeListener(this);
         switch2.setOnCheckedChangeListener(this);
@@ -871,9 +835,6 @@ public class Camera extends AppCompatActivity implements ActivityCompat.OnReques
                             mCaptureSession = cameraCaptureSession;
                             try {
                                 // Auto focus should be continuous for camera preview.
-                                switchFilter(FILTER_USED);  //Test!
-                                mPreviewRequestBuilder.set(CaptureRequest.CONTROL_AF_MODE,
-                                        CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE);
                                 // Flash is automatically enabled when necessary.
                                 if (FLASHMODE == 1) {
                                     setAutoFlash(mPreviewRequestBuilder);
@@ -1009,7 +970,6 @@ public class Camera extends AppCompatActivity implements ActivityCompat.OnReques
             // Use the same AE and AF modes as the preview.
             captureBuilder.set(CaptureRequest.CONTROL_AF_MODE,
                     CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE);
-            switchFilter(FILTER_USED);  //Test!
             if (FLASHMODE == 1) {
                 setAutoFlash(captureBuilder);
             } else {
@@ -1105,94 +1065,6 @@ public class Camera extends AppCompatActivity implements ActivityCompat.OnReques
     }
 
 
-    //The 3 types of filters provided
-    private void noFilterMode(CaptureRequest.Builder requestBuilder) {
-        Log.d(TAG, "filter off");
-        requestBuilder.set(CaptureRequest.CONTROL_EFFECT_MODE,
-                CaptureRequest.CONTROL_EFFECT_MODE_OFF);
-    }
-
-    private void negativeMode(CaptureRequest.Builder requestBuilder) {
-        Log.d(TAG, "set negative mode");
-        requestBuilder.set(CaptureRequest.CONTROL_EFFECT_MODE,
-                CaptureRequest.CONTROL_EFFECT_MODE_NEGATIVE);
-    }
-
-    private void blackBoardMode(CaptureRequest.Builder requestBuilder) {
-        Log.d(TAG, "set blackBoard mode");
-        requestBuilder.set(CaptureRequest.CONTROL_EFFECT_MODE,
-                CaptureRequest.CONTROL_EFFECT_MODE_BLACKBOARD);
-    }
-
-    private void monoMode(CaptureRequest.Builder requestBuilder) {
-        Log.d(TAG, "set mono mode");
-        requestBuilder.set(CaptureRequest.CONTROL_EFFECT_MODE,
-                CaptureRequest.CONTROL_EFFECT_MODE_MONO);
-    }
-
-
-
-    //Initialize the filers
-    private void initFilers() {
-        filter_list = new ArrayList<String>();
-        filter_list.add("No filter");
-        filter_list.add("Negative");
-        filter_list.add("Blackboard");
-        filter_list.add("Mono");
-    }
-
-    //The filters to elect
-    private void selectFilers(int i) {
-        switch (i) {
-            case(0): {
-                FILTER_USED = 0;
-                Log.d(TAG,"no filter used");
-                break;
-            }
-            case(1): {
-                FILTER_USED = 1;
-
-                Log.d(TAG,"filter 1 used");
-                break;
-            }
-            case(2): {
-                FILTER_USED = 2;
-
-                Log.d(TAG,"filter 2 used");
-                break;
-            }
-            case(3): {
-                FILTER_USED = 3;
-
-                Log.d(TAG,"filter 3 used");
-                break;
-            }
-        }
-    }
-
-    // swich the filter to use
-    private void switchFilter(int i) {
-        switch(i) {
-            case(0): {
-                noFilterMode(mPreviewRequestBuilder);  //Test!
-                break;
-            }
-            case(1): {
-                negativeMode(mPreviewRequestBuilder);
-                break;
-            }
-            case(2): {
-                blackBoardMode(mPreviewRequestBuilder);
-                break;
-            }
-            case(3): {
-                monoMode(mPreviewRequestBuilder);
-                break;
-            }
-        }
-    }
-
-
     // The 2 functions below deal with grids
     private void hideGrid() {
         View grid1 = (View) findViewById(R.id.divider);
@@ -1279,10 +1151,6 @@ public class Camera extends AppCompatActivity implements ActivityCompat.OnReques
         }
 
     }
-
-
-
-
 
 }
 

@@ -3,6 +3,7 @@ package ins.com.ins_project;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -32,8 +33,13 @@ import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class PhotoEditor extends AppCompatActivity {
@@ -61,7 +67,7 @@ public class PhotoEditor extends AppCompatActivity {
     // The bitmap of the image to process
     private Bitmap bm;
     // The bitmap of the image after processing
-    private Bitmap new_bm;
+    private Bitmap bmCopy;
     //Height and width of the image
     private int imgHeight, imgWidth;
     /**
@@ -99,9 +105,6 @@ public class PhotoEditor extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // save
-
-                Log.d(TAG, "save photo");
-
                 save();
 
             }});
@@ -267,6 +270,8 @@ public class PhotoEditor extends AppCompatActivity {
     //load image
     private void showImage(String path){
         bm = BitmapFactory.decodeFile(path);
+        // A copy of the image in bitMap
+        copyImg();
         getImageInfo(bm);
         ((ImageView)findViewById(R.id.image)).setImageBitmap(bm);
     }
@@ -281,9 +286,38 @@ public class PhotoEditor extends AppCompatActivity {
     }
 
 
-
+    //saving photo to storage
     private void save() {
-
+        Log.d(TAG, "saving image");
+        File appDir = new File(Environment.getExternalStorageDirectory(),"ins_project_photos");
+        if (!appDir.exists()) {
+            appDir.mkdir();
+        }
+        String fileName = System.currentTimeMillis() + ".jpg";
+        String path = "ins_project/photos" + fileName;
+        File file = new File(appDir, fileName);
+        try {
+            FileOutputStream fos = new FileOutputStream(file);
+            bm.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            fos.flush();
+            fos.close();
+            Log.d(TAG, "image saved");
+            Toast.makeText(this,"photo saved"+fileName,Toast.LENGTH_SHORT).show();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        // Insert the photo to system gallery
+        try {
+            MediaStore.Images.Media.insertImage(getApplicationContext().getContentResolver(),
+                    file.getAbsolutePath(), fileName, null);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        // Broadcast the update
+        getApplicationContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
+                Uri.parse("file://" + path)));
     }
 
     // press the button
@@ -309,7 +343,6 @@ public class PhotoEditor extends AppCompatActivity {
 
         Paint paint = new Paint();
         paint.setColorFilter(new ColorMatrixColorFilter(cMatrix));
-
         Canvas canvas = new Canvas(bmp);
         canvas.drawBitmap(bm, 0, 0, paint);
         imageToShow.setImageBitmap(bmp);
@@ -327,7 +360,6 @@ public class PhotoEditor extends AppCompatActivity {
         Canvas canvas = new Canvas(bmp);
         // draw the new pic on canvas
         canvas.drawBitmap(bm, 0, 0, paint);
-
         imageToShow.setImageBitmap(bmp);
     }
 
@@ -342,7 +374,7 @@ public class PhotoEditor extends AppCompatActivity {
         filter_list.add("No filter");
         filter_list.add("Negative");
         filter_list.add("Blackboard");
-        filter_list.add("Mono");
+        filter_list.add("Nostalgic");
     }
 
     //The filters to elect
@@ -371,7 +403,7 @@ public class PhotoEditor extends AppCompatActivity {
             }
             case(3): {
                 FILTER_USED = 3;
-                monoMode();
+                nostalgicMode();
 
                 Log.d(TAG,"filter 3 used");
                 break;
@@ -381,12 +413,13 @@ public class PhotoEditor extends AppCompatActivity {
 
     //The 3 types of filters provided
     private void noFilterMode() {
-
+        bm = bmCopy;
+        imageToShow.setImageBitmap(bm);
     }
 
     private void negativeMode() {
         /*
-         * 算法原理： 将当前像素点的RGB值分别与255之差后的值作为当前点的RGB值 例：ABC，求B点的底片效果： B.r = 255 - B.r; B.g = 255 - B.g; B.b = 255 - B.b;
+         * Algorithm: B.r = 255 - B.r; B.g = 255 - B.g; B.b = 255 - B.b;
          */
         int width = imgWidth;
         int height = imgHeight;
@@ -429,15 +462,75 @@ public class PhotoEditor extends AppCompatActivity {
             newPixels[i] = Color.argb(pixelsA, pixelsR, pixelsG, pixelsB);
         }
         bitmap.setPixels(newPixels, 0, width, 0, 0, width, height);
+        bm = bitmap;
         imageToShow.setImageBitmap(bitmap);
     }
 
-    private void blacknWhiteMode() {
 
+    public void blacknWhiteMode() {
+        int width = imgWidth;
+        int height = imgHeight;
+        Bitmap bmp = bm;
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+        int[] pixels = new int[width * height];
+        bmp.getPixels(pixels, 0, width, 0, 0, width, height);
+        int alpha = 0xFF << 24;
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                int grey = pixels[width * i + j];
+
+                int red = ((grey & 0x00FF0000) >> 16);
+                int green = ((grey & 0x0000FF00) >> 8);
+                int blue = (grey & 0x000000FF);
+
+                grey = (int) (red * 0.3 + green * 0.59 + blue * 0.11);
+                grey = alpha | (grey << 16) | (grey << 8) | grey;
+                pixels[width * i + j] = grey;
+            }
+        }
+        bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
+        bm = bitmap;
+        imageToShow.setImageBitmap(bitmap);
     }
 
-    private void monoMode() {
+    public void nostalgicMode() {
+        /*
+         * Algorithm: RGB R=0.393r+0.769g+0.189b G=0.349r+0.686g+0.168b B=0.272r+0.534g+0.131b
+         */
+        int width = imgWidth;
+        int height = imgHeight;
+        Bitmap bmp = bm;
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+        int pixColor = 0;
+        int pixR = 0;
+        int pixG = 0;
+        int pixB = 0;
+        int newR = 0;
+        int newG = 0;
+        int newB = 0;
+        int[] pixels = new int[width * height];
+        bmp.getPixels(pixels, 0, width, 0, 0, width, height);
+        for (int i = 0; i < height; i++) {
+            for (int k = 0; k < width; k++) {
+                pixColor = pixels[width * i + k];
+                pixR = Color.red(pixColor);
+                pixG = Color.green(pixColor);
+                pixB = Color.blue(pixColor);
+                newR = (int) (0.393 * pixR + 0.769 * pixG + 0.189 * pixB);
+                newG = (int) (0.349 * pixR + 0.686 * pixG + 0.168 * pixB);
+                newB = (int) (0.272 * pixR + 0.534 * pixG + 0.131 * pixB);
+                int newColor = Color.argb(255, newR > 255 ? 255 : newR,
+                        newG > 255 ? 255 : newG, newB > 255 ? 255 : newB);
+                pixels[width * i + k] = newColor;
+            }
+        }
+        bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
+        bm = bitmap;
+        imageToShow.setImageBitmap(bitmap);
+    }
 
+    private void copyImg() {
+        bmCopy = bm;
     }
 
     private void confirm() {
@@ -450,6 +543,20 @@ public class PhotoEditor extends AppCompatActivity {
         contrast.setVisibility(View.INVISIBLE);
         text1.setVisibility(View.INVISIBLE);
         text2.setVisibility(View.INVISIBLE);
+        copyImg();
+        showToast("Confirm!");
+    }
+
+    private void showToast(final String text) {
+
+
+        PhotoEditor.this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(PhotoEditor.this, text, Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 }
 
