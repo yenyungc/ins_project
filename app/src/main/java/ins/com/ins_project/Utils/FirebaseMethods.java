@@ -46,10 +46,6 @@ import ins.com.ins_project.models.User;
 import ins.com.ins_project.models.UserAccountSettings;
 import ins.com.ins_project.models.UserSettings;
 
-/**
- * Created by User on 6/26/2017.
- */
-
 public class FirebaseMethods {
 
     private static final String TAG = "FirebaseMethods";
@@ -104,12 +100,12 @@ public class FirebaseMethods {
             uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Uri firebaseUrl = taskSnapshot.getDownloadUrl();
+                    String firebaseUrl = taskSnapshot.getMetadata().getReference().getDownloadUrl().toString();
 
                     Toast.makeText(mContext, "photo upload success", Toast.LENGTH_SHORT).show();
 
                     //add the new photo to 'photos' node and 'user_photos' node
-                    addPhotoToDatabase(caption, firebaseUrl.toString());
+                    addPhotoToDatabase(caption, firebaseUrl);
 
                     //navigate to the main feed so the user can see their photo
                     Intent intent = new Intent(mContext, HomeActivity.class);
@@ -157,12 +153,12 @@ public class FirebaseMethods {
             uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Uri firebaseUrl = taskSnapshot.getDownloadUrl();
+                    String firebaseUrl = taskSnapshot.getMetadata().getReference().getDownloadUrl().toString();
 
                     Toast.makeText(mContext, "photo upload success", Toast.LENGTH_SHORT).show();
 
                     //insert into 'user_account_settings' node
-                    setProfilePhoto(firebaseUrl.toString());
+                    setProfilePhoto(firebaseUrl);
 
                     ((AccountSettingsActivity)mContext).setViewPager(
                             ((AccountSettingsActivity)mContext).pagerAdapter
@@ -218,10 +214,10 @@ public class FirebaseMethods {
             uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Uri firebaseURL = taskSnapshot.getDownloadUrl();
+                    String firebaseURL = taskSnapshot.getMetadata().getReference().getDownloadUrl().toString();
                     fragment.mStoriesAdapter.stopProgressBar();
                     Toast.makeText(mContext, "Upload Success", Toast.LENGTH_SHORT).show();
-                    addNewStoryImageToDatabase(firebaseURL.toString());
+                    addNewStoryImageToDatabase(firebaseURL);
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -264,10 +260,10 @@ public class FirebaseMethods {
             uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Uri firebaseURL = taskSnapshot.getDownloadUrl();
+                    String firebaseURL = taskSnapshot.getMetadata().getReference().getDownloadUrl().toString();
                     fragment.mStoriesAdapter.stopProgressBar();
                     Toast.makeText(mContext, "Upload Success", Toast.LENGTH_SHORT).show();
-                    addNewStoryVideoToDatabase(firebaseURL.toString(), uploadBytes);
+                    addNewStoryVideoToDatabase(firebaseURL, uploadBytes);
 
                     if(deleteCompressedVideo){
                         deleteOutputFile(uri);
@@ -542,7 +538,6 @@ public class FirebaseMethods {
                         if (!task.isSuccessful()) {
                             Toast.makeText(mContext, R.string.auth_failed,
                                     Toast.LENGTH_SHORT).show();
-
                         }
                         else if(task.isSuccessful()){
                             //send verificaton email
@@ -584,10 +579,9 @@ public class FirebaseMethods {
      * @param profile_photo
      */
     public void addNewUser(String email, String username, String description, String website, String profile_photo){
-
         User user = new User( userID,  1,  email,  StringManipulation.condenseUsername(username) );
 
-        myRef.child(mContext.getString(R.string.dbname_users))
+        myRef.child("users")
                 .child(userID)
                 .setValue(user);
 
@@ -604,10 +598,9 @@ public class FirebaseMethods {
                 userID
         );
 
-        myRef.child(mContext.getString(R.string.dbname_user_account_settings))
+        myRef.child("user_account_settings")
                 .child(userID)
                 .setValue(settings);
-
     }
 
 

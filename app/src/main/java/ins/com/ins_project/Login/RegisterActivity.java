@@ -26,10 +26,6 @@ import ins.com.ins_project.R;
 import ins.com.ins_project.Utils.FirebaseMethods;
 import ins.com.ins_project.models.User;
 
-/**
- * Created by User on 6/19/2017.
- */
-
 public class RegisterActivity extends AppCompatActivity {
 
     private static final String TAG = "RegisterActivity";

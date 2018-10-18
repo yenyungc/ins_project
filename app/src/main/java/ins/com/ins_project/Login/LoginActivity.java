@@ -23,10 +23,6 @@ import com.google.firebase.auth.FirebaseUser;
 import ins.com.ins_project.Home.HomeActivity;
 import ins.com.ins_project.R;
 
-/**
- * Created by User on 6/19/2017.
- */
-
 public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginActivity";
