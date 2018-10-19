@@ -29,10 +29,6 @@ import ins.com.ins_project.Utils.FilePaths;
 import ins.com.ins_project.Utils.FileSearch;
 import ins.com.ins_project.Utils.GridImageAdapter;
 
-/**
- * Created by User on 5/28/2017.
- */
-
 public class GalleryFragment extends Fragment {
     private static final String TAG = "GalleryFragment";
 
@@ -81,11 +77,11 @@ public class GalleryFragment extends Fragment {
             public void onClick(View v) {
                 Log.d(TAG, "onClick: navigating to the final share screen.");
 
-                if(isRootTask()){
+                if (isRootTask()) {
                     Intent intent = new Intent(getActivity(), NextActivity.class);
                     intent.putExtra(getString(R.string.selected_image), mSelectedImage);
                     startActivity(intent);
-                }else{
+                } else {
                     Intent intent = new Intent(getActivity(), AccountSettingsActivity.class);
                     intent.putExtra(getString(R.string.selected_image), mSelectedImage);
                     intent.putExtra(getString(R.string.return_to_fragment), getString(R.string.edit_profile_fragment));
@@ -101,16 +97,15 @@ public class GalleryFragment extends Fragment {
         return view;
     }
 
-    private boolean isRootTask(){
-        if(((ShareActivity)getActivity()).getTask() == 0){
+    private boolean isRootTask() {
+        if (((ShareActivity) getActivity()).getTask() == 0) {
             return true;
-        }
-        else{
+        } else {
             return false;
         }
     }
 
-    private void init(){
+    private void init() {
         FilePaths filePaths = new FilePaths();
 
         //check for other folders indide "/storage/emulated/0/pictures"
@@ -149,13 +144,13 @@ public class GalleryFragment extends Fragment {
     }
 
 
-    private void setupGridView(String selectedDirectory){
+    private void setupGridView(String selectedDirectory) {
         Log.d(TAG, "setupGridView: directory chosen: " + selectedDirectory);
         final ArrayList<String> imgURLs = FileSearch.getFilePaths(selectedDirectory);
 
         //set the grid column width
         int gridWidth = getResources().getDisplayMetrics().widthPixels;
-        int imageWidth = gridWidth/NUM_GRID_COLUMNS;
+        int imageWidth = gridWidth / NUM_GRID_COLUMNS;
         gridView.setColumnWidth(imageWidth);
 
         //use the grid adapter to adapter the images to gridview
@@ -163,11 +158,11 @@ public class GalleryFragment extends Fragment {
         gridView.setAdapter(adapter);
 
         //set the first image to be displayed when the activity fragment view is inflated
-        try{
+        try {
             setImage(imgURLs.get(0), galleryImage, mAppend);
             mSelectedImage = imgURLs.get(0);
-        }catch (ArrayIndexOutOfBoundsException e){
-            Log.e(TAG, "setupGridView: ArrayIndexOutOfBoundsException: " +e.getMessage() );
+        } catch (ArrayIndexOutOfBoundsException e) {
+            Log.e(TAG, "setupGridView: ArrayIndexOutOfBoundsException: " + e.getMessage());
         }
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -183,7 +178,7 @@ public class GalleryFragment extends Fragment {
     }
 
 
-    private void setImage(String imgURL, ImageView image, String append){
+    private void setImage(String imgURL, ImageView image, String append) {
         Log.d(TAG, "setImage: setting image");
 
         ImageLoader imageLoader = ImageLoader.getInstance();

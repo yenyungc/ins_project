@@ -1,6 +1,5 @@
 package ins.com.ins_project.Utils;
 
-
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -39,15 +38,11 @@ import ins.com.ins_project.R;
 import ins.com.ins_project.models.Comment;
 import ins.com.ins_project.models.Photo;
 
-/**
- * Created by User on 8/12/2017.
- */
-
 public class ViewCommentsFragment extends Fragment {
 
     private static final String TAG = "ViewCommentsFragment";
 
-    public ViewCommentsFragment(){
+    public ViewCommentsFragment() {
         super();
         setArguments(new Bundle());
     }
@@ -80,21 +75,19 @@ public class ViewCommentsFragment extends Fragment {
         mContext = getActivity();
 
 
-        try{
+        try {
             mPhoto = getPhotoFromBundle();
             setupFirebaseAuth();
 
-        }catch (NullPointerException e){
-            Log.e(TAG, "onCreateView: NullPointerException: " + e.getMessage() );
+        } catch (NullPointerException e) {
+            Log.e(TAG, "onCreateView: NullPointerException: " + e.getMessage());
         }
-
-
 
 
         return view;
     }
 
-    private void setupWidgets(){
+    private void setupWidgets() {
 
         CommentListAdapter adapter = new CommentListAdapter(mContext,
                 R.layout.layout_comment, mComments);
@@ -104,13 +97,13 @@ public class ViewCommentsFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                if(!mComment.getText().toString().equals("")){
+                if (!mComment.getText().toString().equals("")) {
                     Log.d(TAG, "onClick: attempting to submit new comment.");
                     addNewComment(mComment.getText().toString());
 
                     mComment.setText("");
                     closeKeyboard();
-                }else{
+                } else {
                     Toast.makeText(getActivity(), "you can't post a blank comment", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -120,10 +113,10 @@ public class ViewCommentsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onClick: navigating back");
-                if(getCallingActivityFromBundle().equals(getString(R.string.home_activity))){
+                if (getCallingActivityFromBundle().equals(getString(R.string.home_activity))) {
                     getActivity().getSupportFragmentManager().popBackStack();
-                    ((HomeActivity)getActivity()).showLayout();
-                }else{
+                    ((HomeActivity) getActivity()).showLayout();
+                } else {
                     getActivity().getSupportFragmentManager().popBackStack();
                 }
 
@@ -131,16 +124,16 @@ public class ViewCommentsFragment extends Fragment {
         });
     }
 
-    private void closeKeyboard(){
+    private void closeKeyboard() {
         View view = getActivity().getCurrentFocus();
-        if(view != null){
+        if (view != null) {
             InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
 
 
-    private void addNewComment(String newComment){
+    private void addNewComment(String newComment) {
         Log.d(TAG, "addNewComment: adding new comment: " + newComment);
 
         String commentID = myRef.push().getKey();
@@ -167,7 +160,7 @@ public class ViewCommentsFragment extends Fragment {
 
     }
 
-    private String getTimestamp(){
+    private String getTimestamp() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.CANADA);
         sdf.setTimeZone(TimeZone.getTimeZone("Canada/Pacific"));
         return sdf.format(new Date());
@@ -175,30 +168,32 @@ public class ViewCommentsFragment extends Fragment {
 
     /**
      * retrieve the photo from the incoming bundle from profileActivity interface
+     *
      * @return
      */
-    private String getCallingActivityFromBundle(){
+    private String getCallingActivityFromBundle() {
         Log.d(TAG, "getPhotoFromBundle: arguments: " + getArguments());
 
         Bundle bundle = this.getArguments();
-        if(bundle != null) {
+        if (bundle != null) {
             return bundle.getString(getString(R.string.home_activity));
-        }else{
+        } else {
             return null;
         }
     }
 
     /**
      * retrieve the photo from the incoming bundle from profileActivity interface
+     *
      * @return
      */
-    private Photo getPhotoFromBundle(){
+    private Photo getPhotoFromBundle() {
         Log.d(TAG, "getPhotoFromBundle: arguments: " + getArguments());
 
         Bundle bundle = this.getArguments();
-        if(bundle != null) {
+        if (bundle != null) {
             return bundle.getParcelable(getString(R.string.photo));
-        }else{
+        } else {
             return null;
         }
     }
@@ -210,7 +205,7 @@ public class ViewCommentsFragment extends Fragment {
     /**
      * Setup the firebase auth object
      */
-    private void setupFirebaseAuth(){
+    private void setupFirebaseAuth() {
         Log.d(TAG, "setupFirebaseAuth: setting up firebase auth.");
 
         mAuth = FirebaseAuth.getInstance();
@@ -234,7 +229,7 @@ public class ViewCommentsFragment extends Fragment {
             }
         };
 
-        if(mPhoto.getComments().size() == 0){
+        if (mPhoto.getComments().size() == 0) {
             mComments.clear();
             Comment firstComment = new Comment();
             firstComment.setComment(mPhoto.getCaption());
@@ -261,7 +256,7 @@ public class ViewCommentsFragment extends Fragment {
                         query.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
-                                for ( DataSnapshot singleSnapshot :  dataSnapshot.getChildren()){
+                                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
 
                                     Photo photo = new Photo();
                                     Map<String, Object> objectMap = (HashMap<String, Object>) singleSnapshot.getValue();
@@ -282,7 +277,7 @@ public class ViewCommentsFragment extends Fragment {
                                     mComments.add(firstComment);
 
                                     for (DataSnapshot dSnapshot : singleSnapshot
-                                           .child(mContext.getString(R.string.field_comments)).getChildren()){
+                                            .child(mContext.getString(R.string.field_comments)).getChildren()) {
                                         Comment comment = new Comment();
                                         comment.setUser_id(dSnapshot.getValue(Comment.class).getUser_id());
                                         comment.setComment(dSnapshot.getValue(Comment.class).getComment());
@@ -294,7 +289,7 @@ public class ViewCommentsFragment extends Fragment {
 
                                     mPhoto = photo;
 
-                                   setupWidgets();
+                                    setupWidgets();
 //                    List<Like> likesList = new ArrayList<Like>();
 //                    for (DataSnapshot dSnapshot : singleSnapshot
 //                            .child(getString(R.string.field_likes)).getChildren()){
@@ -303,38 +298,37 @@ public class ViewCommentsFragment extends Fragment {
 //                        likesList.add(like);
 //                    }
 
-                                       }
+                                }
 
-                                   }
+                            }
 
-                                   @Override
-                                   public void onCancelled(DatabaseError databaseError) {
-                                       Log.d(TAG, "onCancelled: query cancelled.");
-                                   }
-                               });
-                           }
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                                Log.d(TAG, "onCancelled: query cancelled.");
+                            }
+                        });
+                    }
 
-                           @Override
-                           public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
-                           }
+                    }
 
-                           @Override
-                           public void onChildRemoved(DataSnapshot dataSnapshot) {
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {
 
-                           }
+                    }
 
-                           @Override
-                           public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
 
-                           }
+                    }
 
-                           @Override
-                           public void onCancelled(DatabaseError databaseError) {
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
 
-                           }
-                       });
-
+                    }
+                });
 
 
     }

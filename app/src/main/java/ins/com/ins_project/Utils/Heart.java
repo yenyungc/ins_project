@@ -8,10 +8,6 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 
-/**
- * Created by User on 8/21/2017.
- */
-
 public class Heart {
 
     private static final String TAG = "Heart";
@@ -26,13 +22,13 @@ public class Heart {
         this.heartRed = heartRed;
     }
 
-    public void toggleLike(){
+    public void toggleLike() {
         Log.d(TAG, "toggleLike: toggling heart.");
 
-        AnimatorSet animationSet =  new AnimatorSet();
+        AnimatorSet animationSet = new AnimatorSet();
 
 
-        if(heartRed.getVisibility() == View.VISIBLE){
+        if (heartRed.getVisibility() == View.VISIBLE) {
             Log.d(TAG, "toggleLike: toggling red heart off.");
             heartRed.setScaleX(0.1f);
             heartRed.setScaleY(0.1f);
@@ -49,9 +45,7 @@ public class Heart {
             heartWhite.setVisibility(View.VISIBLE);
 
             animationSet.playTogether(scaleDownY, scaleDownX);
-        }
-
-        else if(heartRed.getVisibility() == View.GONE){
+        } else if (heartRed.getVisibility() == View.GONE) {
             Log.d(TAG, "toggleLike: toggling red heart on.");
             heartRed.setScaleX(0.1f);
             heartRed.setScaleY(0.1f);

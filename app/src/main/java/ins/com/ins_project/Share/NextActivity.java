@@ -25,10 +25,6 @@ import ins.com.ins_project.R;
 import ins.com.ins_project.Utils.FirebaseMethods;
 import ins.com.ins_project.Utils.UniversalImageLoader;
 
-/**
- * Created by User on 7/24/2017.
- */
-
 public class NextActivity extends AppCompatActivity {
 
     private static final String TAG = "NextActivity";
@@ -55,7 +51,7 @@ public class NextActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_next);
         mFirebaseMethods = new FirebaseMethods(NextActivity.this);
-        mCaption = (EditText) findViewById(R.id.caption) ;
+        mCaption = (EditText) findViewById(R.id.caption);
 
         setupFirebaseAuth();
 
@@ -78,15 +74,13 @@ public class NextActivity extends AppCompatActivity {
                 Toast.makeText(NextActivity.this, "Attempting to upload new photo", Toast.LENGTH_SHORT).show();
                 String caption = mCaption.getText().toString();
 
-                if(intent.hasExtra(getString(R.string.selected_image))){
+                if (intent.hasExtra(getString(R.string.selected_image))) {
                     imgUrl = intent.getStringExtra(getString(R.string.selected_image));
-                    mFirebaseMethods.uploadNewPhoto(getString(R.string.new_photo), caption, imageCount, imgUrl,null);
-                }
-                else if(intent.hasExtra(getString(R.string.selected_bitmap))){
+                    mFirebaseMethods.uploadNewPhoto(getString(R.string.new_photo), caption, imageCount, imgUrl, null);
+                } else if (intent.hasExtra(getString(R.string.selected_bitmap))) {
                     bitmap = (Bitmap) intent.getParcelableExtra(getString(R.string.selected_bitmap));
-                    mFirebaseMethods.uploadNewPhoto(getString(R.string.new_photo), caption, imageCount, null,bitmap);
+                    mFirebaseMethods.uploadNewPhoto(getString(R.string.new_photo), caption, imageCount, null, bitmap);
                 }
-
 
 
             }
@@ -95,7 +89,7 @@ public class NextActivity extends AppCompatActivity {
         setImage();
     }
 
-    private void someMethod(){
+    private void someMethod() {
         /*
             Step 1)
             Create a data model for Photos
@@ -119,16 +113,15 @@ public class NextActivity extends AppCompatActivity {
     /**
      * gets the image url from the incoming intent and displays the chosen image
      */
-    private void setImage(){
+    private void setImage() {
         intent = getIntent();
         ImageView image = (ImageView) findViewById(R.id.imageShare);
 
-        if(intent.hasExtra(getString(R.string.selected_image))){
+        if (intent.hasExtra(getString(R.string.selected_image))) {
             imgUrl = intent.getStringExtra(getString(R.string.selected_image));
             Log.d(TAG, "setImage: got new image url: " + imgUrl);
             UniversalImageLoader.setImage(imgUrl, image, null, mAppend);
-        }
-        else if(intent.hasExtra(getString(R.string.selected_bitmap))){
+        } else if (intent.hasExtra(getString(R.string.selected_bitmap))) {
             bitmap = (Bitmap) intent.getParcelableExtra(getString(R.string.selected_bitmap));
             Log.d(TAG, "setImage: got new bitmap");
             image.setImageBitmap(bitmap);
@@ -142,7 +135,7 @@ public class NextActivity extends AppCompatActivity {
     /**
      * Setup the firebase auth object
      */
-    private void setupFirebaseAuth(){
+    private void setupFirebaseAuth() {
         Log.d(TAG, "setupFirebaseAuth: setting up firebase auth.");
         mAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase = FirebaseDatabase.getInstance();

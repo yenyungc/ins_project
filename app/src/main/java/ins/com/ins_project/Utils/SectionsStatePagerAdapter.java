@@ -8,10 +8,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * Created by User on 6/4/2017.
- */
-
 public class SectionsStatePagerAdapter extends FragmentStatePagerAdapter {
 
     private final List<Fragment> mFragmentList = new ArrayList<>();
@@ -33,22 +29,23 @@ public class SectionsStatePagerAdapter extends FragmentStatePagerAdapter {
         return mFragmentList.size();
     }
 
-    public void addFragment(Fragment fragment, String fragmentName){
+    public void addFragment(Fragment fragment, String fragmentName) {
         mFragmentList.add(fragment);
-        mFragments.put(fragment, mFragmentList.size()-1);
-        mFragmentNumbers.put(fragmentName, mFragmentList.size()-1);
-        mFragmentNames.put(mFragmentList.size()-1, fragmentName);
+        mFragments.put(fragment, mFragmentList.size() - 1);
+        mFragmentNumbers.put(fragmentName, mFragmentList.size() - 1);
+        mFragmentNames.put(mFragmentList.size() - 1, fragmentName);
     }
 
     /**
      * returns the fragment with the name @param
+     *
      * @param fragmentName
      * @return
      */
-    public Integer getFragmentNumber(String fragmentName){
-        if(mFragmentNumbers.containsKey(fragmentName)){
+    public Integer getFragmentNumber(String fragmentName) {
+        if (mFragmentNumbers.containsKey(fragmentName)) {
             return mFragmentNumbers.get(fragmentName);
-        }else{
+        } else {
             return null;
         }
     }
@@ -56,26 +53,28 @@ public class SectionsStatePagerAdapter extends FragmentStatePagerAdapter {
 
     /**
      * returns the fragment with the name @param
+     *
      * @param fragment
      * @return
      */
-    public Integer getFragmentNumber(Fragment fragment){
-        if(mFragmentNumbers.containsKey(fragment)){
+    public Integer getFragmentNumber(Fragment fragment) {
+        if (mFragmentNumbers.containsKey(fragment)) {
             return mFragmentNumbers.get(fragment);
-        }else{
+        } else {
             return null;
         }
     }
 
     /**
      * returns the fragment with the name @param
+     *
      * @param fragmentNumber
      * @return
      */
-    public String getFragmentName(Integer fragmentNumber){
-        if(mFragmentNames.containsKey(fragmentNumber)){
+    public String getFragmentName(Integer fragmentNumber) {
+        if (mFragmentNames.containsKey(fragmentNumber)) {
             return mFragmentNames.get(fragmentNumber);
-        }else{
+        } else {
             return null;
         }
     }

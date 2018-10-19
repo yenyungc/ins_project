@@ -2,10 +2,6 @@ package ins.com.ins_project.Utils;
 
 import android.os.Environment;
 
-/**
- * Created by User on 7/24/2017.
- */
-
 public class FilePaths {
 
     //"storage/emulated/0"
@@ -17,5 +13,4 @@ public class FilePaths {
 
     public String FIREBASE_STORY_STORAGE = "stories/users";
     public String FIREBASE_IMAGE_STORAGE = "photos/users/";
-
 }

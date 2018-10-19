@@ -26,10 +26,6 @@ import ins.com.ins_project.R;
 import ins.com.ins_project.models.User;
 import ins.com.ins_project.models.UserAccountSettings;
 
-/**
- * Created by User on 9/17/2017.
- */
-
 public class UserListAdapter extends ArrayAdapter<User> {
 
     private static final String TAG = "UserListAdapter";
@@ -48,7 +44,7 @@ public class UserListAdapter extends ArrayAdapter<User> {
         this.mUsers = objects;
     }
 
-    private static class ViewHolder{
+    private static class ViewHolder {
         TextView username, email;
         CircleImageView profileImage;
     }
@@ -61,7 +57,7 @@ public class UserListAdapter extends ArrayAdapter<User> {
 
         final ViewHolder holder;
 
-        if(convertView == null){
+        if (convertView == null) {
             convertView = mInflater.inflate(layoutResource, parent, false);
             holder = new ViewHolder();
 
@@ -70,7 +66,7 @@ public class UserListAdapter extends ArrayAdapter<User> {
             holder.profileImage = (CircleImageView) convertView.findViewById(R.id.profile_image);
 
             convertView.setTag(holder);
-        }else{
+        } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
@@ -85,7 +81,7 @@ public class UserListAdapter extends ArrayAdapter<User> {
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot singleSnapshot: dataSnapshot.getChildren()){
+                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
                     Log.d(TAG, "onDataChange: found user: " +
                             singleSnapshot.getValue(UserAccountSettings.class).toString());
 

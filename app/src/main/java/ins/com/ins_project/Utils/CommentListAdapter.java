@@ -33,10 +33,6 @@ import ins.com.ins_project.R;
 import ins.com.ins_project.models.Comment;
 import ins.com.ins_project.models.UserAccountSettings;
 
-/**
- * Created by User on 8/22/2017.
- */
-
 public class CommentListAdapter extends ArrayAdapter<Comment> {
 
     private static final String TAG = "CommentListAdapter";
@@ -53,7 +49,7 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
         layoutResource = resource;
     }
 
-    private static class ViewHolder{
+    private static class ViewHolder {
         TextView comment, username, timestamp, reply, likes;
         CircleImageView profileImage;
         ImageView like;
@@ -65,7 +61,7 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
 
         final ViewHolder holder;
 
-        if(convertView == null){
+        if (convertView == null) {
             convertView = mInflater.inflate(layoutResource, parent, false);
             holder = new ViewHolder();
 
@@ -78,7 +74,7 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
             holder.profileImage = (CircleImageView) convertView.findViewById(R.id.comment_profile_image);
 
             convertView.setTag(holder);
-        }else{
+        } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
@@ -87,9 +83,9 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
 
         //set the timestamp difference
         String timestampDifference = getTimestampDifference(getItem(position));
-        if(!timestampDifference.equals("0")){
+        if (!timestampDifference.equals("0")) {
             holder.timestamp.setText(timestampDifference + " d");
-        }else{
+        } else {
             holder.timestamp.setText("today");
         }
 
@@ -102,7 +98,7 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for ( DataSnapshot singleSnapshot :  dataSnapshot.getChildren()){
+                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
                     holder.username.setText(
                             singleSnapshot.getValue(UserAccountSettings.class).getUsername());
 
@@ -121,14 +117,14 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
             }
         });
 
-        try{
-            if(position == 0){
+        try {
+            if (position == 0) {
                 holder.like.setVisibility(View.GONE);
                 holder.likes.setVisibility(View.GONE);
                 holder.reply.setVisibility(View.GONE);
             }
-        }catch (NullPointerException e){
-            Log.e(TAG, "getView: NullPointerException: " + e.getMessage() );
+        } catch (NullPointerException e) {
+            Log.e(TAG, "getView: NullPointerException: " + e.getMessage());
         }
 
 
@@ -137,9 +133,10 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
 
     /**
      * Returns a string representing the number of days ago the post was made
+     *
      * @return
      */
-    private String getTimestampDifference(Comment comment){
+    private String getTimestampDifference(Comment comment) {
         Log.d(TAG, "getTimestampDifference: getting timestamp difference.");
 
         String difference = "";
@@ -150,11 +147,11 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
         sdf.format(today);
         Date timestamp;
         final String photoTimestamp = comment.getDate_created();
-        try{
+        try {
             timestamp = sdf.parse(photoTimestamp);
-            difference = String.valueOf(Math.round(((today.getTime() - timestamp.getTime()) / 1000 / 60 / 60 / 24 )));
-        }catch (ParseException e){
-            Log.e(TAG, "getTimestampDifference: ParseException: " + e.getMessage() );
+            difference = String.valueOf(Math.round(((today.getTime() - timestamp.getTime()) / 1000 / 60 / 60 / 24)));
+        } catch (ParseException e) {
+            Log.e(TAG, "getTimestampDifference: ParseException: " + e.getMessage());
             difference = "0";
         }
         return difference;

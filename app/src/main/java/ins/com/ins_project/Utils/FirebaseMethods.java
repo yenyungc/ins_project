@@ -463,6 +463,10 @@ public class FirebaseMethods {
                     .child(userID)
                     .child(mContext.getString(R.string.field_phone_number))
                     .setValue(phoneNumber);
+            myRef.child("users")
+                    .child(userID)
+                    .child(mContext.getString(R.string.field_phone_number))
+                    .setValue(phoneNumber);
         }
     }
 
@@ -580,7 +584,7 @@ public class FirebaseMethods {
      * @param profile_photo
      */
     public void addNewUser(String email, String username, String description, String website, String profile_photo) {
-        User user = new User(userID, 1, email, StringManipulation.condenseUsername(username));
+        User user = new User(userID,1, email, StringManipulation.condenseUsername(username));
 
         myRef.child("users")
                 .child(userID)

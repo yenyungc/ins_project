@@ -26,11 +26,6 @@ import ins.com.ins_project.Home.HomeActivity;
 import ins.com.ins_project.R;
 import ins.com.ins_project.opengl.OpenGLES10Activity;
 
-
-/**
- * Created by User on 12/27/2017.
- */
-
 public class StoriesRecyclerViewAdapter extends RecyclerView.Adapter<StoriesRecyclerViewAdapter.ViewHolder> {
 
     private static final String TAG = "RecyclerViewAdapter";
@@ -39,7 +34,6 @@ public class StoriesRecyclerViewAdapter extends RecyclerView.Adapter<StoriesRecy
 
     //vars
     private HashMap<Integer, ViewHolder> mViewHolders = new HashMap<>();
-//    private ArrayList<UserStories> mUserStories = new ArrayList<>();
     private JSONArray mMasterStoriesArray = new JSONArray();
     private Runnable mOnTouchRunnable;
     private boolean isRunning = false;
@@ -50,8 +44,6 @@ public class StoriesRecyclerViewAdapter extends RecyclerView.Adapter<StoriesRecy
     private float y1 = 0;
     private float x2 = 0;
     private float y2 = 0;
-//    private long t1 = 0;
-//    private long t2 = 0;
     private long runningTime = 0;
 
 
@@ -71,30 +63,28 @@ public class StoriesRecyclerViewAdapter extends RecyclerView.Adapter<StoriesRecy
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         Log.d(TAG, "onBindViewHolder: called.");
 
-        try{
-            if(mMasterStoriesArray.getJSONObject(position).getJSONObject(mContext.getString(R.string.user_account_settings))
-                    .get(mContext.getString(R.string.field_user_id)).equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+        try {
+            if (mMasterStoriesArray.getJSONObject(position).getJSONObject(mContext.getString(R.string.user_account_settings))
+                    .get(mContext.getString(R.string.field_user_id)).equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
                 int numStories = 0;
-                try{
-                    numStories =  mMasterStoriesArray.getJSONObject(position).getJSONArray(mContext.getString(R.string.user_stories)).length();
-                }catch (JSONException e){
+                try {
+                    numStories = mMasterStoriesArray.getJSONObject(position).getJSONArray(mContext.getString(R.string.user_stories)).length();
+                } catch (JSONException e) {
                     Log.e(TAG, "onBindViewHolder: authenticated user has no stories.");
                 }
                 Log.d(TAG, "onBindViewHolder: user: " + FirebaseAuth.getInstance().getCurrentUser().getUid());
                 Log.d(TAG, "onBindViewHolder: number of stories for this user: " + numStories);
-                if(numStories == 0){
+                if (numStories == 0) {
                     Log.d(TAG, "onBindViewHolder: no stories for authenticated user.");
                     holder.plusIcon.setVisibility(View.VISIBLE);
                     holder.layout.setBackground(null);
-                }
-                else{
+                } else {
                     Log.d(TAG, "onBindViewHolder: found stories for authenticated user.");
                     holder.hasStories = true;
                     holder.plusIcon.setVisibility(View.INVISIBLE);
                     holder.layout.setBackground(mContext.getResources().getDrawable(R.drawable.circle_grey));
                 }
-            }
-            else{
+            } else {
                 Log.d(TAG, "onBindViewHolder: not the authenticated user.");
                 holder.plusIcon.setVisibility(View.INVISIBLE);
                 holder.layout.setBackground(mContext.getResources().getDrawable(R.drawable.circle_red));
@@ -113,7 +103,7 @@ public class StoriesRecyclerViewAdapter extends RecyclerView.Adapter<StoriesRecy
                     .get(mContext.getString(R.string.field_username)).toString());
 
 
-        }catch (JSONException e){
+        } catch (JSONException e) {
             e.printStackTrace();
         }
         holder.layout.setOnTouchListener(new View.OnTouchListener() {
@@ -125,7 +115,7 @@ public class StoriesRecyclerViewAdapter extends RecyclerView.Adapter<StoriesRecy
 
                     case MotionEvent.ACTION_UP:
                         Log.d(TAG, "onTouch: ACTION UP.");
-                        if(down){
+                        if (down) {
                             up = true;
                             down = false;
                             x2 = event.getX();
@@ -134,32 +124,31 @@ public class StoriesRecyclerViewAdapter extends RecyclerView.Adapter<StoriesRecy
                         }
 
                     case MotionEvent.ACTION_DOWN:
-                        if(!up){
+                        if (!up) {
                             Log.d(TAG, "onTouch: ACTION DOWN");
                             x1 = event.getX();
                             y1 = event.getY();
 //                        t1 = System.currentTimeMillis();
 //                        Log.d(TAG, "onTouch: t1: " + t1);
                             down = true;
-                            if(!isRunning){
+                            if (!isRunning) {
                                 isRunning = true;
                                 final Handler handler = new Handler();
                                 mOnTouchRunnable = new Runnable() {
                                     @Override
                                     public void run() {
-                                        if(isRunning){
+                                        if (isRunning) {
                                             handler.postDelayed(mOnTouchRunnable, 200);
-                                            try{
+                                            try {
 
-                                                if(runningTime >= CLICK_DURATION){
+                                                if (runningTime >= CLICK_DURATION) {
                                                     Log.d(TAG, "onTouch: long click. opening add to story dialog.");
                                                     isRunning = false;
-                                                    if(mMasterStoriesArray.getJSONObject(position).getJSONObject(mContext.getString(R.string.user_account_settings))
-                                                            .get(mContext.getString(R.string.field_user_id)).equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
-                                                        ((HomeActivity)mContext).showAddToStoryDialog();
+                                                    if (mMasterStoriesArray.getJSONObject(position).getJSONObject(mContext.getString(R.string.user_account_settings))
+                                                            .get(mContext.getString(R.string.field_user_id)).equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                                                        ((HomeActivity) mContext).showAddToStoryDialog();
                                                     }
-                                                }
-                                                else{
+                                                } else {
                                                     runningTime += 200;
                                                 }
                                                 if (x1 == x2 && y1 == y2 && runningTime < CLICK_DURATION && isRunning) {
@@ -168,18 +157,16 @@ public class StoriesRecyclerViewAdapter extends RecyclerView.Adapter<StoriesRecy
                                                     Log.d(TAG, "onTouch: clicked on: " + mMasterStoriesArray.getJSONObject(position)
                                                             .getJSONObject(mContext.getString(R.string.user_account_settings)).get(mContext.getString(R.string.field_username)));
 
-                                                    if(userId.equals(FirebaseAuth.getInstance().getCurrentUser().getUid()) && holder.hasStories){
+                                                    if (userId.equals(FirebaseAuth.getInstance().getCurrentUser().getUid()) && holder.hasStories) {
                                                         Intent intent = new Intent(mContext, OpenGLES10Activity.class);
                                                         intent.putExtra(mContext.getString(R.string.user_stories), mMasterStoriesArray.toString());
                                                         intent.putExtra(mContext.getString(R.string.resource_index), position);
                                                         mContext.startActivity(intent);
                                                         isRunning = false;
-                                                    }
-                                                    else if(userId.equals(FirebaseAuth.getInstance().getCurrentUser().getUid()) && !holder.hasStories){
-                                                        ((HomeActivity)mContext).showAddToStoryDialog();
+                                                    } else if (userId.equals(FirebaseAuth.getInstance().getCurrentUser().getUid()) && !holder.hasStories) {
+                                                        ((HomeActivity) mContext).showAddToStoryDialog();
                                                         isRunning = false;
-                                                    }
-                                                    else if(!userId.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+                                                    } else if (!userId.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
                                                         Intent intent = new Intent(mContext, OpenGLES10Activity.class);
                                                         intent.putExtra(mContext.getString(R.string.user_stories), mMasterStoriesArray.toString());
                                                         intent.putExtra(mContext.getString(R.string.resource_index), position);
@@ -189,7 +176,7 @@ public class StoriesRecyclerViewAdapter extends RecyclerView.Adapter<StoriesRecy
 
 
                                                 }
-                                            }catch (JSONException e){
+                                            } catch (JSONException e) {
                                                 e.printStackTrace();
                                             }
                                         }
@@ -197,8 +184,7 @@ public class StoriesRecyclerViewAdapter extends RecyclerView.Adapter<StoriesRecy
                                 };
                                 mOnTouchRunnable.run();
                             }
-                        }
-                        else{
+                        } else {
                             up = false;
                         }
 
@@ -219,12 +205,12 @@ public class StoriesRecyclerViewAdapter extends RecyclerView.Adapter<StoriesRecy
         return mMasterStoriesArray.length();
     }
 
-    public void startProgressBar(){
+    public void startProgressBar() {
         Log.d(TAG, "startProgressBar: starting story upload progress bar.");
         mViewHolders.get(0).progressBar.setVisibility(View.VISIBLE);
     }
 
-    public void stopProgressBar(){
+    public void stopProgressBar() {
         Log.d(TAG, "stopProgressBar: stopping story upload progress bar.");
         mViewHolders.get(0).progressBar.setVisibility(View.GONE);
         mViewHolders.get(0).plusIcon.setVisibility(View.GONE);

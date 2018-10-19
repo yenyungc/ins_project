@@ -13,19 +13,15 @@ import android.widget.Toast;
 
 import ins.com.ins_project.R;
 
-/**
- * Created by User on 7/10/2017.
- */
-
 public class ConfirmPasswordDialog extends DialogFragment {
 
     private static final String TAG = "ConfirmPasswordDialog";
 
-    public interface OnConfirmPasswordListener{
+    public interface OnConfirmPasswordListener {
         public void onConfirmPassword(String password);
     }
-    OnConfirmPasswordListener mOnConfirmPasswordListener;
 
+    OnConfirmPasswordListener mOnConfirmPasswordListener;
 
     //vars
     TextView mPassword;
@@ -46,10 +42,10 @@ public class ConfirmPasswordDialog extends DialogFragment {
                 Log.d(TAG, "onClick: captured password and confirming.");
 
                 String password = mPassword.getText().toString();
-                if(!password.equals("")){
+                if (!password.equals("")) {
                     mOnConfirmPasswordListener.onConfirmPassword(password);
                     getDialog().dismiss();
-                }else{
+                } else {
                     Toast.makeText(getActivity(), "you must enter a password", Toast.LENGTH_SHORT).show();
                 }
 
@@ -72,10 +68,10 @@ public class ConfirmPasswordDialog extends DialogFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        try{
+        try {
             mOnConfirmPasswordListener = (OnConfirmPasswordListener) getTargetFragment();
-        }catch (ClassCastException e){
-            Log.e(TAG, "onAttach: ClassCastException: " + e.getMessage() );
+        } catch (ClassCastException e) {
+            Log.e(TAG, "onAttach: ClassCastException: " + e.getMessage());
         }
     }
 }
