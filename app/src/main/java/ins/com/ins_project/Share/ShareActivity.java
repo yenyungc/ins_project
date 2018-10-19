@@ -1,6 +1,7 @@
 package ins.com.ins_project.Share;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -33,6 +34,7 @@ public class ShareActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        Intent intent = getIntent();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_share);
         Log.d(TAG, "onCreate: started.");
@@ -76,8 +78,17 @@ public class ShareActivity extends AppCompatActivity {
     }
 
     public int getTask() {
-        Log.d(TAG, "getTask: TASK: " + getIntent().getFlags());
-        return getIntent().getFlags();
+        Log.d(TAG, "getTask: TASK: " + getIntent().getAction());
+        Intent intent = getIntent();
+        int result = 0;
+        String action = intent.getAction();
+        if (action.equals("NewPhoto")) {
+            result = 0;
+        } else if (action.equals("Profile")) {
+            result = 1;
+        }
+
+        return result;
     }
 
     /**
