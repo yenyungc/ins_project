@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -97,17 +98,34 @@ public class FirebaseMethods {
             UploadTask uploadTask = null;
             uploadTask = storageReference.putBytes(bytes);
 
+            Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                @Override
+                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                    if (!task.isSuccessful()) {
+                        throw task.getException();
+                    }
+
+                    // Continue with the task to get the download URL
+                    return storageReference.getDownloadUrl();
+                }
+            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    if (task.isSuccessful()) {
+                        Uri downloadUri = task.getResult();
+                        String firebaseUrl = downloadUri.toString();
+                        addPhotoToDatabase(caption, firebaseUrl);
+                    } else {
+                        // Handle failures
+                        // ...
+                    }
+                }
+            });
+
             uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Task<Uri> result = storageReference.getDownloadUrl();
-                    Uri downloadUri = result.getResult();
-                    String firebaseUrl = downloadUri.toString();
-
                     Toast.makeText(mContext, "photo upload success", Toast.LENGTH_SHORT).show();
-
-                    //add the new photo to 'photos' node and 'user_photos' node
-                    addPhotoToDatabase(caption, firebaseUrl);
 
                     //navigate to the main feed so the user can see their photo
                     Intent intent = new Intent(mContext, HomeActivity.class);
@@ -152,17 +170,36 @@ public class FirebaseMethods {
             UploadTask uploadTask = null;
             uploadTask = storageReference.putBytes(bytes);
 
+            Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                @Override
+                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                    if (!task.isSuccessful()) {
+                        throw task.getException();
+                    }
+
+                    // Continue with the task to get the download URL
+                    return storageReference.getDownloadUrl();
+                }
+            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    if (task.isSuccessful()) {
+                        Uri downloadUri = task.getResult();
+                        String firebaseUrl = downloadUri.toString();
+                        setProfilePhoto(firebaseUrl);
+                    } else {
+                        // Handle failures
+                        // ...
+                    }
+                }
+            });
+
+
             uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Task<Uri> result = storageReference.getDownloadUrl();
-                    Uri downloadUri = result.getResult();
-                    String firebaseUrl = downloadUri.toString();
 
                     Toast.makeText(mContext, "photo upload success", Toast.LENGTH_SHORT).show();
-
-                    //insert into 'user_account_settings' node
-                    setProfilePhoto(firebaseUrl);
 
                     ((AccountSettingsActivity) mContext).setViewPager(
                             ((AccountSettingsActivity) mContext).pagerAdapter
@@ -191,6 +228,9 @@ public class FirebaseMethods {
             });
         }
 
+
+
+
     }
 
     public void uploadNewStory(Intent intent, final HomeFragment fragment) {
@@ -215,16 +255,38 @@ public class FirebaseMethods {
 
             UploadTask uploadTask = null;
             uploadTask = storageReference.putBytes(bytes);
+
+            Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                @Override
+                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                    if (!task.isSuccessful()) {
+                        throw task.getException();
+                    }
+
+                    // Continue with the task to get the download URL
+                    return storageReference.getDownloadUrl();
+                }
+            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    if (task.isSuccessful()) {
+                        Uri downloadUri = task.getResult();
+                        String firebaseUrl = downloadUri.toString();
+                        addNewStoryImageToDatabase(firebaseUrl);
+                    } else {
+                        // Handle failures
+                        // ...
+                    }
+                }
+            });
+
             uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Task<Uri> result = storageReference.getDownloadUrl();
-                    Uri downloadUri = result.getResult();
-                    String firebaseUrl = downloadUri.toString();
 
                     fragment.mStoriesAdapter.stopProgressBar();
                     Toast.makeText(mContext, "Upload Success", Toast.LENGTH_SHORT).show();
-                    addNewStoryImageToDatabase(firebaseUrl);
+
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -262,16 +324,41 @@ public class FirebaseMethods {
 
             UploadTask uploadTask = null;
             uploadTask = storageReference.putBytes(bytes);
+
+            Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                @Override
+                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                    if (!task.isSuccessful()) {
+                        throw task.getException();
+                    }
+
+                    // Continue with the task to get the download URL
+                    return storageReference.getDownloadUrl();
+                }
+            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    if (task.isSuccessful()) {
+                        Uri downloadUri = task.getResult();
+                        String firebaseUrl = downloadUri.toString();
+                        addNewStoryVideoToDatabase(firebaseUrl, uploadBytes);
+                    } else {
+                        // Handle failures
+                        // ...
+                    }
+                }
+            });
+
             uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Task<Uri> result = storageReference.getDownloadUrl();
-                    Uri downloadUri = result.getResult();
-                    String firebaseUrl = downloadUri.toString();
+//                    Task<Uri> result = storageReference.getDownloadUrl();
+//                    Uri downloadUri = result.getResult();
+//                    String firebaseUrl = downloadUri.toString();
 
                     fragment.mStoriesAdapter.stopProgressBar();
                     Toast.makeText(mContext, "Upload Success", Toast.LENGTH_SHORT).show();
-                    addNewStoryVideoToDatabase(firebaseUrl, uploadBytes);
+                    //ddNewStoryVideoToDatabase(firebaseUrl, uploadBytes);
 
                     if (deleteCompressedVideo) {
                         deleteOutputFile(uri);
@@ -595,7 +682,7 @@ public class FirebaseMethods {
      * @param profile_photo
      */
     public void addNewUser(String email, String username, String description, String website, String profile_photo) {
-        User user = new User(userID,1, email, StringManipulation.condenseUsername(username));
+        User user = new User(userID, 1, email, StringManipulation.condenseUsername(username));
 
         myRef.child("users")
                 .child(userID)
