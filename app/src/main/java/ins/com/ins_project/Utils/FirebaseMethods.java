@@ -30,6 +30,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -83,7 +84,7 @@ public class FirebaseMethods {
             Log.d(TAG, "uploadNewPhoto: uploading NEW photo.");
 
             String user_id = FirebaseAuth.getInstance().getCurrentUser().getUid();
-            StorageReference storageReference = mStorageReference
+            final StorageReference storageReference = mStorageReference
                     .child(filePaths.FIREBASE_IMAGE_STORAGE + "/" + user_id + "/photo" + (count + 1));
 
             //convert image url to bitmap
@@ -99,7 +100,9 @@ public class FirebaseMethods {
             uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    String firebaseUrl = taskSnapshot.getMetadata().getReference().getDownloadUrl().toString();
+                    Task<Uri> result = storageReference.getDownloadUrl();
+                    Uri downloadUri = result.getResult();
+                    String firebaseUrl = downloadUri.toString();
 
                     Toast.makeText(mContext, "photo upload success", Toast.LENGTH_SHORT).show();
 
@@ -137,7 +140,7 @@ public class FirebaseMethods {
 
 
             String user_id = FirebaseAuth.getInstance().getCurrentUser().getUid();
-            StorageReference storageReference = mStorageReference
+            final StorageReference storageReference = mStorageReference
                     .child(filePaths.FIREBASE_IMAGE_STORAGE + "/" + user_id + "/profile_photo");
 
             //convert image url to bitmap
@@ -152,7 +155,9 @@ public class FirebaseMethods {
             uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    String firebaseUrl = taskSnapshot.getMetadata().getReference().getDownloadUrl().toString();
+                    Task<Uri> result = storageReference.getDownloadUrl();
+                    Uri downloadUri = result.getResult();
+                    String firebaseUrl = downloadUri.toString();
 
                     Toast.makeText(mContext, "photo upload success", Toast.LENGTH_SHORT).show();
 
@@ -213,10 +218,13 @@ public class FirebaseMethods {
             uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    String firebaseURL = taskSnapshot.getMetadata().getReference().getDownloadUrl().toString();
+                    Task<Uri> result = storageReference.getDownloadUrl();
+                    Uri downloadUri = result.getResult();
+                    String firebaseUrl = downloadUri.toString();
+
                     fragment.mStoriesAdapter.stopProgressBar();
                     Toast.makeText(mContext, "Upload Success", Toast.LENGTH_SHORT).show();
-                    addNewStoryImageToDatabase(firebaseURL);
+                    addNewStoryImageToDatabase(firebaseUrl);
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -257,10 +265,13 @@ public class FirebaseMethods {
             uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    String firebaseURL = taskSnapshot.getMetadata().getReference().getDownloadUrl().toString();
+                    Task<Uri> result = storageReference.getDownloadUrl();
+                    Uri downloadUri = result.getResult();
+                    String firebaseUrl = downloadUri.toString();
+
                     fragment.mStoriesAdapter.stopProgressBar();
                     Toast.makeText(mContext, "Upload Success", Toast.LENGTH_SHORT).show();
-                    addNewStoryVideoToDatabase(firebaseURL, uploadBytes);
+                    addNewStoryVideoToDatabase(firebaseUrl, uploadBytes);
 
                     if (deleteCompressedVideo) {
                         deleteOutputFile(uri);
