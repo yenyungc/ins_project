@@ -10,6 +10,11 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -42,6 +47,8 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.firebase.firestore.GeoPoint;
 
+import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
+
 public class FirebaseMethods {
 
     private static final String TAG = "FirebaseMethods";
@@ -54,11 +61,11 @@ public class FirebaseMethods {
     private StorageReference mStorageReference;
     private String userID;
 
-    private FusedLocationProviderClient mFusedLocationClient;
     //vars
     private Context mContext;
     private double mPhotoUploadProgress = 0;
-    private GeoPoint geoPoint;
+    private Location geoPoint;
+    private FusedLocationProviderClient mFusedLocationClient;
 
     public FirebaseMethods(Context context) {
         mAuth = FirebaseAuth.getInstance();
@@ -67,13 +74,17 @@ public class FirebaseMethods {
         mStorageReference = FirebaseStorage.getInstance().getReference();
         mContext = context;
 
+
         if (mAuth.getCurrentUser() != null) {
             userID = mAuth.getCurrentUser().getUid();
         }
     }
 
     public void uploadNewPhoto(String photoType, final String caption, final int count, final String imgUrl, Bitmap bm) {
-        Log.d(TAG, "uploadNewPhoto: attempting to uplaod new photo.");
+        Log.d(TAG, "uploadNewPhoto: attempting to upload new photo.");
+
+        mFusedLocationClient = getFusedLocationProviderClient(mContext);
+        getLastLocation();
 
         FilePaths filePaths = new FilePaths();
         //case1) new photo
@@ -190,7 +201,6 @@ public class FirebaseMethods {
                 }
             });
 
-
             uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -223,10 +233,6 @@ public class FirebaseMethods {
                 }
             });
         }
-
-
-
-
     }
 
     private void setProfilePhoto(String url) {
@@ -244,46 +250,17 @@ public class FirebaseMethods {
         return sdf.format(new Date());
     }
 
-
-
-
-
-
-// ..
-
-
-
     private void addPhotoToDatabase(String caption, String url) {
         Log.d(TAG, "addPhotoToDatabase: adding photo to database.");
 
-
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(mContext);
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(mContext);
-        try {
-            mFusedLocationClient.getLastLocation().addOnSuccessListener(
-                    new OnSuccessListener<Location>() {
-                        @Override
-                        public void onSuccess(Location location) {
-                            if (location != null) {
-
-                                geoPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
-
-                            } else {
-
-                            }
-                        }
-                    });
-        } catch (SecurityException e) {
-            e.printStackTrace();
-        }
-
-
+//        mFusedLocationClient = getFusedLocationProviderClient(mContext);
+//        getLastLocation();
 
         String tags = StringManipulation.getTags(caption);
         String newPhotoKey = myRef.child(mContext.getString(R.string.dbname_photos)).push().getKey();
         Photo photo = new Photo();
         photo.setCaption(caption);
-        photo.setGeo_point(geoPoint);
+        photo.setLocation(geoPoint);
         photo.setDate_created(getTimestamp());
         photo.setImage_path(url);
         photo.setTags(tags);
@@ -295,6 +272,24 @@ public class FirebaseMethods {
                 .child(FirebaseAuth.getInstance().getCurrentUser()
                         .getUid()).child(newPhotoKey).setValue(photo);
         myRef.child(mContext.getString(R.string.dbname_photos)).child(newPhotoKey).setValue(photo);
+    }
+
+    private void getLastLocation() {
+        try {
+            mFusedLocationClient.getLastLocation()
+                    .addOnCompleteListener(new OnCompleteListener<Location>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Location> task) {
+                            if (task.isSuccessful() && task.getResult() != null) {
+                                geoPoint = task.getResult();
+                            } else {
+                                Log.w(TAG, "Failed to get location.");
+                            }
+                        }
+                    });
+        } catch (SecurityException unlikely) {
+            Log.e(TAG, "Lost location permission." + unlikely);
+        }
     }
 
     public int getImageCount(DataSnapshot dataSnapshot) {
@@ -435,7 +430,6 @@ public class FirebaseMethods {
                     }
                 });
     }
-
 
 
     /**
