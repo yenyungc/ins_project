@@ -74,7 +74,6 @@ public class FirebaseMethods {
         mStorageReference = FirebaseStorage.getInstance().getReference();
         mContext = context;
 
-
         if (mAuth.getCurrentUser() != null) {
             userID = mAuth.getCurrentUser().getUid();
         }
@@ -252,9 +251,6 @@ public class FirebaseMethods {
 
     private void addPhotoToDatabase(String caption, String url) {
         Log.d(TAG, "addPhotoToDatabase: adding photo to database.");
-
-//        mFusedLocationClient = getFusedLocationProviderClient(mContext);
-//        getLastLocation();
 
         String tags = StringManipulation.getTags(caption);
         String newPhotoKey = myRef.child(mContext.getString(R.string.dbname_photos)).push().getKey();
