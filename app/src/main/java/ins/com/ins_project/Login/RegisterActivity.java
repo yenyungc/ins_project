@@ -43,9 +43,7 @@ public class RegisterActivity extends AppCompatActivity {
     private FirebaseMethods firebaseMethods;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference myRef;
-
     private String append = "";
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,7 +69,6 @@ public class RegisterActivity extends AppCompatActivity {
                 if (checkInputs(email, username, password)) {
                     mProgressBar.setVisibility(View.VISIBLE);
                     loadingPleaseWait.setVisibility(View.VISIBLE);
-
                     firebaseMethods.registerNewEmail(email, password, username);
                 }
             }
@@ -101,7 +98,6 @@ public class RegisterActivity extends AppCompatActivity {
         mContext = RegisterActivity.this;
         mProgressBar.setVisibility(View.GONE);
         loadingPleaseWait.setVisibility(View.GONE);
-
     }
 
     private boolean isStringNull(String string) {
@@ -196,7 +192,6 @@ public class RegisterActivity extends AppCompatActivity {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
                 }
-                // ...
             }
         };
     }

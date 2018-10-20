@@ -74,7 +74,6 @@ public class ViewCommentsFragment extends Fragment {
         mComments = new ArrayList<>();
         mContext = getActivity();
 
-
         try {
             mPhoto = getPhotoFromBundle();
             setupFirebaseAuth();
@@ -82,13 +81,10 @@ public class ViewCommentsFragment extends Fragment {
         } catch (NullPointerException e) {
             Log.e(TAG, "onCreateView: NullPointerException: " + e.getMessage());
         }
-
-
         return view;
     }
 
     private void setupWidgets() {
-
         CommentListAdapter adapter = new CommentListAdapter(mContext,
                 R.layout.layout_comment, mComments);
         mListView.setAdapter(adapter);
@@ -119,7 +115,6 @@ public class ViewCommentsFragment extends Fragment {
                 } else {
                     getActivity().getSupportFragmentManager().popBackStack();
                 }
-
             }
         });
     }
@@ -131,7 +126,6 @@ public class ViewCommentsFragment extends Fragment {
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
-
 
     private void addNewComment(String newComment) {
         Log.d(TAG, "addNewComment: adding new comment: " + newComment);
@@ -157,12 +151,11 @@ public class ViewCommentsFragment extends Fragment {
                 .child(getString(R.string.field_comments))
                 .child(commentID)
                 .setValue(comment);
-
     }
 
     private String getTimestamp() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.CANADA);
-        sdf.setTimeZone(TimeZone.getTimeZone("Canada/Pacific"));
+        sdf.setTimeZone(TimeZone.getTimeZone("Australia/Melbourne"));
         return sdf.format(new Date());
     }
 
@@ -216,8 +209,6 @@ public class ViewCommentsFragment extends Fragment {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
-
-
                 if (user != null) {
                     // User is signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
@@ -225,7 +216,6 @@ public class ViewCommentsFragment extends Fragment {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
                 }
-                // ...
             }
         };
 
@@ -239,7 +229,6 @@ public class ViewCommentsFragment extends Fragment {
             mPhoto.setComments(mComments);
             setupWidgets();
         }
-
 
         myRef.child(mContext.getString(R.string.dbname_photos))
                 .child(mPhoto.getPhoto_id())
@@ -257,7 +246,6 @@ public class ViewCommentsFragment extends Fragment {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
-
                                     Photo photo = new Photo();
                                     Map<String, Object> objectMap = (HashMap<String, Object>) singleSnapshot.getValue();
 
@@ -267,7 +255,6 @@ public class ViewCommentsFragment extends Fragment {
                                     photo.setUser_id(objectMap.get(mContext.getString(R.string.field_user_id)).toString());
                                     photo.setDate_created(objectMap.get(mContext.getString(R.string.field_date_created)).toString());
                                     photo.setImage_path(objectMap.get(mContext.getString(R.string.field_image_path)).toString());
-
 
                                     mComments.clear();
                                     Comment firstComment = new Comment();
@@ -284,22 +271,10 @@ public class ViewCommentsFragment extends Fragment {
                                         comment.setDate_created(dSnapshot.getValue(Comment.class).getDate_created());
                                         mComments.add(comment);
                                     }
-
                                     photo.setComments(mComments);
-
                                     mPhoto = photo;
-
                                     setupWidgets();
-//                    List<Like> likesList = new ArrayList<Like>();
-//                    for (DataSnapshot dSnapshot : singleSnapshot
-//                            .child(getString(R.string.field_likes)).getChildren()){
-//                        Like like = new Like();
-//                        like.setUser_id(dSnapshot.getValue(Like.class).getUser_id());
-//                        likesList.add(like);
-//                    }
-
                                 }
-
                             }
 
                             @Override
@@ -329,10 +304,7 @@ public class ViewCommentsFragment extends Fragment {
 
                     }
                 });
-
-
     }
-
 
     @Override
     public void onStart() {
@@ -347,26 +319,4 @@ public class ViewCommentsFragment extends Fragment {
             mAuth.removeAuthStateListener(mAuthListener);
         }
     }
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

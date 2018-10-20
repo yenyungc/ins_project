@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Home.PhotoEditor">
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+    <FrameLayout
+        android:id="@+id/tools"
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="2dp">
+
+        <Button
+            android:id="@+id/crop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Crop" />
+
+        <Button
+            android:id="@+id/brightnessButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:text="Brightness contrast"
+            android:textSize="10sp" />
+
+
+        <Spinner
+            android:id="@+id/filer"
+            android:layout_width="135dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:spinnerMode="dialog" />
+
+
+    </FrameLayout>
+
+    <Button
+        android:id="@+id/save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:text="Save and Update" />
+
+    <Button
+        android:id="@+id/confirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:text="confirm"
+        android:visibility="invisible" />
+
+    <SeekBar
+        android:id="@+id/brightness"
+        android:layout_width="231dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/tools"
+        android:layout_centerHorizontal="true"
+        android:max="255"
+        android:progress="127"
+        android:visibility="invisible" />
+
+    <SeekBar
+        android:id="@+id/contrast"
+        android:layout_width="230dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="69dp"
+        android:max="127"
+        android:progress="63"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/brightness"
+        android:layout_centerHorizontal="true"
+        android:text="Brightness"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/contrast"
+        android:layout_centerHorizontal="true"
+        android:text="Contrast"
+        android:visibility="invisible" />
+
+
+</RelativeLayout>

@@ -137,14 +137,12 @@ public class SearchActivity extends AppCompatActivity {
         });
     }
 
-
     private void hideSoftKeyboard() {
         if (getCurrentFocus() != null) {
             InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         }
     }
-
 
     /**
      * BottomNavigationView setup

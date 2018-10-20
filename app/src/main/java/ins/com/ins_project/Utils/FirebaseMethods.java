@@ -7,10 +7,12 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
+<<<<<<< HEAD
 import android.os.AsyncTask;
 import android.os.Bundle;
+=======
+>>>>>>> 049f704b7b7109f2a0f1beb9b83a5f0c516b7d57
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -21,7 +23,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -30,24 +31,15 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
 import ins.com.ins_project.Home.HomeActivity;
-import ins.com.ins_project.Home.HomeFragment;
 import ins.com.ins_project.Profile.AccountSettingsActivity;
 import ins.com.ins_project.R;
-import ins.com.ins_project.materialcamera.MaterialCamera;
 import ins.com.ins_project.models.Photo;
-import ins.com.ins_project.models.Story;
 import ins.com.ins_project.models.User;
 import ins.com.ins_project.models.UserAccountSettings;
 import ins.com.ins_project.models.UserSettings;
@@ -243,248 +235,6 @@ public class FirebaseMethods {
 
     }
 
-    public void uploadNewStory(Intent intent, final HomeFragment fragment) {
-        Log.d(TAG, "uploadNewStory: attempting to upload new story to storage.");
-
-        final String uri = intent.getDataString();
-        final boolean deleteCompressedVideo = intent.getBooleanExtra(MaterialCamera.DELETE_UPLOAD_FILE_EXTRA, false);
-         /*
-            upload a new photo to firebase storage
-         */
-        if (!isMediaVideo(uri)) {
-            Log.d(TAG, "uploadNewStory: uploading new story (IMAGE) to firebase storage.");
-            fragment.mStoriesAdapter.startProgressBar();
-            FilePaths filePaths = new FilePaths();
-
-            //specify where the photo will be stored
-            final StorageReference storageReference = mStorageReference
-                    .child(filePaths.FIREBASE_STORY_STORAGE + "/" + userID + "/" + uri.substring(uri.indexOf("Stories/") + 8, uri.indexOf(".")));
-
-            BackgroundGetBytesFromBitmap getBytes = new BackgroundGetBytesFromBitmap();
-            byte[] bytes = getBytes.doInBackground(uri);
-
-            UploadTask uploadTask = null;
-            uploadTask = storageReference.putBytes(bytes);
-
-            Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-                @Override
-                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                    if (!task.isSuccessful()) {
-                        throw task.getException();
-                    }
-
-                    // Continue with the task to get the download URL
-                    return storageReference.getDownloadUrl();
-                }
-            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                @Override
-                public void onComplete(@NonNull Task<Uri> task) {
-                    if (task.isSuccessful()) {
-                        Uri downloadUri = task.getResult();
-                        String firebaseUrl = downloadUri.toString();
-                        addNewStoryImageToDatabase(firebaseUrl);
-                    } else {
-                        // Handle failures
-                        // ...
-                    }
-                }
-            });
-
-            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-                    fragment.mStoriesAdapter.stopProgressBar();
-                    Toast.makeText(mContext, "Upload Success", Toast.LENGTH_SHORT).show();
-
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-                    fragment.mStoriesAdapter.stopProgressBar();
-                    Toast.makeText(mContext, "Upload Failed", Toast.LENGTH_SHORT).show();
-                }
-            });
-
-        } else {
-            Log.d(TAG, "uploadNewStory: uploading new story (VIDEO) to firebase storage.");
-            fragment.mStoriesAdapter.startProgressBar();
-            FilePaths filePaths = new FilePaths();
-
-            //specify where the photo will be stored
-            final StorageReference storageReference = mStorageReference
-                    .child(filePaths.FIREBASE_STORY_STORAGE + "/" + userID + "/" + uri.substring(uri.indexOf("Stories/") + 8, uri.indexOf(".")));
-
-            FileInputStream fis = null;
-            File file = new File(uri);
-            try {
-                fis = new FileInputStream(file);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-            byte[] bytes = new byte[0];
-            try {
-                bytes = readBytes(fis);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            Log.d(TAG, "uploadNewStory: video upload bytes: " + bytes.length);
-            final byte[] uploadBytes = bytes;
-
-            UploadTask uploadTask = null;
-            uploadTask = storageReference.putBytes(bytes);
-
-            Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-                @Override
-                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                    if (!task.isSuccessful()) {
-                        throw task.getException();
-                    }
-
-                    // Continue with the task to get the download URL
-                    return storageReference.getDownloadUrl();
-                }
-            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                @Override
-                public void onComplete(@NonNull Task<Uri> task) {
-                    if (task.isSuccessful()) {
-                        Uri downloadUri = task.getResult();
-                        String firebaseUrl = downloadUri.toString();
-                        addNewStoryVideoToDatabase(firebaseUrl, uploadBytes);
-                    } else {
-                        // Handle failures
-                        // ...
-                    }
-                }
-            });
-
-            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//                    Task<Uri> result = storageReference.getDownloadUrl();
-//                    Uri downloadUri = result.getResult();
-//                    String firebaseUrl = downloadUri.toString();
-
-                    fragment.mStoriesAdapter.stopProgressBar();
-                    Toast.makeText(mContext, "Upload Success", Toast.LENGTH_SHORT).show();
-                    //ddNewStoryVideoToDatabase(firebaseUrl, uploadBytes);
-
-                    if (deleteCompressedVideo) {
-                        deleteOutputFile(uri);
-                    }
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-                    fragment.mStoriesAdapter.stopProgressBar();
-                    Toast.makeText(mContext, "Upload Failed", Toast.LENGTH_SHORT).show();
-                    if (deleteCompressedVideo) {
-                        deleteOutputFile(uri);
-                    }
-                }
-            });
-        }
-    }
-
-    private class BackgroundGetBytesFromBitmap extends AsyncTask<String, Integer, byte[]> {
-
-        @Override
-        protected byte[] doInBackground(String... params) {
-            byte[] bytes = null;
-
-//            Bitmap bm = ImageManager.getBitmap(Uri.parse(params[0]).getPath());
-            Bitmap bm = null;
-            try {
-                RotateBitmap rotateBitmap = new RotateBitmap();
-                bm = rotateBitmap.HandleSamplingAndRotationBitmap(mContext, Uri.parse("file://" + params[0]));
-            } catch (IOException e) {
-                Log.e(TAG, "BackgroundGetBytesFromBitmap: IOException: " + e.getMessage());
-            }
-
-            bytes = ImageManager.getBytesFromBitmap(bm, ImageManager.IMAGE_SAVE_QUALITY);
-            return bytes;
-        }
-    }
-
-
-    private void deleteOutputFile(@Nullable String uri) {
-        if (uri != null)
-            //noinspection ResultOfMethodCallIgnored
-            new File(Uri.parse(uri).getPath()).delete();
-    }
-
-
-    public byte[] readBytes(FileInputStream inputStream) throws IOException {
-        // this dynamically extends to take the bytes you read
-        ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
-
-        // this is storage overwritten on each iteration with bytes
-        int bufferSize = 1024;
-        byte[] buffer = new byte[bufferSize];
-
-        // we need to know how may bytes were read to write them to the byteBuffer
-        int len = 0;
-        while ((len = inputStream.read(buffer)) != -1) {
-            byteBuffer.write(buffer, 0, len);
-        }
-
-        // and then we can return your byte array.
-        return byteBuffer.toByteArray();
-    }
-
-
-    private void addNewStoryImageToDatabase(String url) {
-        Log.d(TAG, "addNewStoryToDatabase: adding new story to database.");
-
-        Story story = new Story();
-        story.setImage_url(url);
-        String newKey = myRef.push().getKey();
-        story.setStory_id(newKey);
-        story.setTimestamp(getTimestamp());
-        story.setUser_id(userID);
-        story.setViews("0");
-
-        myRef.child(mContext.getString(R.string.dbname_stories))
-                .child(userID)
-                .child(newKey)
-                .setValue(story);
-
-    }
-
-    private void addNewStoryVideoToDatabase(String url, byte[] bytes) {
-        Log.d(TAG, "addNewStoryToDatabase: adding new story to database.");
-
-        Story story = new Story();
-        story.setVideo_url(url);
-        String newKey = myRef.push().getKey();
-        story.setStory_id(newKey);
-        story.setTimestamp(getTimestamp());
-        story.setUser_id(userID);
-        story.setViews("0");
-
-        // calculate the estimated duration.
-        // need to do this for the progress bars in the block. We can't get the video duration of MP4 files
-        double megabytes = bytes.length / 1000000.000;
-        Log.d(TAG, "addNewStoryVideoToDatabase: estimated MB: " + megabytes);
-        String duration = String.valueOf(Math.round(15 * (megabytes / 6.3)));
-        Log.d(TAG, "addNewStoryVideoToDatabase: estimated video duration: " + duration);
-        story.setDuration(duration);
-
-        myRef.child(mContext.getString(R.string.dbname_stories))
-                .child(userID)
-                .child(newKey)
-                .setValue(story);
-
-    }
-
-    private boolean isMediaVideo(String uri) {
-        if (uri.contains(".mp4") || uri.contains(".wmv") || uri.contains(".flv") || uri.contains(".avi")) {
-            return true;
-        }
-        return false;
-    }
-
     private void setProfilePhoto(String url) {
         Log.d(TAG, "setProfilePhoto: setting new profile image: " + url);
 
@@ -496,7 +246,7 @@ public class FirebaseMethods {
 
     private String getTimestamp() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.CANADA);
-        sdf.setTimeZone(TimeZone.getTimeZone("Canada/Pacific"));
+        sdf.setTimeZone(TimeZone.getTimeZone("Australia/Melbourne"));
         return sdf.format(new Date());
     }
 
@@ -551,7 +301,6 @@ public class FirebaseMethods {
                 .child(FirebaseAuth.getInstance().getCurrentUser()
                         .getUid()).child(newPhotoKey).setValue(photo);
         myRef.child(mContext.getString(R.string.dbname_photos)).child(newPhotoKey).setValue(photo);
-
     }
 
     public int getImageCount(DataSnapshot dataSnapshot) {

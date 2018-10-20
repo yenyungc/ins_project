@@ -24,7 +24,6 @@ public class PhotoFragment extends Fragment {
     private static final int GALLERY_FRAGMENT_NUM = 2;
     private static final int CAMERA_REQUEST_CODE = 5;
 
-
     @Nullable
     @Override
     public View onCreateView(final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -50,7 +49,6 @@ public class PhotoFragment extends Fragment {
                 }
             }
         });
-
         return view;
     }
 
@@ -94,7 +92,6 @@ public class PhotoFragment extends Fragment {
                     Log.d(TAG, "onActivityResult: NullPointerException: " + e.getMessage());
                 }
             }
-
         }
     }
 }

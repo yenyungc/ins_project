@@ -64,10 +64,6 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
         mLayoutResource = resource;
         this.mContext = context;
         mReference = FirebaseDatabase.getInstance().getReference();
-
-//        for(Photo photo: objects){
-//            Log.d(TAG, "MainFeedListAdapter: photo id: " + photo.getPhoto_id());
-//        }
     }
 
     static class ViewHolder {
@@ -80,7 +76,6 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
         UserAccountSettings settings = new UserAccountSettings();
         User user = new User();
         StringBuilder users;
-        String mLikesString;
         boolean likeByCurrentUser;
         Heart heart;
         GestureDetector detector;
@@ -251,7 +246,6 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
         if (reachedEndOfList(position)) {
             loadMoreData();
         }
-
         return convertView;
     }
 
@@ -306,19 +300,15 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
                         String keyID = singleSnapshot.getKey();
 
                         //case1: Then user already liked the photo
-                        if (mHolder.likeByCurrentUser
-//                                && singleSnapshot.getValue(Like.class).getUser_id()
-//                                        .equals(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                ) {
+                        if (mHolder.likeByCurrentUser) {
 
                             mReference.child(mContext.getString(R.string.dbname_photos))
                                     .child(mHolder.photo.getPhoto_id())
                                     .child(mContext.getString(R.string.field_likes))
                                     .child(keyID)
                                     .removeValue();
-///
+
                             mReference.child(mContext.getString(R.string.dbname_user_photos))
-//                                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                                     .child(mHolder.photo.getUser_id())
                                     .child(mHolder.photo.getPhoto_id())
                                     .child(mContext.getString(R.string.field_likes))
@@ -346,7 +336,6 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
 
                 }
             });
-
             return true;
         }
     }
@@ -388,7 +377,6 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
                 for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
                     currentUsername = singleSnapshot.getValue(UserAccountSettings.class).getUsername();
                 }
-
             }
 
             @Override
@@ -532,7 +520,7 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
         String difference = "";
         Calendar c = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.CANADA);
-        sdf.setTimeZone(TimeZone.getTimeZone("Canada/Pacific"));//google 'android list of timezones'
+        sdf.setTimeZone(TimeZone.getTimeZone("Australia/Melbourne"));//google 'android list of timezones'
         Date today = c.getTime();
         sdf.format(today);
         Date timestamp;
@@ -546,7 +534,6 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
         }
         return difference;
     }
-
 }
 
 

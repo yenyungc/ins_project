@@ -50,7 +50,6 @@ public class SectionsStatePagerAdapter extends FragmentStatePagerAdapter {
         }
     }
 
-
     /**
      * returns the fragment with the name @param
      *

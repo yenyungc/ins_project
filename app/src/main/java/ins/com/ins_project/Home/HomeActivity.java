@@ -15,7 +15,6 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
@@ -24,14 +23,11 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import ins.com.ins_project.Login.LoginActivity;
 import ins.com.ins_project.R;
 import ins.com.ins_project.Utils.BottomNavigationViewHelper;
-import ins.com.ins_project.Utils.FirebaseMethods;
 import ins.com.ins_project.Utils.MainFeedListAdapter;
 import ins.com.ins_project.Utils.SectionsPagerAdapter;
 import ins.com.ins_project.Utils.UniversalImageLoader;
 import ins.com.ins_project.Utils.ViewCommentsFragment;
 import ins.com.ins_project.models.Photo;
-import ins.com.ins_project.opengl.AddToStoryDialog;
-import ins.com.ins_project.opengl.NewStoryActivity;
 
 
 public class HomeActivity extends AppCompatActivity implements MainFeedListAdapter.OnLoadMoreItemsListener {
@@ -49,9 +45,6 @@ public class HomeActivity extends AppCompatActivity implements MainFeedListAdapt
     private static final String TAG = "HomeActivity";
     private static final int ACTIVITY_NUM = 0;
     private static final int HOME_FRAGMENT = 1;
-    private static final int RESULT_ADD_NEW_STORY = 7891;
-    private final static int CAMERA_RQ = 6969;
-    private static final int REQUEST_ADD_NEW_STORY = 8719;
 
     private Context mContext = HomeActivity.this;
 
@@ -77,17 +70,6 @@ public class HomeActivity extends AppCompatActivity implements MainFeedListAdapt
         initImageLoader();
         setupBottomNavigationView();
         setupViewPager();
-    }
-
-    public void openNewStoryActivity() {
-        Intent intent = new Intent(this, NewStoryActivity.class);
-        startActivityForResult(intent, REQUEST_ADD_NEW_STORY);
-    }
-
-    public void showAddToStoryDialog() {
-        Log.d(TAG, "showAddToStoryDialog: showing add to story dialog.");
-        AddToStoryDialog dialog = new AddToStoryDialog();
-        dialog.show(getFragmentManager(), getString(R.string.dialog_add_to_story));
     }
 
     public void onCommentThreadSelected(Photo photo, String callingActivity) {
@@ -125,31 +107,6 @@ public class HomeActivity extends AppCompatActivity implements MainFeedListAdapt
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Log.d(TAG, "onActivityResult: incoming result.");
-        // Received recording or error from MaterialCamera
-
-        if (requestCode == REQUEST_ADD_NEW_STORY) {
-            Log.d(TAG, "onActivityResult: incoming new story.");
-            if (resultCode == RESULT_ADD_NEW_STORY) {
-                Log.d(TAG, "onActivityResult: got the new story.");
-                Log.d(TAG, "onActivityResult: data type: " + data.getType());
-
-                final HomeFragment fragment = (HomeFragment) getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewpager_container + ":" + 1);
-                if (fragment != null) {
-
-                    FirebaseMethods firebaseMethods = new FirebaseMethods(this);
-                    firebaseMethods.uploadNewStory(data, fragment);
-                } else {
-                    Log.d(TAG, "onActivityResult: could not communicate with home fragment.");
-                }
-            }
-        }
-    }
-
-
     private void initImageLoader() {
         UniversalImageLoader universalImageLoader = new UniversalImageLoader(mContext);
         ImageLoader.getInstance().init(universalImageLoader.getConfig());
@@ -185,7 +142,6 @@ public class HomeActivity extends AppCompatActivity implements MainFeedListAdapt
         MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
         menuItem.setChecked(true);
     }
-
 
      /*
     ------------------------------------ Firebase ---------------------------------------------

@@ -32,10 +32,8 @@ import ins.com.ins_project.Utils.GridImageAdapter;
 public class GalleryFragment extends Fragment {
     private static final String TAG = "GalleryFragment";
 
-
     //constants
     private static final int NUM_GRID_COLUMNS = 3;
-
 
     //widgets
     private GridView gridView;
@@ -47,7 +45,6 @@ public class GalleryFragment extends Fragment {
     private ArrayList<String> directories;
     private String mAppend = "file:/";
     private String mSelectedImage;
-
 
     @Nullable
     @Override
@@ -70,7 +67,6 @@ public class GalleryFragment extends Fragment {
             }
         });
 
-
         TextView nextScreen = (TextView) view.findViewById(R.id.tvNext);
         nextScreen.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,7 +85,6 @@ public class GalleryFragment extends Fragment {
                     startActivity(intent);
                     getActivity().finish();
                 }
-
             }
         });
 
@@ -176,9 +171,7 @@ public class GalleryFragment extends Fragment {
                 mSelectedImage = imgURLs.get(position);
             }
         });
-
     }
-
 
     private void setImage(String imgURL, ImageView image, String append) {
         Log.d(TAG, "setImage: setting image");

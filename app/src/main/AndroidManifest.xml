@@ -4,10 +4,11 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
+
     <uses-feature android:name="android.hardware.camera" />
-    <!--<uses-feature android:name="android.hardware.camera.autofocus" />-->
-    <uses-permission android:name="android.permission.FLASHLIGHT"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <!-- <uses-feature android:name="android.hardware.camera.autofocus" /> -->
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
@@ -24,7 +25,8 @@
         android:name="android.hardware.camera.autofocus"
         android:required="false" />
     <uses-feature android:name="android.hardware.camera.flash" />
-    <!--android:name="android.support.multidex.MultiDexApplication"-->
+
+    <!-- android:name="android.support.multidex.MultiDexApplication" -->
     <application
         android:name="android.support.multidex.MultiDexApplication"
         android:allowBackup="true"
@@ -40,37 +42,53 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".Likes.LikesActivity"
-            android:launchMode="singleInstance"/>
-        <activity android:name=".Profile.ProfileActivity"
-            android:launchMode="singleInstance"/>
-        <activity android:name=".Share.ShareActivity"
-            android:launchMode="singleInstance"/>
-        <activity android:name=".Share.NextActivity"
-            android:launchMode="singleInstance"/>
-        <activity android:name=".Login.LoginActivity"
-            android:launchMode="singleInstance"/>
-
-        <activity android:name=".Profile.AccountSettingsActivity"
-            android:launchMode="singleInstance"/>
-        <activity android:name=".Login.RegisterActivity"
-            android:launchMode="singleInstance"/>
-        <activity android:name=".opengl.OpenGLES10Activity"
+        <activity
+            android:name=".Likes.LikesActivity"
+            android:launchMode="singleInstance" />
+        <activity
+            android:name=".Profile.ProfileActivity"
+            android:launchMode="singleInstance" />
+        <activity
+            android:name=".Share.ShareActivity"
+            android:launchMode="singleInstance" />
+        <activity
+            android:name=".Share.NextActivity"
+            android:launchMode="singleInstance" />
+        <activity
+            android:name=".Login.LoginActivity"
+            android:launchMode="singleInstance" />
+        <activity
+            android:name=".Profile.AccountSettingsActivity"
+            android:launchMode="singleInstance" />
+        <activity
+            android:name=".Login.RegisterActivity"
+            android:launchMode="singleInstance" />
+        <activity
+            android:name=".opengl.OpenGLES10Activity"
             android:launchMode="singleInstance"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".opengl.NewStoryActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".opengl.NewStoryActivity"
             android:launchMode="singleInstance"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Search.SearchActivity"
-            android:windowSoftInputMode="adjustNothing"
-            android:launchMode="singleInstance"/>
+            android:launchMode="singleInstance"
+            android:windowSoftInputMode="adjustNothing" />
 
-
-
-        <!--<activity android:name=".Home.AutoFitTextureView" />-->
-        <activity android:name=".Home.Camera"></activity>
+        <!-- <activity android:name=".Home.AutoFitTextureView" /> -->
+        <activity android:name=".Home.Camera" />
+        <activity android:name=".Share.SharePage" />
+        <activity android:name=".Home.PhotoEditor"></activity>
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="ins.com.ins_project.fileProvider"
+            android:grantUriPermissions="true"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
     </application>
 
 </manifest>

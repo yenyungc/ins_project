@@ -55,20 +55,10 @@ public class AutoFitTextureView extends TextureView {
         requestLayout();
     }
 
-    // Chu: use onMeasure to get the size of father container
-
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-
-        // Chu:
-        // the two int: widthMeasureSpec,heightMeasureSpec
-        // they are two binary specifications, not real size values
-
-        // you may check what the int format is
-
-        // use getSize() to get real size values!
 
         int width = MeasureSpec.getSize(widthMeasureSpec);
         int height = MeasureSpec.getSize(heightMeasureSpec);

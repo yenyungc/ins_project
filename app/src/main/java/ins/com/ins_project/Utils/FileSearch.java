@@ -42,7 +42,6 @@ public class FileSearch {
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
-
         return pathArray;
     }
 }

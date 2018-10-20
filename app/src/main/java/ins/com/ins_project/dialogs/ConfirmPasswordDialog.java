@@ -48,7 +48,6 @@ public class ConfirmPasswordDialog extends DialogFragment {
                 } else {
                     Toast.makeText(getActivity(), "you must enter a password", Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
 
@@ -60,8 +59,6 @@ public class ConfirmPasswordDialog extends DialogFragment {
                 getDialog().dismiss();
             }
         });
-
-
         return view;
     }
 
