@@ -113,6 +113,7 @@ public class PhotoEditor extends AppCompatActivity {
                 save();
 
             }});
+        
 
         brightnessButton.setOnClickListener(new View.OnClickListener()
         {
@@ -271,9 +272,15 @@ public class PhotoEditor extends AppCompatActivity {
             c.close();
         }
         if (requestCode == CROP_PHOTO && resultCode == Activity.RESULT_OK && data != null) {
-            copyImg();
-            getImageInfo(bm);
-            ((ImageView)findViewById(R.id.image)).setImageBitmap(bm);
+            Uri selectedImage = data.getData();
+            String[] filePathColumns = {MediaStore.Images.Media.DATA};
+            Cursor c = getContentResolver().query(selectedImage, filePathColumns, null, null, null);
+            c.moveToFirst();
+            int columnIndex = c.getColumnIndex(filePathColumns[0]);
+            String imagePath = c.getString(columnIndex);
+            Log.d(TAG, "image path:"+imagePath);
+            showImage(imagePath);
+            c.close();
         }
 
     }
