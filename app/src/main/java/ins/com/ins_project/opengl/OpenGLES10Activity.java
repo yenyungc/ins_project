@@ -15,7 +15,6 @@ import org.json.JSONException;
 import java.util.ArrayList;
 
 import ins.com.ins_project.R;
-import ins.com.ins_project.models.UserStories;
 
 public class OpenGLES10Activity extends AppCompatActivity {
 
@@ -32,8 +31,6 @@ public class OpenGLES10Activity extends AppCompatActivity {
     private float mScreenHeight;
 
     private int resourceIndex = 0;
-    private ArrayList<UserStories> mUserStories = new ArrayList<>();
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
