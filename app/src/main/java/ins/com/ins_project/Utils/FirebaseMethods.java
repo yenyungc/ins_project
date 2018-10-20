@@ -3,8 +3,12 @@ package ins.com.ins_project.Utils;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -48,6 +52,10 @@ import ins.com.ins_project.models.User;
 import ins.com.ins_project.models.UserAccountSettings;
 import ins.com.ins_project.models.UserSettings;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.firebase.firestore.GeoPoint;
+
 public class FirebaseMethods {
 
     private static final String TAG = "FirebaseMethods";
@@ -60,9 +68,11 @@ public class FirebaseMethods {
     private StorageReference mStorageReference;
     private String userID;
 
+    private FusedLocationProviderClient mFusedLocationClient;
     //vars
     private Context mContext;
     private double mPhotoUploadProgress = 0;
+    private GeoPoint geoPoint;
 
     public FirebaseMethods(Context context) {
         mAuth = FirebaseAuth.getInstance();
@@ -490,13 +500,46 @@ public class FirebaseMethods {
         return sdf.format(new Date());
     }
 
+
+
+
+
+
+// ..
+
+
+
     private void addPhotoToDatabase(String caption, String url) {
         Log.d(TAG, "addPhotoToDatabase: adding photo to database.");
+
+
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(mContext);
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(mContext);
+        try {
+            mFusedLocationClient.getLastLocation().addOnSuccessListener(
+                    new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+                            if (location != null) {
+
+                                geoPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
+
+                            } else {
+
+                            }
+                        }
+                    });
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        }
+
+
 
         String tags = StringManipulation.getTags(caption);
         String newPhotoKey = myRef.child(mContext.getString(R.string.dbname_photos)).push().getKey();
         Photo photo = new Photo();
         photo.setCaption(caption);
+        photo.setGeo_point(geoPoint);
         photo.setDate_created(getTimestamp());
         photo.setImage_path(url);
         photo.setTags(tags);

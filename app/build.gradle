@@ -61,6 +61,12 @@ dependencies {
     //Fire base storage
     implementation 'com.google.firebase:firebase-storage:16.0.3'
     implementation files('libs/aspectjrt-1.7.3.jar')
+
+    //firebase firestore
+    implementation 'com.google.firebase:firebase-firestore:17.0.4'
+    //google play
+    implementation 'com.google.android.gms:play-services-location:16.0.0'
+
 }
 
 

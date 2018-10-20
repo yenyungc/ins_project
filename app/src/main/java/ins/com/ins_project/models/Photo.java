@@ -3,12 +3,16 @@ package ins.com.ins_project.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+
+import com.google.firebase.firestore.GeoPoint;
+
 import java.util.List;
 
 public class Photo implements Parcelable {
 
     private String caption;
     private String date_created;
+    private GeoPoint geo_point;
     private String image_path;
     private String photo_id;
     private String user_id;
@@ -16,12 +20,13 @@ public class Photo implements Parcelable {
     private List<Like> likes;
     private List<Comment> comments;
 
+
     public Photo() {
 
     }
 
     public Photo(String caption, String date_created, String image_path, String photo_id,
-                 String user_id, String tags, List<Like> likes, List<Comment> comments) {
+                 String user_id, String tags, GeoPoint geo_point, List<Like> likes, List<Comment> comments) {
         this.caption = caption;
         this.date_created = date_created;
         this.image_path = image_path;
@@ -29,12 +34,14 @@ public class Photo implements Parcelable {
         this.user_id = user_id;
         this.tags = tags;
         this.likes = likes;
+        this.geo_point = geo_point;
         this.comments = comments;
     }
 
     protected Photo(Parcel in) {
         caption = in.readString();
         date_created = in.readString();
+
         image_path = in.readString();
         photo_id = in.readString();
         user_id = in.readString();
@@ -45,6 +52,7 @@ public class Photo implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(caption);
         dest.writeString(date_created);
+
         dest.writeString(image_path);
         dest.writeString(photo_id);
         dest.writeString(user_id);
@@ -96,6 +104,14 @@ public class Photo implements Parcelable {
         this.date_created = date_created;
     }
 
+    public GeoPoint getGeo_point() {
+        return geo_point;
+    }
+
+    public void setGeo_point(GeoPoint geo_point) {
+        this.geo_point = geo_point;
+    }
+
     public String getImage_path() {
         return image_path;
     }
@@ -141,6 +157,7 @@ public class Photo implements Parcelable {
         return "Photo{" +
                 "caption='" + caption + '\'' +
                 ", date_created='" + date_created + '\'' +
+                ", geo_point='" + geo_point + '\'' +
                 ", image_path='" + image_path + '\'' +
                 ", photo_id='" + photo_id + '\'' +
                 ", user_id='" + user_id + '\'' +
