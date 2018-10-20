@@ -29,7 +29,6 @@ public class ShareActivity extends AppCompatActivity {
 
     private ViewPager mViewPager;
 
-
     private Context mContext = ShareActivity.this;
 
     @Override
@@ -44,7 +43,6 @@ public class ShareActivity extends AppCompatActivity {
         } else {
             verifyPermissions(Permissions.PERMISSIONS);
         }
-
     }
 
     /**
@@ -74,7 +72,6 @@ public class ShareActivity extends AppCompatActivity {
 
         tabLayout.getTabAt(0).setText(getString(R.string.gallery));
         tabLayout.getTabAt(1).setText(getString(R.string.photo));
-
     }
 
     public int getTask() {
@@ -87,7 +84,6 @@ public class ShareActivity extends AppCompatActivity {
         } else if (action.equals("Profile")) {
             result = 1;
         }
-
         return result;
     }
 

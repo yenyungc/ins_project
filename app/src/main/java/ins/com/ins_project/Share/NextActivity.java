@@ -64,7 +64,6 @@ public class NextActivity extends AppCompatActivity {
             }
         });
 
-
         TextView share = (TextView) findViewById(R.id.tvShare);
         share.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,34 +80,10 @@ public class NextActivity extends AppCompatActivity {
                     bitmap = (Bitmap) intent.getParcelableExtra(getString(R.string.selected_bitmap));
                     mFirebaseMethods.uploadNewPhoto(getString(R.string.new_photo), caption, imageCount, null, bitmap);
                 }
-
-
             }
         });
-
         setImage();
     }
-
-    private void someMethod() {
-        /*
-            Step 1)
-            Create a data model for Photos
-
-            Step 2)
-            Add properties to the Photo Objects (caption, date, imageUrl, photo_id, tags, user_id)
-
-            Step 3)
-            Count the number of photos that the user already has.
-
-            Step 4)
-            a) Upload the photo to Firebase Storage
-            b) insert into 'photos' node
-            c) insert into 'user_photos' node
-
-         */
-
-    }
-
 
     /**
      * gets the image url from the incoming intent and displays the chosen image
@@ -146,8 +121,6 @@ public class NextActivity extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
-
-
                 if (user != null) {
                     // User is signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
@@ -155,15 +128,12 @@ public class NextActivity extends AppCompatActivity {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
                 }
-                // ...
             }
         };
-
 
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
                 imageCount = mFirebaseMethods.getImageCount(dataSnapshot);
                 Log.d(TAG, "onDataChange: image count: " + imageCount);
 
@@ -175,7 +145,6 @@ public class NextActivity extends AppCompatActivity {
             }
         });
     }
-
 
     @Override
     public void onStart() {

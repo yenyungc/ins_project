@@ -50,12 +50,10 @@ public class SignOutFragment extends Fragment {
                 Log.d(TAG, "onClick: attempting to sign out.");
                 mProgressBar.setVisibility(View.VISIBLE);
                 tvSigningOut.setVisibility(View.VISIBLE);
-
                 mAuth.signOut();
                 getActivity().finish();
             }
         });
-
         return view;
     }
 
@@ -89,7 +87,6 @@ public class SignOutFragment extends Fragment {
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                 }
-                // ...
             }
         };
     }

@@ -15,7 +15,6 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
@@ -45,7 +44,6 @@ public class HomeActivity extends AppCompatActivity implements MainFeedListAdapt
     private static final String TAG = "HomeActivity";
     private static final int ACTIVITY_NUM = 0;
     private static final int HOME_FRAGMENT = 1;
-    private static final int REQUEST_ADD_NEW_STORY = 8719;
 
     private Context mContext = HomeActivity.this;
 

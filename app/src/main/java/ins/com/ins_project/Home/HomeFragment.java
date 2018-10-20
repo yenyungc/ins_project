@@ -125,6 +125,7 @@ public class HomeFragment extends Fragment implements OnUpdateListener, OnLoadLi
         if (mFollowing != null) {
             mFollowing.clear();
         }
+
         if (mPhotos != null) {
             mPhotos.clear();
             if (adapter != null) {
@@ -132,12 +133,15 @@ public class HomeFragment extends Fragment implements OnUpdateListener, OnLoadLi
                 adapter.notifyDataSetChanged();
             }
         }
+
         if (mUserAccountSettings != null) {
             mUserAccountSettings.clear();
         }
+
         if (mPaginatedPhotos != null) {
             mPaginatedPhotos.clear();
         }
+
         mFollowing = new ArrayList<>();
         mPhotos = new ArrayList<>();
         mPaginatedPhotos = new ArrayList<>();

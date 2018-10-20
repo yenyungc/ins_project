@@ -58,7 +58,6 @@ public class GridImageAdapter extends ArrayAdapter<String> {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-
         String imgURL = getItem(position);
 
         ImageLoader imageLoader = ImageLoader.getInstance();
@@ -92,7 +91,6 @@ public class GridImageAdapter extends ArrayAdapter<String> {
                 }
             }
         });
-
         return convertView;
     }
 }

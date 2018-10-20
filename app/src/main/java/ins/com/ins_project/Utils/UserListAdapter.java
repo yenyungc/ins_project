@@ -30,7 +30,6 @@ public class UserListAdapter extends ArrayAdapter<User> {
 
     private static final String TAG = "UserListAdapter";
 
-
     private LayoutInflater mInflater;
     private List<User> mUsers = null;
     private int layoutResource;
@@ -49,11 +48,9 @@ public class UserListAdapter extends ArrayAdapter<User> {
         CircleImageView profileImage;
     }
 
-
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-
 
         final ViewHolder holder;
 
@@ -69,7 +66,6 @@ public class UserListAdapter extends ArrayAdapter<User> {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-
 
         holder.username.setText(getItem(position).getUsername());
         holder.email.setText(getItem(position).getEmail());
@@ -97,7 +93,6 @@ public class UserListAdapter extends ArrayAdapter<User> {
 
             }
         });
-
         return convertView;
     }
 }

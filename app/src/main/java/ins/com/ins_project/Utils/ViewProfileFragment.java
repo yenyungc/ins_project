@@ -48,7 +48,6 @@ public class ViewProfileFragment extends Fragment {
 
     private static final String TAG = "ProfileFragment";
 
-
     public interface OnGridImageSelectedListener {
         void onGridImageSelected(Photo photo, int activityNumber);
     }
@@ -64,7 +63,6 @@ public class ViewProfileFragment extends Fragment {
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference myRef;
 
-
     //widgets
     private TextView mPosts, mFollowers, mFollowing, mDisplayName, mUsername, mWebsite, mDescription,
             mFollow, mUnfollow;
@@ -76,13 +74,11 @@ public class ViewProfileFragment extends Fragment {
     private Context mContext;
     private TextView editProfile;
 
-
     //vars
     private User mUser;
     private int mFollowersCount = 0;
     private int mFollowingCount = 0;
     private int mPostsCount = 0;
-
 
     @Nullable
     @Override
@@ -106,7 +102,6 @@ public class ViewProfileFragment extends Fragment {
         mContext = getActivity();
         Log.d(TAG, "onCreateView: stared.");
 
-
         try {
             mUser = getUserFromBundle();
             init();
@@ -123,7 +118,6 @@ public class ViewProfileFragment extends Fragment {
         getFollowingCount();
         getFollowersCount();
         getPostsCount();
-
 
         mFollow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,7 +141,6 @@ public class ViewProfileFragment extends Fragment {
             }
         });
 
-
         mUnfollow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -168,9 +161,6 @@ public class ViewProfileFragment extends Fragment {
             }
         });
 
-        //setupGridView();
-
-
         editProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -181,13 +171,10 @@ public class ViewProfileFragment extends Fragment {
                 getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             }
         });
-
         return view;
     }
 
-
     private void init() {
-
         //set the profile widgets
         DatabaseReference reference1 = FirebaseDatabase.getInstance().getReference();
         Query query1 = reference1.child(getString(R.string.dbname_user_account_settings))
@@ -211,9 +198,7 @@ public class ViewProfileFragment extends Fragment {
             }
         });
 
-
         //get the users profile photos
-
         DatabaseReference reference2 = FirebaseDatabase.getInstance().getReference();
         Query query2 = reference2
                 .child(getString(R.string.dbname_user_photos))
@@ -221,7 +206,6 @@ public class ViewProfileFragment extends Fragment {
         query2.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
                 ArrayList<Photo> photos = new ArrayList<Photo>();
                 for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
 
@@ -375,13 +359,6 @@ public class ViewProfileFragment extends Fragment {
         editProfile.setVisibility(View.GONE);
     }
 
-    private void setCurrentUsersProfile() {
-        Log.d(TAG, "setFollowing: updating UI for showing this user their own profile");
-        mFollow.setVisibility(View.GONE);
-        mUnfollow.setVisibility(View.GONE);
-        editProfile.setVisibility(View.VISIBLE);
-    }
-
     private void setupImageGrid(final ArrayList<Photo> photos) {
         //setup our image grid
         int gridWidth = getResources().getDisplayMetrics().widthPixels;
@@ -425,15 +402,8 @@ public class ViewProfileFragment extends Fragment {
         super.onAttach(context);
     }
 
-
     private void setProfileWidgets(UserSettings userSettings) {
-        //Log.d(TAG, "setProfileWidgets: setting widgets with data retrieving from firebase database: " + userSettings.toString());
-        //Log.d(TAG, "setProfileWidgets: setting widgets with data retrieving from firebase database: " + userSettings.getSettings().getUsername());
-
-
-        //User user = userSettings.getUser();
         UserAccountSettings settings = userSettings.getSettings();
-
         UniversalImageLoader.setImage(settings.getProfile_photo(), mProfilePhoto, null, "");
 
         mDisplayName.setText(settings.getDisplay_name());
@@ -455,7 +425,6 @@ public class ViewProfileFragment extends Fragment {
         });
 
     }
-
 
     /**
      * BottomNavigationView setup
@@ -495,13 +464,9 @@ public class ViewProfileFragment extends Fragment {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
                 }
-                // ...
             }
         };
-
-
     }
-
 
     @Override
     public void onStart() {

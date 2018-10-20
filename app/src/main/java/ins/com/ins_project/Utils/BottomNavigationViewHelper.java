@@ -66,8 +66,6 @@ public class BottomNavigationViewHelper {
                         callingActivity.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                         break;
                 }
-
-
                 return false;
             }
         });

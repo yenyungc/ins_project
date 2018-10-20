@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -104,7 +103,6 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
                             singleSnapshot.getValue(UserAccountSettings.class).getProfile_photo(),
                             holder.profileImage);
                 }
-
             }
 
             @Override
