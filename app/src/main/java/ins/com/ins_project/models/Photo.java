@@ -2,8 +2,6 @@ package ins.com.ins_project.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
-
 import com.google.firebase.firestore.GeoPoint;
 
 import java.util.List;
@@ -19,7 +17,6 @@ public class Photo implements Parcelable {
     private String tags;
     private List<Like> likes;
     private List<Comment> comments;
-
 
     public Photo() {
 
@@ -52,7 +49,6 @@ public class Photo implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(caption);
         dest.writeString(date_created);
-
         dest.writeString(image_path);
         dest.writeString(photo_id);
         dest.writeString(user_id);
