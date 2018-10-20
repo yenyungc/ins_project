@@ -124,29 +124,29 @@ public class HomeActivity extends AppCompatActivity implements MainFeedListAdapt
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Log.d(TAG, "onActivityResult: incoming result.");
-        // Received recording or error from MaterialCamera
-
-        if (requestCode == REQUEST_ADD_NEW_STORY) {
-            Log.d(TAG, "onActivityResult: incoming new story.");
-            if (resultCode == RESULT_ADD_NEW_STORY) {
-                Log.d(TAG, "onActivityResult: got the new story.");
-                Log.d(TAG, "onActivityResult: data type: " + data.getType());
-
-                final HomeFragment fragment = (HomeFragment) getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewpager_container + ":" + 1);
-                if (fragment != null) {
-
-                    FirebaseMethods firebaseMethods = new FirebaseMethods(this);
-                    firebaseMethods.uploadNewStory(data, fragment);
-                } else {
-                    Log.d(TAG, "onActivityResult: could not communicate with home fragment.");
-                }
-            }
-        }
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        Log.d(TAG, "onActivityResult: incoming result.");
+//        // Received recording or error from MaterialCamera
+//
+//        if (requestCode == REQUEST_ADD_NEW_STORY) {
+//            Log.d(TAG, "onActivityResult: incoming new story.");
+//            if (resultCode == RESULT_ADD_NEW_STORY) {
+//                Log.d(TAG, "onActivityResult: got the new story.");
+//                Log.d(TAG, "onActivityResult: data type: " + data.getType());
+//
+//                final HomeFragment fragment = (HomeFragment) getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewpager_container + ":" + 1);
+//                if (fragment != null) {
+//
+//                    FirebaseMethods firebaseMethods = new FirebaseMethods(this);
+//                    firebaseMethods.uploadNewStory(data, fragment);
+//                } else {
+//                    Log.d(TAG, "onActivityResult: could not communicate with home fragment.");
+//                }
+//            }
+//        }
+//    }
 
 
     private void initImageLoader() {

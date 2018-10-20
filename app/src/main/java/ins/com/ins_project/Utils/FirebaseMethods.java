@@ -233,149 +233,149 @@ public class FirebaseMethods {
 
     }
 
-    public void uploadNewStory(Intent intent, final HomeFragment fragment) {
-        Log.d(TAG, "uploadNewStory: attempting to upload new story to storage.");
-
-        final String uri = intent.getDataString();
-        final boolean deleteCompressedVideo = intent.getBooleanExtra(MaterialCamera.DELETE_UPLOAD_FILE_EXTRA, false);
-         /*
-            upload a new photo to firebase storage
-         */
-        if (!isMediaVideo(uri)) {
-            Log.d(TAG, "uploadNewStory: uploading new story (IMAGE) to firebase storage.");
-            fragment.mStoriesAdapter.startProgressBar();
-            FilePaths filePaths = new FilePaths();
-
-            //specify where the photo will be stored
-            final StorageReference storageReference = mStorageReference
-                    .child(filePaths.FIREBASE_STORY_STORAGE + "/" + userID + "/" + uri.substring(uri.indexOf("Stories/") + 8, uri.indexOf(".")));
-
-            BackgroundGetBytesFromBitmap getBytes = new BackgroundGetBytesFromBitmap();
-            byte[] bytes = getBytes.doInBackground(uri);
-
-            UploadTask uploadTask = null;
-            uploadTask = storageReference.putBytes(bytes);
-
-            Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-                @Override
-                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                    if (!task.isSuccessful()) {
-                        throw task.getException();
-                    }
-
-                    // Continue with the task to get the download URL
-                    return storageReference.getDownloadUrl();
-                }
-            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                @Override
-                public void onComplete(@NonNull Task<Uri> task) {
-                    if (task.isSuccessful()) {
-                        Uri downloadUri = task.getResult();
-                        String firebaseUrl = downloadUri.toString();
-                        addNewStoryImageToDatabase(firebaseUrl);
-                    } else {
-                        // Handle failures
-                        // ...
-                    }
-                }
-            });
-
-            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-                    fragment.mStoriesAdapter.stopProgressBar();
-                    Toast.makeText(mContext, "Upload Success", Toast.LENGTH_SHORT).show();
-
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-                    fragment.mStoriesAdapter.stopProgressBar();
-                    Toast.makeText(mContext, "Upload Failed", Toast.LENGTH_SHORT).show();
-                }
-            });
-
-        } else {
-            Log.d(TAG, "uploadNewStory: uploading new story (VIDEO) to firebase storage.");
-            fragment.mStoriesAdapter.startProgressBar();
-            FilePaths filePaths = new FilePaths();
-
-            //specify where the photo will be stored
-            final StorageReference storageReference = mStorageReference
-                    .child(filePaths.FIREBASE_STORY_STORAGE + "/" + userID + "/" + uri.substring(uri.indexOf("Stories/") + 8, uri.indexOf(".")));
-
-            FileInputStream fis = null;
-            File file = new File(uri);
-            try {
-                fis = new FileInputStream(file);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-            byte[] bytes = new byte[0];
-            try {
-                bytes = readBytes(fis);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            Log.d(TAG, "uploadNewStory: video upload bytes: " + bytes.length);
-            final byte[] uploadBytes = bytes;
-
-            UploadTask uploadTask = null;
-            uploadTask = storageReference.putBytes(bytes);
-
-            Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-                @Override
-                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                    if (!task.isSuccessful()) {
-                        throw task.getException();
-                    }
-
-                    // Continue with the task to get the download URL
-                    return storageReference.getDownloadUrl();
-                }
-            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                @Override
-                public void onComplete(@NonNull Task<Uri> task) {
-                    if (task.isSuccessful()) {
-                        Uri downloadUri = task.getResult();
-                        String firebaseUrl = downloadUri.toString();
-                        addNewStoryVideoToDatabase(firebaseUrl, uploadBytes);
-                    } else {
-                        // Handle failures
-                        // ...
-                    }
-                }
-            });
-
-            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//                    Task<Uri> result = storageReference.getDownloadUrl();
-//                    Uri downloadUri = result.getResult();
-//                    String firebaseUrl = downloadUri.toString();
-
-                    fragment.mStoriesAdapter.stopProgressBar();
-                    Toast.makeText(mContext, "Upload Success", Toast.LENGTH_SHORT).show();
-                    //ddNewStoryVideoToDatabase(firebaseUrl, uploadBytes);
-
-                    if (deleteCompressedVideo) {
-                        deleteOutputFile(uri);
-                    }
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-                    fragment.mStoriesAdapter.stopProgressBar();
-                    Toast.makeText(mContext, "Upload Failed", Toast.LENGTH_SHORT).show();
-                    if (deleteCompressedVideo) {
-                        deleteOutputFile(uri);
-                    }
-                }
-            });
-        }
-    }
+//    public void uploadNewStory(Intent intent, final HomeFragment fragment) {
+//        Log.d(TAG, "uploadNewStory: attempting to upload new story to storage.");
+//
+//        final String uri = intent.getDataString();
+//        final boolean deleteCompressedVideo = intent.getBooleanExtra(MaterialCamera.DELETE_UPLOAD_FILE_EXTRA, false);
+//         /*
+//            upload a new photo to firebase storage
+//         */
+//        if (!isMediaVideo(uri)) {
+//            Log.d(TAG, "uploadNewStory: uploading new story (IMAGE) to firebase storage.");
+//            fragment.mStoriesAdapter.startProgressBar();
+//            FilePaths filePaths = new FilePaths();
+//
+//            //specify where the photo will be stored
+//            final StorageReference storageReference = mStorageReference
+//                    .child(filePaths.FIREBASE_STORY_STORAGE + "/" + userID + "/" + uri.substring(uri.indexOf("Stories/") + 8, uri.indexOf(".")));
+//
+//            BackgroundGetBytesFromBitmap getBytes = new BackgroundGetBytesFromBitmap();
+//            byte[] bytes = getBytes.doInBackground(uri);
+//
+//            UploadTask uploadTask = null;
+//            uploadTask = storageReference.putBytes(bytes);
+//
+//            Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+//                @Override
+//                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+//                    if (!task.isSuccessful()) {
+//                        throw task.getException();
+//                    }
+//
+//                    // Continue with the task to get the download URL
+//                    return storageReference.getDownloadUrl();
+//                }
+//            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+//                @Override
+//                public void onComplete(@NonNull Task<Uri> task) {
+//                    if (task.isSuccessful()) {
+//                        Uri downloadUri = task.getResult();
+//                        String firebaseUrl = downloadUri.toString();
+//                        addNewStoryImageToDatabase(firebaseUrl);
+//                    } else {
+//                        // Handle failures
+//                        // ...
+//                    }
+//                }
+//            });
+//
+//            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//                @Override
+//                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//
+//                    fragment.mStoriesAdapter.stopProgressBar();
+//                    Toast.makeText(mContext, "Upload Success", Toast.LENGTH_SHORT).show();
+//
+//                }
+//            }).addOnFailureListener(new OnFailureListener() {
+//                @Override
+//                public void onFailure(@NonNull Exception exception) {
+//                    fragment.mStoriesAdapter.stopProgressBar();
+//                    Toast.makeText(mContext, "Upload Failed", Toast.LENGTH_SHORT).show();
+//                }
+//            });
+//
+//        } else {
+//            Log.d(TAG, "uploadNewStory: uploading new story (VIDEO) to firebase storage.");
+//            fragment.mStoriesAdapter.startProgressBar();
+//            FilePaths filePaths = new FilePaths();
+//
+//            //specify where the photo will be stored
+//            final StorageReference storageReference = mStorageReference
+//                    .child(filePaths.FIREBASE_STORY_STORAGE + "/" + userID + "/" + uri.substring(uri.indexOf("Stories/") + 8, uri.indexOf(".")));
+//
+//            FileInputStream fis = null;
+//            File file = new File(uri);
+//            try {
+//                fis = new FileInputStream(file);
+//            } catch (FileNotFoundException e) {
+//                e.printStackTrace();
+//            }
+//            byte[] bytes = new byte[0];
+//            try {
+//                bytes = readBytes(fis);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//
+//            Log.d(TAG, "uploadNewStory: video upload bytes: " + bytes.length);
+//            final byte[] uploadBytes = bytes;
+//
+//            UploadTask uploadTask = null;
+//            uploadTask = storageReference.putBytes(bytes);
+//
+//            Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+//                @Override
+//                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+//                    if (!task.isSuccessful()) {
+//                        throw task.getException();
+//                    }
+//
+//                    // Continue with the task to get the download URL
+//                    return storageReference.getDownloadUrl();
+//                }
+//            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+//                @Override
+//                public void onComplete(@NonNull Task<Uri> task) {
+//                    if (task.isSuccessful()) {
+//                        Uri downloadUri = task.getResult();
+//                        String firebaseUrl = downloadUri.toString();
+//                        addNewStoryVideoToDatabase(firebaseUrl, uploadBytes);
+//                    } else {
+//                        // Handle failures
+//                        // ...
+//                    }
+//                }
+//            });
+//
+//            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//                @Override
+//                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+////                    Task<Uri> result = storageReference.getDownloadUrl();
+////                    Uri downloadUri = result.getResult();
+////                    String firebaseUrl = downloadUri.toString();
+//
+//                    fragment.mStoriesAdapter.stopProgressBar();
+//                    Toast.makeText(mContext, "Upload Success", Toast.LENGTH_SHORT).show();
+//                    //ddNewStoryVideoToDatabase(firebaseUrl, uploadBytes);
+//
+//                    if (deleteCompressedVideo) {
+//                        deleteOutputFile(uri);
+//                    }
+//                }
+//            }).addOnFailureListener(new OnFailureListener() {
+//                @Override
+//                public void onFailure(@NonNull Exception exception) {
+//                    fragment.mStoriesAdapter.stopProgressBar();
+//                    Toast.makeText(mContext, "Upload Failed", Toast.LENGTH_SHORT).show();
+//                    if (deleteCompressedVideo) {
+//                        deleteOutputFile(uri);
+//                    }
+//                }
+//            });
+//        }
+//    }
 
     private class BackgroundGetBytesFromBitmap extends AsyncTask<String, Integer, byte[]> {
 
