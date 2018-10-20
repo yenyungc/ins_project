@@ -642,9 +642,6 @@ public class FirebaseMethods {
                             Toast.makeText(mContext, R.string.auth_failed,
                                     Toast.LENGTH_SHORT).show();
                         } else if (task.isSuccessful()) {
-                            //send verificaton email
-                            sendVerificationEmail();
-
                             userID = mAuth.getCurrentUser().getUid();
                             Log.d(TAG, "onComplete: Authstate changed: " + userID);
                         }
@@ -653,23 +650,7 @@ public class FirebaseMethods {
                 });
     }
 
-    public void sendVerificationEmail() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        if (user != null) {
-            user.sendEmailVerification()
-                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-
-                            } else {
-                                Toast.makeText(mContext, "couldn't send verification email.", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-        }
-    }
 
     /**
      * Add information to the users nodes

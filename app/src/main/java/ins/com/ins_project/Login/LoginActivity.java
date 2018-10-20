@@ -108,28 +108,14 @@ public class LoginActivity extends AppCompatActivity {
                                          mPleaseWait.setVisibility(View.GONE);
                                      }
                                      else{
-                                         try{
-                                             if(CHECK_IF_VERIFIED){
-                                                 if(user.isEmailVerified()){
-                                                     Log.d(TAG, "onComplete: success. email is verified.");
-                                                     Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                                                     startActivity(intent);
-                                                 }else{
-                                                     Toast.makeText(mContext, "Email is not verified \n check your email inbox.", Toast.LENGTH_SHORT).show();
-                                                     mProgressBar.setVisibility(View.GONE);
-                                                     mPleaseWait.setVisibility(View.GONE);
-                                                     mAuth.signOut();
-                                                 }
-                                             }
-                                             else{
-                                                 Log.d(TAG, "onComplete: success. email is verified.");
-                                                 Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                                                 startActivity(intent);
-                                             }
+                                         Log.d(TAG, "signInWithEmail: successful login");
+                                         Toast.makeText(LoginActivity.this, getString(R.string.auth_success),
+                                                 Toast.LENGTH_SHORT).show();
+                                         mProgressBar.setVisibility(View.GONE);
+                                         mPleaseWait.setVisibility(View.GONE);
 
-                                         }catch (NullPointerException e){
-                                             Log.e(TAG, "onComplete: NullPointerException: " + e.getMessage() );
-                                         }
+                                         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                                         startActivity(intent);
                                      }
                                      // ...
                                  }
