@@ -105,6 +105,18 @@ public class PhotoEditor extends AppCompatActivity {
             return;
         }
         Log.d(TAG, "initial");
+        //Open image
+        Bundle bundle = this.getIntent().getExtras();
+        try {
+            // Use the photo taken by the camera
+            String tempPath = bundle.getString("photoTaken");
+            showImage(tempPath);
+        } catch (NullPointerException e) {
+            // Open a photo from gallery
+            openGallery();
+
+        }
+
         saveButton = (Button) findViewById(R.id.save);
         brightnessButton = (Button) findViewById(R.id.brightnessButton);
         cropButton = (Button) findViewById(R.id.crop);
@@ -157,14 +169,6 @@ public class PhotoEditor extends AppCompatActivity {
                 confirm();
             }});
 
-        //Open image
-        if (PHOTOSOURCE == 1) {
-            // Open a photo from gallery
-            openGallery();
-        } else {
-            // Get photo from camera
-            //TODO
-        }
 
         //The filters provided
         initFilers();
@@ -304,6 +308,7 @@ public class PhotoEditor extends AppCompatActivity {
     }
 
     public static void setSource(int source) {
+        Log.d("Photo Editor", "set source"+source);
 
         PHOTOSOURCE = source;
     }

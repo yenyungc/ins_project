@@ -3,6 +3,7 @@ package ins.com.ins_project.Home;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.ImageFormat;
@@ -1027,26 +1028,32 @@ public class Camera extends AppCompatActivity implements ActivityCompat.OnReques
      * finished.
      */
     private void unlockFocus() {
-//        Log.d(TAG, "line 968");
-        try {
-            // Reset the auto-focus trigger
-            mPreviewRequestBuilder.set(CaptureRequest.CONTROL_AF_TRIGGER,
-                    CameraMetadata.CONTROL_AF_TRIGGER_CANCEL);
-            if (FLASHMODE == 1) {
-                setAutoFlash(mPreviewRequestBuilder);
-            } else {
-                setOffFlash(mPreviewRequestBuilder);
-            }
+        Intent intent = new Intent(this, PhotoEditor.class);
+        intent.putExtra("photoTaken", mFile.getPath());
+        this.startActivity(intent);
+        this.finish();
 
-            mCaptureSession.capture(mPreviewRequestBuilder.build(), mCaptureCallback,
-                    mBackgroundHandler);
-            // After this, the camera will go back to the normal state of preview.
-            mState = STATE_PREVIEW;
-            mCaptureSession.setRepeatingRequest(mPreviewRequest, mCaptureCallback,
-                    mBackgroundHandler);
-        } catch (CameraAccessException e) {
-            e.printStackTrace();
-        }
+
+//        Log.d(TAG, "line 968");
+//        try {
+//            // Reset the auto-focus trigger
+//            mPreviewRequestBuilder.set(CaptureRequest.CONTROL_AF_TRIGGER,
+//                    CameraMetadata.CONTROL_AF_TRIGGER_CANCEL);
+//            if (FLASHMODE == 1) {
+//                setAutoFlash(mPreviewRequestBuilder);
+//            } else {
+//                setOffFlash(mPreviewRequestBuilder);
+//            }
+//
+//            mCaptureSession.capture(mPreviewRequestBuilder.build(), mCaptureCallback,
+//                    mBackgroundHandler);
+//            // After this, the camera will go back to the normal state of preview.
+//            mState = STATE_PREVIEW;
+//            mCaptureSession.setRepeatingRequest(mPreviewRequest, mCaptureCallback,
+//                    mBackgroundHandler);
+//        } catch (CameraAccessException e) {
+//            e.printStackTrace();
+//        }
     }
 
 
