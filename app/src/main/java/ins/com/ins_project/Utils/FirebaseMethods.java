@@ -486,7 +486,7 @@ public class FirebaseMethods {
 
     private String getTimestamp() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.CANADA);
-        sdf.setTimeZone(TimeZone.getTimeZone("Canada/Pacific"));
+        sdf.setTimeZone(TimeZone.getTimeZone("Australia/Melbourne"));
         return sdf.format(new Date());
     }
 

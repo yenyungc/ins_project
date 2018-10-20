@@ -50,9 +50,8 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
     }
 
     private static class ViewHolder {
-        TextView comment, username, timestamp, reply, likes;
+        TextView comment, username, timestamp;
         CircleImageView profileImage;
-        ImageView like;
     }
 
     @NonNull
@@ -68,9 +67,6 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
             holder.comment = (TextView) convertView.findViewById(R.id.comment);
             holder.username = (TextView) convertView.findViewById(R.id.comment_username);
             holder.timestamp = (TextView) convertView.findViewById(R.id.comment_time_posted);
-            holder.reply = (TextView) convertView.findViewById(R.id.comment_reply);
-            holder.like = (ImageView) convertView.findViewById(R.id.comment_like);
-            holder.likes = (TextView) convertView.findViewById(R.id.comment_likes);
             holder.profileImage = (CircleImageView) convertView.findViewById(R.id.comment_profile_image);
 
             convertView.setTag(holder);
@@ -116,18 +112,6 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
                 Log.d(TAG, "onCancelled: query cancelled.");
             }
         });
-
-        try {
-            if (position == 0) {
-                holder.like.setVisibility(View.GONE);
-                holder.likes.setVisibility(View.GONE);
-                holder.reply.setVisibility(View.GONE);
-            }
-        } catch (NullPointerException e) {
-            Log.e(TAG, "getView: NullPointerException: " + e.getMessage());
-        }
-
-
         return convertView;
     }
 
@@ -142,7 +126,7 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
         String difference = "";
         Calendar c = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.CANADA);
-        sdf.setTimeZone(TimeZone.getTimeZone("Canada/Pacific"));//google 'android list of timezones'
+        sdf.setTimeZone(TimeZone.getTimeZone("Australia/Melbourne"));//google 'android list of timezones'
         Date today = c.getTime();
         sdf.format(today);
         Date timestamp;
