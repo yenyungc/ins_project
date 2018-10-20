@@ -37,6 +37,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -44,7 +45,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import ins.com.ins_project.BuildConfig;
+import ins.com.ins_project.Profile.AccountSettingsActivity;
 import ins.com.ins_project.R;
+import ins.com.ins_project.Share.NextActivity;
+import ins.com.ins_project.Share.ShareActivity;
 
 public class PhotoEditor extends AppCompatActivity {
 
@@ -82,6 +86,13 @@ public class PhotoEditor extends AppCompatActivity {
      */
     private static int PHOTOSOURCE = 1;
 
+    /**
+     * The caller of this class
+     * 1 means sharing photo
+     * 2 means updating profile
+     */
+    private static int CALLER = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,11 +120,11 @@ public class PhotoEditor extends AppCompatActivity {
         {
             @Override
             public void onClick(View v) {
+                Log.d(TAG, "onClick: navigating to the final share screen.");
                 // save
                 save();
 
             }});
-        
 
         brightnessButton.setOnClickListener(new View.OnClickListener()
         {
@@ -255,6 +266,7 @@ public class PhotoEditor extends AppCompatActivity {
         startActivityForResult(intent, PHOTOSOURCE);
     }
 
+    //For grab gallery photo or result from crop procedure
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d(TAG, "received result");
@@ -272,15 +284,12 @@ public class PhotoEditor extends AppCompatActivity {
             c.close();
         }
         if (requestCode == CROP_PHOTO && resultCode == Activity.RESULT_OK && data != null) {
-            Uri selectedImage = data.getData();
-            String[] filePathColumns = {MediaStore.Images.Media.DATA};
-            Cursor c = getContentResolver().query(selectedImage, filePathColumns, null, null, null);
-            c.moveToFirst();
-            int columnIndex = c.getColumnIndex(filePathColumns[0]);
-            String imagePath = c.getString(columnIndex);
-            Log.d(TAG, "image path:"+imagePath);
-            showImage(imagePath);
-            c.close();
+            Bundle extras = data.getExtras();
+            if (extras != null) {
+                bm = extras.getParcelable("data");
+                copyImg();
+                imageToShow.setImageBitmap(bm);
+            }
         }
 
     }
@@ -313,8 +322,8 @@ public class PhotoEditor extends AppCompatActivity {
             appDir.mkdir();
         }
         String fileName = System.currentTimeMillis() + ".jpg";
-        String path = "ins_project_photos" + fileName;
         File file = new File(appDir, fileName);
+        String path = file.getAbsolutePath();
         try {
             FileOutputStream fos = new FileOutputStream(file);
             bm.compress(Bitmap.CompressFormat.JPEG, 100, fos);
@@ -337,6 +346,33 @@ public class PhotoEditor extends AppCompatActivity {
         // Broadcast the update
         getApplicationContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
                 Uri.parse("file://" + path)));
+
+        // Upload to database
+        if (isUpload()) {
+            Intent intent = new Intent(this, NextActivity.class);
+            intent.putExtra(getString(R.string.selected_image), path);
+            startActivity(intent);
+            this.finish();
+        } else {
+            Intent intent = new Intent(this, AccountSettingsActivity.class);
+            intent.putExtra(getString(R.string.selected_image), path);
+            intent.putExtra(getString(R.string.return_to_fragment), getString(R.string.edit_profile_fragment));
+            startActivity(intent);
+            this.finish();
+        }
+    }
+
+    public static void setCaller(int caller) {
+
+        CALLER = caller;
+    }
+
+    private boolean isUpload() {
+        if (CALLER == 1) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     //save a temporary file and then apply crop method on

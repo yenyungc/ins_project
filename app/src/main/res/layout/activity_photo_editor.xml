@@ -51,7 +51,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:text="Save" />
+        android:text="Save and Update" />
 
     <Button
         android:id="@+id/confirm"

@@ -42,5 +42,8 @@ public class SharePage extends AppCompatActivity {
                 Intent intent = new Intent(SharePage.this, PhotoEditor.class);
                 startActivity(intent);
             }});
+
+        //Action: to upload photo
+        PhotoEditor.setCaller(1);
     }
 }
