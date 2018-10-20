@@ -114,6 +114,7 @@ public class GalleryFragment extends Fragment {
             directories = FileSearch.getDirectoryPaths(filePaths.PICTURES);
         }
         directories.add(filePaths.CAMERA);
+        //directories.add(filePaths.PICTURES);
 
         ArrayList<String> directoryNames = new ArrayList<>();
         for (int i = 0; i < directories.size(); i++) {
@@ -162,7 +163,7 @@ public class GalleryFragment extends Fragment {
         try {
             setImage(imgURLs.get(0), galleryImage, mAppend);
             mSelectedImage = imgURLs.get(0);
-        } catch (ArrayIndexOutOfBoundsException e) {
+        } catch (Exception e) {
             Log.e(TAG, "setupGridView: ArrayIndexOutOfBoundsException: " + e.getMessage());
         }
 
