@@ -3,10 +3,12 @@ package ins.com.ins_project;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -62,6 +64,7 @@ public class PhotoEditor extends AppCompatActivity {
     private ArrayList<String> filter_list;
     private int FILTER_USED = 0;
     private static final int IMAGE = 1;
+    private static final int CROP_PHOTO = 2;
     private static final int PERMISSION_REQUEST_STORAGE = 1;
 
     // The bitmap of the image to process
@@ -124,10 +127,10 @@ public class PhotoEditor extends AppCompatActivity {
         {
             @Override
             public void onClick(View v) {
-                // change brightness and contrast
+                // save a temp file and apply crop on it
 
                 Log.d(TAG, "crop photo");
-                crop();
+                saveTemp(bm);
             }});
 
         confirmButton.setOnClickListener(new View.OnClickListener()
@@ -265,6 +268,12 @@ public class PhotoEditor extends AppCompatActivity {
             showImage(imagePath);
             c.close();
         }
+        if (requestCode == CROP_PHOTO && resultCode == Activity.RESULT_OK && data != null) {
+            copyImg();
+            getImageInfo(bm);
+            ((ImageView)findViewById(R.id.image)).setImageBitmap(bm);
+        }
+
     }
 
     //load image
@@ -294,7 +303,7 @@ public class PhotoEditor extends AppCompatActivity {
             appDir.mkdir();
         }
         String fileName = System.currentTimeMillis() + ".jpg";
-        String path = "ins_project/photos" + fileName;
+        String path = "ins_project_photos" + fileName;
         File file = new File(appDir, fileName);
         try {
             FileOutputStream fos = new FileOutputStream(file);
@@ -318,6 +327,29 @@ public class PhotoEditor extends AppCompatActivity {
         // Broadcast the update
         getApplicationContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
                 Uri.parse("file://" + path)));
+    }
+
+    //save a temporary file and then apply crop method on
+    private void saveTemp(Bitmap b) {
+        Log.d(TAG, "saving a temp image for cropping");
+        File appDir = new File(Environment.getExternalStorageDirectory(),"ins_project_photos");
+        if (!appDir.exists()) {
+            appDir.mkdir();
+        }
+        String fileName = System.currentTimeMillis() + ".jpg";
+        File file = new File(appDir, fileName);
+        try {
+            FileOutputStream fos = new FileOutputStream(file);
+            bm.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            fos.flush();
+            fos.close();
+            Log.d(TAG, "temp image saved");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        crop(file);
     }
 
     // press the button
@@ -363,8 +395,22 @@ public class PhotoEditor extends AppCompatActivity {
         imageToShow.setImageBitmap(bmp);
     }
 
-    private void crop() {
+    private void crop(File file) {
+        Intent intent = new Intent("com.android.camera.action.CROP");
 
+        intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        Uri contentUri = FileProvider.getUriForFile(this,
+                BuildConfig.APPLICATION_ID + ".fileProvider", file);
+        intent.setDataAndType(contentUri, "image/*");
+
+        intent.putExtra("crop", "true");
+        intent.putExtra("aspectX", 0.1);
+        intent.putExtra("aspectY", 0.1);
+        intent.putExtra("outputX", 150);
+        intent.putExtra("outputY", 150);
+        intent.putExtra("return-data", true);
+        intent.putExtra("scale", true);
+        startActivityForResult(intent, CROP_PHOTO);
     }
 
 
@@ -569,3 +615,6 @@ public class PhotoEditor extends AppCompatActivity {
 
 //滤镜
 //https://blog.csdn.net/aqi00/article/details/51331531
+
+//剪裁
+//https://blog.csdn.net/wuliang756071448/article/details/71080968

@@ -30,8 +30,17 @@
         </activity>
         <activity android:name=".AutoFitTextureView" />
         <activity android:name=".Camera" />
-        <activity android:name=".GridSurfaceView" />
         <activity android:name=".PhotoEditor"></activity>
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="ins.com.ins_project.fileProvider"
+            android:grantUriPermissions="true"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
     </application>
 
 </manifest>
