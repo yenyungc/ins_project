@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
 import android.graphics.Point;
@@ -21,6 +23,7 @@ import android.hardware.camera2.CaptureRequest;
 import android.hardware.camera2.CaptureResult;
 import android.hardware.camera2.TotalCaptureResult;
 import android.hardware.camera2.params.StreamConfigurationMap;
+import android.media.ExifInterface;
 import android.media.Image;
 import android.media.ImageReader;
 import android.os.Handler;
@@ -44,6 +47,7 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -1028,32 +1032,29 @@ public class Camera extends AppCompatActivity implements ActivityCompat.OnReques
      * finished.
      */
     private void unlockFocus() {
-        Intent intent = new Intent(this, PhotoEditor.class);
-        intent.putExtra("photoTaken", mFile.getPath());
-        this.startActivity(intent);
-        this.finish();
 
+        Log.d(TAG, "line 968");
+        try {
+            // Reset the auto-focus trigger
+            mPreviewRequestBuilder.set(CaptureRequest.CONTROL_AF_TRIGGER,
+                    CameraMetadata.CONTROL_AF_TRIGGER_CANCEL);
+            if (FLASHMODE == 1) {
+                setAutoFlash(mPreviewRequestBuilder);
+            } else {
+                setOffFlash(mPreviewRequestBuilder);
+            }
 
-//        Log.d(TAG, "line 968");
-//        try {
-//            // Reset the auto-focus trigger
-//            mPreviewRequestBuilder.set(CaptureRequest.CONTROL_AF_TRIGGER,
-//                    CameraMetadata.CONTROL_AF_TRIGGER_CANCEL);
-//            if (FLASHMODE == 1) {
-//                setAutoFlash(mPreviewRequestBuilder);
-//            } else {
-//                setOffFlash(mPreviewRequestBuilder);
-//            }
-//
-//            mCaptureSession.capture(mPreviewRequestBuilder.build(), mCaptureCallback,
-//                    mBackgroundHandler);
-//            // After this, the camera will go back to the normal state of preview.
-//            mState = STATE_PREVIEW;
-//            mCaptureSession.setRepeatingRequest(mPreviewRequest, mCaptureCallback,
-//                    mBackgroundHandler);
-//        } catch (CameraAccessException e) {
-//            e.printStackTrace();
-//        }
+            mCaptureSession.capture(mPreviewRequestBuilder.build(), mCaptureCallback,
+                    mBackgroundHandler);
+            // After this, the camera will go back to the normal state of preview.
+            mState = STATE_PREVIEW;
+            mCaptureSession.setRepeatingRequest(mPreviewRequest, mCaptureCallback,
+                    mBackgroundHandler);
+
+            openInPE();
+        } catch (CameraAccessException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -1144,6 +1145,82 @@ public class Camera extends AppCompatActivity implements ActivityCompat.OnReques
             }
         }
 
+    }
+
+
+    //Then save it, finally open it in photo editor
+    private void openInPE() {
+        Log.d(TAG, "goto photo editor");
+//        String path = mFile.getPath();
+//        int angle = readPictureDegree(path);
+//        Log.d(TAG, "rotation:" +angle);
+//        Bitmap bm_old = BitmapFactory.decodeFile(path);
+//        Bitmap bm_new = null;
+//        Matrix matrix = new Matrix();
+//        matrix.postRotate(angle);
+//        try {
+//            bm_new = Bitmap.createBitmap(bm_old, 0, 0, bm_old.getWidth(), bm_old.getHeight(),
+//                    matrix, true);
+//        } catch (OutOfMemoryError e) {
+//            e.printStackTrace();
+//        }
+//        if (bm_new == null) {
+//            bm_new = bm_old;
+//        } else if (bm_new != bm_old) {
+//            bm_old.recycle();
+//        }
+//
+//        OutputStream os = null;
+//        try {
+//             os = new FileOutputStream(path);
+//            bm_new.compress(Bitmap.CompressFormat.PNG, 100, os);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//            try {
+//                if (os != null) {
+//                    os.close();
+//                }
+//                if (bm_new != null) {
+//                    bm_new.recycle();
+//                }
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
+        String action = this.getIntent().getAction();
+        Intent intent = new Intent(this, PhotoEditor.class);
+        intent.putExtra("photoTaken", mFile.getPath());
+        intent.setAction(action);
+        this.startActivity(intent);
+        this.finish();
+    }
+
+    /**
+     * read the angles that a photo rotated
+     * @param path path that a photo saved
+     * @return angle
+     */
+    public static int readPictureDegree(String path) {
+        int degree = 0;
+        try {
+            ExifInterface exifInterface = new ExifInterface(path);
+            int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+            switch (orientation) {
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    degree = 90;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    degree = 180;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    degree = 270;
+                    break;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return degree;
     }
 
     /**

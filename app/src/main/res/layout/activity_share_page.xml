@@ -22,4 +22,7 @@
         android:layout_marginTop="83dp"
         android:text="Gallery" />
 
+    <!-- bottom navigation -->
+    <include layout="@layout/layout_bottom_navigation_view"/>
+
 </RelativeLayout>

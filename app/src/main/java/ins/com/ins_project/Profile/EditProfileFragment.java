@@ -31,6 +31,7 @@ import com.google.firebase.database.ValueEventListener;
 import de.hdodenhof.circleimageview.CircleImageView;
 import ins.com.ins_project.R;
 import ins.com.ins_project.Share.ShareActivity;
+import ins.com.ins_project.Share.SharePage;
 import ins.com.ins_project.Utils.FirebaseMethods;
 import ins.com.ins_project.Utils.UniversalImageLoader;
 import ins.com.ins_project.dialogs.ConfirmPasswordDialog;
@@ -256,7 +257,7 @@ public class EditProfileFragment extends Fragment implements
             public void onClick(View v) {
                 Log.d(TAG, "onClick: changing profile photo");
                 //Intent intent = new Intent(getActivity(), ShareActivity.class);
-                Intent intent = new Intent(getActivity(), ShareActivity.class);
+                Intent intent = new Intent(getActivity(), SharePage.class);
                 intent.setAction("Profile");
                 startActivity(intent);
                 //getActivity().startActivity(intent);

@@ -49,7 +49,7 @@ public class BottomNavigationViewHelper {
 
                     case R.id.ic_circle:
                         Intent intent3 = new Intent(context, ins.com.ins_project.Share.SharePage.class);//ACTIVITY_NUM = 2
-                        intent3.setAction("NewPhoto");
+                        intent3.setAction("Share");
                         context.startActivity(intent3);
                         callingActivity.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                         break;

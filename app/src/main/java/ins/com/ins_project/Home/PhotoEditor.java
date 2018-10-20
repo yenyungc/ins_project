@@ -86,12 +86,6 @@ public class PhotoEditor extends AppCompatActivity {
      */
     private static int PHOTOSOURCE = 1;
 
-    /**
-     * The caller of this class
-     * 1 means sharing photo
-     * 2 means updating profile
-     */
-    private static int CALLER = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,6 +104,7 @@ public class PhotoEditor extends AppCompatActivity {
         try {
             // Use the photo taken by the camera
             String tempPath = bundle.getString("photoTaken");
+            Log.d(TAG, "showing image from camera: " + tempPath);
             showImage(tempPath);
         } catch (NullPointerException e) {
             // Open a photo from gallery
@@ -367,13 +362,9 @@ public class PhotoEditor extends AppCompatActivity {
         }
     }
 
-    public static void setCaller(int caller) {
-
-        CALLER = caller;
-    }
-
     private boolean isUpload() {
-        if (CALLER == 1) {
+        Intent intent = getIntent();
+        if (intent.getAction().equals("Share")) {
             return true;
         } else {
             return false;
