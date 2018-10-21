@@ -1158,43 +1158,7 @@ public class Camera extends AppCompatActivity implements ActivityCompat.OnReques
     //Then save it, finally open it in photo editor
     private void openInPE() {
         Log.d(TAG, "goto photo editor");
-//        String path = mFile.getPath();
-//        int angle = readPictureDegree(path);
-//        Log.d(TAG, "rotation:" +angle);
-//        Bitmap bm_old = BitmapFactory.decodeFile(path);
-//        Bitmap bm_new = null;
-//        Matrix matrix = new Matrix();
-//        matrix.postRotate(angle);
-//        try {
-//            bm_new = Bitmap.createBitmap(bm_old, 0, 0, bm_old.getWidth(), bm_old.getHeight(),
-//                    matrix, true);
-//        } catch (OutOfMemoryError e) {
-//            e.printStackTrace();
-//        }
-//        if (bm_new == null) {
-//            bm_new = bm_old;
-//        } else if (bm_new != bm_old) {
-//            bm_old.recycle();
-//        }
-//
-//        OutputStream os = null;
-//        try {
-//             os = new FileOutputStream(path);
-//            bm_new.compress(Bitmap.CompressFormat.PNG, 100, os);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        } finally {
-//            try {
-//                if (os != null) {
-//                    os.close();
-//                }
-//                if (bm_new != null) {
-//                    bm_new.recycle();
-//                }
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
+
         String action = this.getIntent().getAction();
         Intent intent = new Intent(this, PhotoEditor.class);
         intent.putExtra("photoTaken", mFile.getPath());
