@@ -30,6 +30,8 @@ public class SharePage extends AppCompatActivity {
             public void onClick(View v) {
                 Log.d(TAG, "goto camera");
                 Intent intent = new Intent(SharePage.this, Camera.class);
+                String action = getAction();
+                intent.setAction(action);
                 startActivity(intent);
             }});
 
@@ -38,12 +40,18 @@ public class SharePage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "goto gallery");
-                PhotoEditor.setSource(1);
                 Intent intent = new Intent(SharePage.this, PhotoEditor.class);
+                String action = getAction();
+                intent.setAction(action);
+                //Open photo editor
                 startActivity(intent);
             }});
 
         //Action: to upload photo
-        PhotoEditor.setCaller(1);
+    }
+
+    private String getAction() {
+        Intent intent = getIntent();
+        return intent.getAction();
     }
 }
