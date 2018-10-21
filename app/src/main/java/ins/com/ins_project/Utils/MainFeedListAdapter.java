@@ -178,6 +178,7 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
                             intent.putExtra(mContext.getString(R.string.calling_activity),
                                     mContext.getString(R.string.home_activity));
                             intent.putExtra(mContext.getString(R.string.intent_user), holder.user);
+                            intent.setAction("HomeActivity");
                             mContext.startActivity(intent);
                         }
                     });
@@ -194,6 +195,7 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
                             intent.putExtra(mContext.getString(R.string.calling_activity),
                                     mContext.getString(R.string.home_activity));
                             intent.putExtra(mContext.getString(R.string.intent_user), holder.user);
+                            intent.setAction("HomeActivity");
                             mContext.startActivity(intent);
                         }
                     });
