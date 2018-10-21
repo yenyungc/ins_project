@@ -3,6 +3,7 @@ package ins.com.ins_project.Home;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -105,7 +106,7 @@ public class PhotoEditor extends AppCompatActivity {
             // Use the photo taken by the camera
             String tempPath = bundle.getString("photoTaken");
             Log.d(TAG, "showing image from camera: " + tempPath);
-            showImage(tempPath);
+            showImageWithRotation(tempPath);
         } catch (NullPointerException e) {
             // Open a photo from gallery
             openGallery();
@@ -297,6 +298,24 @@ public class PhotoEditor extends AppCompatActivity {
     private void showImage(String path){
         bm = BitmapFactory.decodeFile(path);
         // A copy of the image in bitMap
+        copyImg();
+        getImageInfo(bm);
+        ((ImageView)findViewById(R.id.image)).setImageBitmap(bm);
+    }
+
+    //load the image from the camera
+    private void showImageWithRotation(String path) {
+        Bitmap bm_old = BitmapFactory.decodeFile(path);
+        Matrix matrix = new Matrix();
+        matrix.postRotate(90);
+        try {
+            bm = Bitmap.createBitmap(bm_old, 0, 0, bm_old.getWidth(), bm_old.getHeight(),
+                    matrix, true);
+        }
+        catch (OutOfMemoryError e) {
+            e.printStackTrace();
+        }
+        bm_old.recycle();
         copyImg();
         getImageInfo(bm);
         ((ImageView)findViewById(R.id.image)).setImageBitmap(bm);
@@ -618,6 +637,7 @@ public class PhotoEditor extends AppCompatActivity {
     }
 
     private void copyImg() {
+
         bmCopy = bm;
     }
 

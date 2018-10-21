@@ -1203,36 +1203,6 @@ public class Camera extends AppCompatActivity implements ActivityCompat.OnReques
         this.finish();
     }
 
-<<<<<<< HEAD
-=======
-    /**
-     * read the angles that a photo rotated
-     *
-     * @param path path that a photo saved
-     * @return angle
-     */
-    public static int readPictureDegree(String path) {
-        int degree = 0;
-        try {
-            ExifInterface exifInterface = new ExifInterface(path);
-            int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-            switch (orientation) {
-                case ExifInterface.ORIENTATION_ROTATE_90:
-                    degree = 90;
-                    break;
-                case ExifInterface.ORIENTATION_ROTATE_180:
-                    degree = 180;
-                    break;
-                case ExifInterface.ORIENTATION_ROTATE_270:
-                    degree = 270;
-                    break;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return degree;
-    }
->>>>>>> aa9c15e72c88697366074b16ad42985f16f5ce48
 
     /**
      * Compares two {@code Size}s based on their areas.
