@@ -243,13 +243,6 @@ public class HomeFragment extends Fragment implements OnUpdateListener, OnLoadLi
                     for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
 
                         Photo newPhoto = new Photo();
-                        Location loc1 = new Location("");
-                        String lat1 = singleSnapshot.child("location").child("latitude").getValue().toString();
-                        String lon1 = singleSnapshot.child("location").child("longitude").getValue().toString();
-
-
-                        loc1.setLatitude(Double.parseDouble(lat1));
-                        loc1.setLongitude(Double.parseDouble(lon1));
 
                         Map<String, Object> objectMap = (HashMap<String, Object>) singleSnapshot.getValue();
 
