@@ -63,23 +63,23 @@ public class ClientActivity extends Activity {
                 int wifistate = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE, WifiManager.WIFI_STATE_DISABLED);
 
                 if(wifistate == WifiManager.WIFI_STATE_DISABLED){
-                    System.out.println("系统关闭wifi");
-                    link_wifi.setText("WIFI未打开");
+                    System.out.println("wifi OFF");
+                    link_wifi.setText("WIFI disabled");
                     wifiState=0;
 
                 }
                 else if(wifistate == WifiManager.WIFI_STATE_ENABLED){
-                    System.out.println("系统开启wifi");
+                    System.out.println("wifi ON");
                    if(isWifiConnected()){
                        if(getConnectWifiSsid().equals("\"wifisocket\"")){
-                           link_wifi.setText("已连接到服务器WIFI");
+                           link_wifi.setText("connected to server's WIFI");
                            wifiState=3;
                        }else{
-                           link_wifi.setText("WIFI已连接(非服务器)");
+                           link_wifi.setText("WIFI connected(Non-server)");
                            wifiState=4;
                        }
                    }else{
-                       link_wifi.setText("WIFI已打开");
+                       link_wifi.setText("WIFI already ON");
                        wifiState=1;
                    }
 
@@ -90,8 +90,8 @@ public class ClientActivity extends Activity {
                 System.out.println("网络状态改变");
                 NetworkInfo info = intent.getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO);
                 if(info.getState().equals(NetworkInfo.State.DISCONNECTED)){
-                    System.out.println("wifi网络连接断开");
-                    link_wifi.setText("WIFI未连接");
+                    System.out.println("wifi Disconnected");
+                    link_wifi.setText("WIFI Disconnected");
                     wifiState=2;
                 }
                 else if(info.getState().equals(NetworkInfo.State.CONNECTED)){
@@ -102,10 +102,10 @@ public class ClientActivity extends Activity {
                     //获取当前wifi名称
                     System.out.println("连接到网络 " + wifiInfo.getSSID());
                     if(wifiInfo.getSSID().equals("\"wifisocket\"")){
-                        link_wifi.setText("已连接到服务器WIFI");
+                        link_wifi.setText("connected to server's WIFI");
                         wifiState=3;
                     }else{
-                        link_wifi.setText("WIFI已连接(非服务器)");
+                        link_wifi.setText("WIFI connected(Non-Server)");
                         wifiState=4;
                     }
 
@@ -119,7 +119,7 @@ public class ClientActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_client);
-        wifiManager = (WifiManager) getSystemService(WIFI_SERVICE);
+        wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
         //WIFI状态接收器
 
 
@@ -255,7 +255,7 @@ public class ClientActivity extends Activity {
                     break;
                 case R.id.client_send:
                     if(socket==null){
-                        Toast.makeText(getApplicationContext(),"请先建立连接！", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),"please connect first！", Toast.LENGTH_SHORT).show();
 
                     }else{
                         String input= ET_input.getText().toString().trim();
@@ -267,16 +267,16 @@ public class ClientActivity extends Activity {
                                 e.printStackTrace();
                             }
                             if(send(socket,si)){
-                                ET_print.getText().append("\n"+"客户端:"+input);
+                                ET_print.getText().append("\n"+"client:"+input);
                                 scrollView.fullScroll(ScrollView.FOCUS_DOWN);//滚动到底部
                             }else {
                                 ET_print.getText().append("\n"+"*****发送数据失败*****");
-                                Toast.makeText(getApplicationContext(),"发送失败！", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(),"sending file！", Toast.LENGTH_SHORT).show();
                                 scrollView.fullScroll(ScrollView.FOCUS_DOWN);//滚动到底部
                             }
 
                         }else{
-                            Toast.makeText(getApplicationContext(),"输入类容为空！", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(),"empty！", Toast.LENGTH_SHORT).show();
                         }
                     }
                     ET_input.setText("");
@@ -493,74 +493,74 @@ public class ClientActivity extends Activity {
 
             switch (msg.what){
                 case 91:
-                    ET_print.getText().append("\n"+"*****文件大小:"+size+"Byte*****");
+                    ET_print.getText().append("\n"+"*****file size:"+size+"Byte*****");
                     scrollView.fullScroll(ScrollView.FOCUS_DOWN);//滚动到底部
                     break;
                 case 92:
                     sendtime++;
                     if(sendtime>0){
-                        ET_print.getText().append("\n"+"*****已发送"+sendtime*512+"Byte*****");
+                        ET_print.getText().append("\n"+"*****Sent"+sendtime*512+"Byte*****");
                         scrollView.fullScroll(ScrollView.FOCUS_DOWN);//滚动到底部
                     }
                     break;
                 case 93:
-                    ET_print.getText().append("\n"+"*****文件发送完成*****");
+                    ET_print.getText().append("\n"+"*****finish sending*****");
                     scrollView.fullScroll(ScrollView.FOCUS_DOWN);//滚动到底部
                     break;
                 case 1:
-                    ET_print.getText().append("\n"+"*****连接服务器成功*****");
+                    ET_print.getText().append("\n"+"*****connected to server success*****");
                     scrollView.fullScroll(ScrollView.FOCUS_DOWN);//滚动到底部
                     break;
                 case 2:
 
                     ET_print.getText().append("\n"+"*****************");
-                    ET_print.getText().append("\n"+"连接服务器失败\n请确认服务器已开启并连接了服务器WIFI");
+                    ET_print.getText().append("\n"+"fail to connect to server");
                     ET_print.getText().append("\n"+"*****************");
                     scrollView.fullScroll(ScrollView.FOCUS_DOWN);//滚动到底部
                     break;
                 case 3:
-                    ET_print.getText().append("\n"+"服务器:"+reviceMgs.toString());
+                    ET_print.getText().append("\n"+"server:"+reviceMgs.toString());
                     scrollView.fullScroll(ScrollView.FOCUS_DOWN);//滚动到底部
                     break;
                 case 5:
                     ET_print.getText().append("\n"+"*****************");
-                    ET_print.getText().append("\n"+"连接服务器失败\n请确认服务器已开启并连接了服务器WIFI");
+                    ET_print.getText().append("\n"+"fail to connect to server");
                     ET_print.getText().append("\n"+"*****************");
                     scrollView.fullScroll(ScrollView.FOCUS_DOWN);//滚动到底部
                     break;
                 case 99:
 
                     ET_print.getText().append("\n"+"*****************");
-                    ET_print.getText().append("\n"+"选择的文件是:"+file_path);
+                    ET_print.getText().append("\n"+"choose the file:"+file_path);
                     ET_print.getText().append("\n"+"*****************");
                     scrollView.fullScroll(ScrollView.FOCUS_DOWN);//滚动到底部
 
                     final AlertDialog.Builder normalDialog2 =
                             new AlertDialog.Builder(ClientActivity.this);
-                    normalDialog2.setTitle("提示");
-                    normalDialog2.setMessage("是否传送文件:\n"+file_path);
-                    normalDialog2.setPositiveButton("确定",
+                    normalDialog2.setTitle("hint");
+                    normalDialog2.setMessage("yes/no to send the file:\n"+file_path);
+                    normalDialog2.setPositiveButton("Confirm",
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     if(socket==null){
-                                        Toast.makeText(getApplicationContext(),"请先建立连接！", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getApplicationContext(),"setup the connection first！", Toast.LENGTH_SHORT).show();
 
                                     }else{
 
                                             if(sendfile(socket)){
-                                                ET_print.getText().append("\n"+"*****传送文件成功*****");
+                                                ET_print.getText().append("\n"+"*****Sending file success*****");
                                                 scrollView.fullScroll(ScrollView.FOCUS_DOWN);//滚动到底部
                                             }else {
-                                                ET_print.getText().append("\n"+"*****传送文件失败*****");
-                                                Toast.makeText(getApplicationContext(),"传送失败！", Toast.LENGTH_SHORT).show();
+                                                ET_print.getText().append("\n"+"*****Sending file fail*****");
+                                                Toast.makeText(getApplicationContext(),"Sending file fail！", Toast.LENGTH_SHORT).show();
                                                 scrollView.fullScroll(ScrollView.FOCUS_DOWN);//滚动到底部
                                             }
 
                                     }
                                 }
                             });
-                    normalDialog2.setNegativeButton("取消",
+                    normalDialog2.setNegativeButton("cancel",
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {

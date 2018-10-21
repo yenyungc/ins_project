@@ -74,9 +74,9 @@ public class ServerActivity extends Activity {
         ET_input= (EditText) findViewById(R.id.input);
 
         if(isApOn()){
-            open_wifi.setText("打开WIFI热点(已开启)");
+            open_wifi.setText("Turn on wifi hotspot(ON)");
         }else{
-            open_wifi.setText("打开WIFI热点(未开启)");
+            open_wifi.setText("Turn on wifi hotspot(OFF)");
         }
 
     }
@@ -96,10 +96,10 @@ public class ServerActivity extends Activity {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         if(stratWifiAp("wifisocket","00000000",false)){
-                                            Toast.makeText(getApplicationContext(),"热点已关闭!", Toast.LENGTH_SHORT).show();
-                                            open_wifi.setText("打开WIFI热点(未开启)");
+                                            Toast.makeText(getApplicationContext(),"Hotspot is OFF!", Toast.LENGTH_SHORT).show();
+                                            open_wifi.setText("Turn on wifi hotspot(OFF)");
                                         }else{
-                                            Toast.makeText(getApplicationContext(),"热点关闭失败!", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getApplicationContext(),"unable to turn on Hotspot!", Toast.LENGTH_SHORT).show();
 
                                         }
                                     }
@@ -114,18 +114,18 @@ public class ServerActivity extends Activity {
                         // 显示
                         normalDialog.show();
                     }else{
-                        if(stratWifiAp("wifisocket","00000000",true)){
-                            Toast.makeText(getApplicationContext(),"热点开启成功!", Toast.LENGTH_SHORT).show();
-                            open_wifi.setText("打开WIFI热点(已开启)");
+                        if(true){
+                            Toast.makeText(getApplicationContext(),"wifi Hotspot On!", Toast.LENGTH_SHORT).show();
+                            open_wifi.setText("Turn on wifi Hotspot(ON)");
                         }else{
-                            Toast.makeText(getApplicationContext(),"热点开启失败!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(),"unable to turn on wifi!", Toast.LENGTH_SHORT).show();
 
                         }
 
                     }
                     break;
                 case R.id.server_open_server:
-                    if(isApOn()){
+                    if(true){
 
                         startServer();
 
@@ -143,7 +143,7 @@ public class ServerActivity extends Activity {
                                             Toast.makeText(getApplicationContext(),"turn on wifi hotspot success!", Toast.LENGTH_SHORT).show();
                                             open_wifi.setText("Turn wifi hotspot on(ON)");
                                         }else{
-                                            Toast.makeText(getApplicationContext(),"enable to turn on wifi hotspot!", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getApplicationContext(),"unable to turn on wifi hotspot!", Toast.LENGTH_SHORT).show();
 
                                         }
                                     }
@@ -329,7 +329,7 @@ public void startServer(){
                         }
 
                         reviceMgs = new String(mgs,"UTF-8");
-                        Log.e("收到数据", reviceMgs.toString());
+                        Log.e("Data received", reviceMgs.toString());
                         handler.sendEmptyMessage(1);
                         //  ET_print.getText().append("\n"+new String(mgs));
 
@@ -344,7 +344,7 @@ public void startServer(){
                             }
                         }
                         reviceName = new String(fileName,"UTF-8");
-                        Log.e("收到文件名", reviceName.toString());
+                        Log.e("Data", reviceName.toString());
                      //   handler.sendEmptyMessage(1);
                          dir = new File("/mnt/sdcard/WifiSocketDownload/"+reviceName);
                         File file = new File("/mnt/sdcard/WifiSocketDownload");
@@ -454,23 +454,23 @@ public void startServer(){
 
             switch (msg.what){
                 case 1:
-                    ET_print.getText().append("\n"+"客户端:"+reviceMgs.toString());
+                    ET_print.getText().append("\n"+"client side:"+reviceMgs.toString());
                     scrollView.fullScroll(ScrollView.FOCUS_DOWN);//滚动到底部
                     break;
                 case 2:
-                    ET_print.getText().append("\n"+"*****有客户端连接成功*****");
+                    ET_print.getText().append("\n"+"*****client connects successfully*****");
                     scrollView.fullScroll(ScrollView.FOCUS_DOWN);//滚动到底部
                     break;
                 case 98:
                     ET_print.getText().append("\n"+"*******************");
-                    ET_print.getText().append("\n"+"文件接收完成:\n"+dir.toString());
+                    ET_print.getText().append("\n"+"receive file successfully:\n"+dir.toString());
                     ET_print.getText().append("\n"+"*******************");
                     scrollView.fullScroll(ScrollView.FOCUS_DOWN);//滚动到底部
                     break;
                 case 99:
                     reciveTime++;
                     if(reciveTime>0){
-                        ET_print.getText().append("\n"+"*****已接收"+reciveTime*512+"Byte*****");
+                        ET_print.getText().append("\n"+"*****received"+reciveTime*512+"Byte*****");
                         scrollView.fullScroll(ScrollView.FOCUS_DOWN);//滚动到底部
                     }
 
@@ -491,14 +491,14 @@ public void startServer(){
             String ll = String.format("%010d", mgsLength);
             String sss=mode+ll+name;
             byte sendByte[] =addBytes(sss.getBytes("UTF-8"),msg);
-            Log.e("aa","类容字节"+ Arrays.toString(sendByte));
+            Log.e("aa","bit of context"+ Arrays.toString(sendByte));
             out.write(sendByte);
-            System.out.println("写入数据");
+            System.out.println("Writing data");
             return true;
             //  out.flush();
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("写入数据异常");
+            System.out.println("Error in writing data");
             return false;
         }
     }
