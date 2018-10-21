@@ -1203,8 +1203,6 @@ public class Camera extends AppCompatActivity implements ActivityCompat.OnReques
         this.finish();
     }
 
-<<<<<<< HEAD
-=======
     /**
      * read the angles that a photo rotated
      *
@@ -1232,13 +1230,11 @@ public class Camera extends AppCompatActivity implements ActivityCompat.OnReques
         }
         return degree;
     }
->>>>>>> aa9c15e72c88697366074b16ad42985f16f5ce48
 
     /**
      * Compares two {@code Size}s based on their areas.
      */
     static class CompareSizesByArea implements Comparator<Size> {
-
 
         @Override
         public int compare(Size lhs, Size rhs) {
