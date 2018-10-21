@@ -448,8 +448,8 @@ public class PhotoEditor extends AppCompatActivity {
         intent.putExtra("crop", "true");
         intent.putExtra("aspectX", 0.1);
         intent.putExtra("aspectY", 0.1);
-        intent.putExtra("outputX", 150);
-        intent.putExtra("outputY", 150);
+        intent.putExtra("outputX", 2000);
+        intent.putExtra("outputY", 2000);
         intent.putExtra("return-data", true);
         intent.putExtra("scale", true);
         startActivityForResult(intent, CROP_PHOTO);
