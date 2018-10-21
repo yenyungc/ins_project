@@ -17,7 +17,7 @@ public class Photo implements Parcelable {
     private String tags;
     private List<Like> likes;
     private List<Comment> comments;
-    private Integer distance;
+
 
 
     public Photo() {
@@ -35,6 +35,7 @@ public class Photo implements Parcelable {
         this.likes = likes;
         this.location = location;
         this.comments = comments;
+
     }
 
     protected Photo(Parcel in) {
@@ -149,21 +150,17 @@ public class Photo implements Parcelable {
         this.likes = likes;
     }
 
-    public float getDistance() {
-        return distance;
-    }
-    public void setDistance(Integer distance) { this.distance = distance;
 
 
 
-    }
+
+
 
     @Override
     public String toString() {
         return "Photo{" +
                 "caption='" + caption + '\'' +
                 ", date_created='" + date_created + '\'' +
-                ", distance='" + distance + '\'' +
                 ", location='" + location + '\'' +
                 ", image_path='" + image_path + '\'' +
                 ", photo_id='" + photo_id + '\'' +

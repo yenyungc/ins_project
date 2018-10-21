@@ -25,6 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.type.LatLng;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -47,7 +48,7 @@ import static com.google.android.gms.location.LocationServices.getFusedLocationP
 
 public class CameraFragment extends Fragment implements OnUpdateListener, OnLoadListener {
 
-    private static final String TAG = "HomeFragment";
+    private static final String TAG = "CameraFragment";
 
     @Override
     public void onUpdate() {
@@ -59,6 +60,7 @@ public class CameraFragment extends Fragment implements OnUpdateListener, OnLoad
     public void onLoad() {
         Log.d(TAG, "ElasticListView: loading...");
         mListView.notifyLoaded();
+
     }
 
     //vars
@@ -71,10 +73,13 @@ public class CameraFragment extends Fragment implements OnUpdateListener, OnLoad
     private int resultsCount = 0;
     private ArrayList<UserAccountSettings> mUserAccountSettings;
 
-
+    private static final int PERMISSION_REQUEST_LOCATION = 2;
     private Context mContext;
     private Location geoPoint;
     private FusedLocationProviderClient mFusedLocationClient;
+
+
+
 
     private void getLastLocation() {
         try {
@@ -100,6 +105,7 @@ public class CameraFragment extends Fragment implements OnUpdateListener, OnLoad
         mListView = (ElasticListView) view.findViewById(R.id.listView);
         initListViewRefresh();
         getFollowing();
+
         return view;
     }
 
@@ -227,9 +233,12 @@ public class CameraFragment extends Fragment implements OnUpdateListener, OnLoad
 
     private void getPhotos() {
         Log.d(TAG, "getPhotos: getting list of photos");
-        mFusedLocationClient = getFusedLocationProviderClient(mContext);
-        getLastLocation();
-
+        try {
+            mFusedLocationClient = getFusedLocationProviderClient(mContext);
+            getLastLocation();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
         for (int i = 0; i < mFollowing.size(); i++) {
             final int count = i;
             Query query = FirebaseDatabase.getInstance().getReference()
@@ -244,13 +253,15 @@ public class CameraFragment extends Fragment implements OnUpdateListener, OnLoad
 
 
 
-                        Location location = null;
+                        Location loc1 = new Location("");
+                        String lat1 = singleSnapshot.child("location").child("latitude").getValue().toString();
+                        String lon1 = singleSnapshot.child("location").child("longitude").getValue().toString();
 
-                        GenericTypeIndicator<Location> t = new GenericTypeIndicator<Location>() {};
-                        location = singleSnapshot.getValue(t);
-                        float distanceMeters = geoPoint.distanceTo(location);
-                        float distanceKm = distanceMeters / 1000f;
-                        int distancekm2 = (int) distanceKm;
+
+                        loc1.setLatitude(Double.parseDouble(lat1));
+                        loc1.setLongitude(Double.parseDouble(lon1));
+
+
 
 
                         Photo newPhoto = new Photo();
@@ -263,7 +274,7 @@ public class CameraFragment extends Fragment implements OnUpdateListener, OnLoad
                         newPhoto.setUser_id(objectMap.get(getString(R.string.field_user_id)).toString());
                         newPhoto.setDate_created(objectMap.get(getString(R.string.field_date_created)).toString());
                         newPhoto.setImage_path(objectMap.get(getString(R.string.field_image_path)).toString());
-                        newPhoto.setDistance(distancekm2);
+                        newPhoto.setLocation(loc1);
 
 
 
@@ -297,11 +308,14 @@ public class CameraFragment extends Fragment implements OnUpdateListener, OnLoad
     private void displayPhotos() {
         if (mPhotos != null) {
 
+
             try {
                 //sort for newest to oldest
                 Collections.sort(mPhotos, new Comparator<Photo>() {
                     public int compare(Photo o1, Photo o2) {
-                        return (int) (o2.getDistance()-o1.getDistance());
+                        float distanceMeters1 = geoPoint.distanceTo(o1.getLocation())/ 1000f;;
+                        float distanceMeters2 = geoPoint.distanceTo(o2.getLocation())/ 1000f;;
+                        return (int) (distanceMeters2-distanceMeters1);
                     }
                 });
 
