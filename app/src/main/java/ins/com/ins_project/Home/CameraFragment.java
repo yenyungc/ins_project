@@ -1,16 +1,13 @@
 package ins.com.ins_project.Home;
 
-import android.content.Context;
-import android.location.Location;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+<<<<<<< HEAD
 import com.eschao.android.widget.elasticlistview.ElasticListView;
 import com.eschao.android.widget.elasticlistview.LoadFooter;
 import com.eschao.android.widget.elasticlistview.OnLoadListener;
@@ -67,12 +64,15 @@ public class CameraFragment extends Fragment implements OnUpdateListener, OnLoad
     private ArrayList<Photo> mPhotos;
     private ArrayList<Photo> mPaginatedPhotos;
     private ArrayList<String> mFollowing;
+=======
+import ins.com.ins_project.R;
+>>>>>>> 2934381f5fbd29989570edc7f0edb68c64b19d3e
 
-    private ElasticListView mListView;
-    private MainFeedListAdapter adapter;
-    private int resultsCount = 0;
-    private ArrayList<UserAccountSettings> mUserAccountSettings;
+/**
+ * Created by User on 5/28/2017.
+ */
 
+<<<<<<< HEAD
     private static final int PERMISSION_REQUEST_LOCATION = 2;
     private Context mContext;
     private Location geoPoint;
@@ -371,6 +371,16 @@ public class CameraFragment extends Fragment implements OnUpdateListener, OnLoad
         } catch (NullPointerException e) {
             Log.e(TAG, "displayPhotos: NullPointerException:" + e.getMessage());
         }
+=======
+public class CameraFragment extends Fragment {
+    private static final String TAG = "CameraFragment";
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_camera, container, false);
+
+        return view;
+>>>>>>> 2934381f5fbd29989570edc7f0edb68c64b19d3e
     }
 }
-

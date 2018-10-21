@@ -18,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
@@ -57,9 +58,6 @@ public class HomeFragment extends Fragment implements OnUpdateListener, OnLoadLi
     private ArrayList<Photo> mPhotos;
     private ArrayList<Photo> mPaginatedPhotos;
     private ArrayList<String> mFollowing;
-
-
-
 
     private ElasticListView mListView;
     private MainFeedListAdapter adapter;
@@ -213,6 +211,13 @@ public class HomeFragment extends Fragment implements OnUpdateListener, OnLoadLi
                     for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
 
                         Photo newPhoto = new Photo();
+//                        Location location = null;
+//
+//                        GenericTypeIndicator<Location> t = new GenericTypeIndicator<Location>() {};
+//                        location = singleSnapshot.getValue(t);
+//
+//                        newPhoto.setLocation(location);
+
                         Map<String, Object> objectMap = (HashMap<String, Object>) singleSnapshot.getValue();
 
                         newPhoto.setCaption(objectMap.get(getString(R.string.field_caption)).toString());

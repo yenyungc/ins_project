@@ -371,6 +371,8 @@ public class ProfileFragment extends Fragment {
     public void onStart() {
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
+        String uu = mAuth.getUid();
+        Log.d(TAG,"currentuser " + uu );
     }
 
     @Override

@@ -29,7 +29,6 @@ import ins.com.ins_project.Utils.UniversalImageLoader;
 import ins.com.ins_project.Utils.ViewCommentsFragment;
 import ins.com.ins_project.models.Photo;
 
-
 public class HomeActivity extends AppCompatActivity implements MainFeedListAdapter.OnLoadMoreItemsListener {
 
     @Override
