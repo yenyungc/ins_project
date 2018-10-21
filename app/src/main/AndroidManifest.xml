@@ -78,7 +78,11 @@
         <!-- <activity android:name=".Home.AutoFitTextureView" /> -->
         <activity android:name=".Home.Camera" />
         <activity android:name=".Share.SharePage" />
-        <activity android:name=".Home.PhotoEditor"></activity>
+        <activity android:name=".Home.PhotoEditor"/>
+        <activity android:name=".Home.Wifi" />
+        <activity android:name=".Home.ServerActivity" />
+        <activity android:name=".Home.ClientActivity" >
+        </activity>
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="ins.com.ins_project.fileProvider"
