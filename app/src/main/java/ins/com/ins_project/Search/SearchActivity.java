@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -46,6 +47,9 @@ public class SearchActivity extends AppCompatActivity {
 
     //vars
     private List<User> mUserList;
+    private List<User> resultList = new ArrayList<>();
+    private List<String> mFollowing = new ArrayList<>();
+
     private UserListAdapter mAdapter;
 
     @Override
@@ -74,6 +78,7 @@ public class SearchActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                displaySuggestUserList();
 
             }
 
@@ -116,6 +121,7 @@ public class SearchActivity extends AppCompatActivity {
         }
     }
 
+
     private void updateUsersList() {
         Log.d(TAG, "updateUsersList: updating users list");
 
@@ -145,6 +151,89 @@ public class SearchActivity extends AppCompatActivity {
         }
     }
 
+    private void displaySuggestUserList() {
+
+
+        mUserList.clear();
+//        resultList.clear();
+//        //update the users list view
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+//        Query query = FirebaseDatabase.getInstance().getReference()
+//                .child(getString(R.string.dbname_following))
+//                .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+//        query.addListenerForSingleValueEvent(new ValueEventListener() {
+//        @Override
+//        public void onDataChange(DataSnapshot dataSnapshot) {
+//            for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
+//
+//                mFollowing.add(singleSnapshot
+//                        .child(getString(R.string.field_user_id)).getValue().toString());
+//                Log.d(TAG, "ewfwwef");
+//                //update the users list view
+////                updateUsersList();
+//            }
+//        }
+//
+//        @Override
+//        public void onCancelled(DatabaseError databaseError) {
+//
+//         }
+//        });
+        Query query2 = reference.child(getString(R.string.dbname_users));
+        query2.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
+                    Log.d(TAG, "onDataChange: found user:" + singleSnapshot.getValue(User.class).toString());
+                        User user = singleSnapshot.getValue(User.class);
+                        if(!user.getUser_id().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                            mUserList.add(singleSnapshot.getValue(User.class));
+                        }
+
+                    Log.d(TAG, "123123");
+                    //update the users list view
+                    updateUsersList();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        for (String followId : mFollowing){
+            for (User item:mUserList){
+                if (!followId.equals(item.getUser_id())){
+                    resultList.add(item);
+                }
+
+            }
+        }
+        updateResultUsersList(resultList);
+    }
+
+    private void updateResultUsersList(final List<User> userList) {
+        Log.d(TAG, "updateUsersList: updating users list");
+
+        mAdapter = new UserListAdapter(SearchActivity.this, R.layout.layout_user_listitem, userList);
+
+        mListView.setAdapter(mAdapter);
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d(TAG, "onItemClick: selected user: " + userList.get(position).toString());
+
+                //navigate to profile activity
+                Intent intent = new Intent(SearchActivity.this, ProfileActivity.class);
+                intent.putExtra(getString(R.string.calling_activity), getString(R.string.search_activity));
+                intent.putExtra(getString(R.string.intent_user), userList.get(position));
+                intent.setAction("SearchActivity");
+                startActivity(intent);
+            }
+        });
+    }
     /**
      * BottomNavigationView setup
      */

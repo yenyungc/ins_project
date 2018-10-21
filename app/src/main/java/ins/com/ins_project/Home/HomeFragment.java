@@ -294,7 +294,14 @@ public class HomeFragment extends Fragment implements OnUpdateListener, OnLoadLi
                 //sort for newest to oldest
                 Collections.sort(mPhotos, new Comparator<Photo>() {
                     public int compare(Photo o1, Photo o2) {
-                        return o2.getDate_created().compareTo(o1.getDate_created());
+                        //int i = o2.getDate_created().compareTo(o1.getDate_created());
+                        //return i;
+                        //return o2.getDate_created().compareTo(o1.getDate_created());
+                        float distanceMeters1 = geoPoint.distanceTo(o1.getLocation())/ 1000f;
+                        float distanceMeters2 = geoPoint.distanceTo(o2.getLocation())/ 1000f;
+                        //return (int) (distanceMeters2-distanceMeters1);
+                        int diff = (int) (distanceMeters2-distanceMeters1);
+                        return diff;
                     }
                 });
 
