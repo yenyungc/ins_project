@@ -56,6 +56,7 @@ public class ProfileActivity extends AppCompatActivity implements
         transaction.addToBackStack(getString(R.string.view_post_fragment));
         transaction.commit();
     }
+
     private Context mContext = ProfileActivity.this;
 
     @Override
@@ -70,7 +71,9 @@ public class ProfileActivity extends AppCompatActivity implements
         Log.d(TAG, "init: inflating " + getString(R.string.profile_fragment));
 
         Intent intent = getIntent();
-        if (intent.hasExtra(getString(R.string.calling_activity))) {
+
+        //if (intent.hasExtra(getString(R.string.calling_activity))) {
+        if (intent.getAction().equals("SearchActivity") || intent.getAction().equals("HomeActivity")) {
             Log.d(TAG, "init: searching for user object attached as intent extra");
             if (intent.hasExtra(getString(R.string.intent_user))) {
                 User user = intent.getParcelableExtra(getString(R.string.intent_user));
@@ -98,7 +101,7 @@ public class ProfileActivity extends AppCompatActivity implements
                 Toast.makeText(mContext, "something went wrong", Toast.LENGTH_SHORT).show();
             }
 
-        } else {
+        } else if(intent.getAction().equals("ViewProfile")){
             Log.d(TAG, "init: inflating Profile");
             ProfileFragment fragment = new ProfileFragment();
             FragmentTransaction transaction = ProfileActivity.this.getSupportFragmentManager().beginTransaction();
