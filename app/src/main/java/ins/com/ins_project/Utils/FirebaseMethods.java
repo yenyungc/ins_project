@@ -7,11 +7,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
-<<<<<<< HEAD
-import android.os.AsyncTask;
-import android.os.Bundle;
-=======
->>>>>>> 049f704b7b7109f2a0f1beb9b83a5f0c516b7d57
+
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
