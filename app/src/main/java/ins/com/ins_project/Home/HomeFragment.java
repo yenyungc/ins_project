@@ -59,9 +59,6 @@ public class HomeFragment extends Fragment implements OnUpdateListener, OnLoadLi
     private ArrayList<Photo> mPaginatedPhotos;
     private ArrayList<String> mFollowing;
 
-
-
-
     private ElasticListView mListView;
     private MainFeedListAdapter adapter;
     private int resultsCount = 0;
