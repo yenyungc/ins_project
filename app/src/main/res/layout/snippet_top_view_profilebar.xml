@@ -39,7 +39,7 @@
                     android:textSize="20sp"
                     android:textColor="@color/black"
                     android:layout_marginStart="10dp"
-                    android:text="mitch.tabian"/>
+                    android:text=""/>
 
 
 

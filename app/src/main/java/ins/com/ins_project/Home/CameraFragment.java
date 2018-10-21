@@ -60,7 +60,6 @@ public class CameraFragment extends Fragment implements OnUpdateListener, OnLoad
     public void onLoad() {
         Log.d(TAG, "ElasticListView: loading...");
         mListView.notifyLoaded();
-
     }
 
     //vars
@@ -116,7 +115,7 @@ public class CameraFragment extends Fragment implements OnUpdateListener, OnLoad
                 .getLoadFooter().setLoadAction(LoadFooter.LoadAction.RELEASE_TO_LOAD);
         mListView.setOnUpdateListener(this)
                 .setOnLoadListener(this);
-
+        displayMorePhotos();
     }
 
     private void getFriendsAccountSettings() {

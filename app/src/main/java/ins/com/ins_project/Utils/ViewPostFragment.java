@@ -224,7 +224,7 @@ public class ViewPostFragment extends Fragment {
 
                             String[] splitUsers = mUsers.toString().split(",");
 
-                            if (mUsers.toString().contains(mCurrentUser.getUsername() + ",")) {//mitch, mitchell.tabian
+                            if (mUsers.toString().contains(mCurrentUser.getUsername() + ",")) {
                                 mLikedByCurrentUser = true;
                             } else {
                                 mLikedByCurrentUser = false;

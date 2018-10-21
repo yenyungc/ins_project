@@ -422,7 +422,7 @@ public class MainFeedListAdapter extends ArrayAdapter<Photo> {
 
                                 String[] splitUsers = holder.users.toString().split(",");
 
-                                if (holder.users.toString().contains(currentUsername + ",")) {//mitch, mitchell.tabian
+                                if (holder.users.toString().contains(currentUsername + ",")) {
                                     holder.likeByCurrentUser = true;
                                 } else {
                                     holder.likeByCurrentUser = false;

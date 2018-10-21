@@ -1,7 +1,9 @@
 package ins.com.ins_project.Home;
 
+import android.content.Context;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -14,6 +16,8 @@ import com.eschao.android.widget.elasticlistview.LoadFooter;
 import com.eschao.android.widget.elasticlistview.OnLoadListener;
 import com.eschao.android.widget.elasticlistview.OnUpdateListener;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -38,6 +42,8 @@ import ins.com.ins_project.models.Comment;
 import ins.com.ins_project.models.Photo;
 import ins.com.ins_project.models.UserAccountSettings;
 
+import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
+
 public class HomeFragment extends Fragment implements OnUpdateListener, OnLoadListener {
 
     private static final String TAG = "HomeFragment";
@@ -58,6 +64,9 @@ public class HomeFragment extends Fragment implements OnUpdateListener, OnLoadLi
     private ArrayList<Photo> mPhotos;
     private ArrayList<Photo> mPaginatedPhotos;
     private ArrayList<String> mFollowing;
+    private Context mContext;
+    private Location geoPoint;
+    private FusedLocationProviderClient mFusedLocationClient;
 
     private ElasticListView mListView;
     private MainFeedListAdapter adapter;
@@ -81,6 +90,24 @@ public class HomeFragment extends Fragment implements OnUpdateListener, OnLoadLi
                 .getLoadFooter().setLoadAction(LoadFooter.LoadAction.RELEASE_TO_LOAD);
         mListView.setOnUpdateListener(this)
                 .setOnLoadListener(this);
+    }
+
+    private void getLastLocation() {
+        try {
+            mFusedLocationClient.getLastLocation()
+                    .addOnCompleteListener(new OnCompleteListener<Location>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Location> task) {
+                            if (task.isSuccessful() && task.getResult() != null) {
+                                geoPoint = task.getResult();
+                            } else {
+                                Log.w(TAG, "Failed to get location.");
+                            }
+                        }
+                    });
+        } catch (SecurityException unlikely) {
+            Log.e(TAG, "Lost location permission." + unlikely);
+        }
     }
 
     private void getFriendsAccountSettings() {
@@ -197,7 +224,12 @@ public class HomeFragment extends Fragment implements OnUpdateListener, OnLoadLi
 
     private void getPhotos() {
         Log.d(TAG, "getPhotos: getting list of photos");
-
+        try {
+            mFusedLocationClient = getFusedLocationProviderClient(mContext);
+            getLastLocation();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
         for (int i = 0; i < mFollowing.size(); i++) {
             final int count = i;
             Query query = FirebaseDatabase.getInstance().getReference()
@@ -211,12 +243,13 @@ public class HomeFragment extends Fragment implements OnUpdateListener, OnLoadLi
                     for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
 
                         Photo newPhoto = new Photo();
-//                        Location location = null;
-//
-//                        GenericTypeIndicator<Location> t = new GenericTypeIndicator<Location>() {};
-//                        location = singleSnapshot.getValue(t);
-//
-//                        newPhoto.setLocation(location);
+                        Location loc1 = new Location("");
+                        String lat1 = singleSnapshot.child("location").child("latitude").getValue().toString();
+                        String lon1 = singleSnapshot.child("location").child("longitude").getValue().toString();
+
+
+                        loc1.setLatitude(Double.parseDouble(lat1));
+                        loc1.setLongitude(Double.parseDouble(lon1));
 
                         Map<String, Object> objectMap = (HashMap<String, Object>) singleSnapshot.getValue();
 
